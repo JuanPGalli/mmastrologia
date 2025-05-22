@@ -46,4 +46,16 @@ export const updateProductHandler: RequestHandler = async (req, res) => {
     }
   }
 };
-export const deleteProductHandler: RequestHandler = async () => {};
+export const deleteProductHandler: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteProduct(id);
+    res.status(200).json("driver deleted successfully");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(400).json({ error: "Unknown error" });
+    }
+  }
+};
