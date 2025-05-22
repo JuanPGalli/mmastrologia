@@ -34,18 +34,10 @@ export const createProductHandler: RequestHandler = async (req, res) => {
 };
 export const updateProductHandler: RequestHandler = async (req, res) => {
   const { id } = req.params;
-  const { name, description, price, imageUrl, category, stock } = req.body;
+  const updatedProduct = req.body;
   try {
-    await updateProductById(
-      id,
-      name,
-      description,
-      price,
-      imageUrl,
-      category,
-      stock
-    );
-    res.status(200).json(`The product ${name} was successfully updated`);
+    await updateProductById(id, updatedProduct);
+    res.status(200).json(`The product was successfully updated`);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
