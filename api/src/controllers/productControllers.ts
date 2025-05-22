@@ -13,6 +13,7 @@ export const updateProductById: Function = async (
   updatedProduct: any
 ) => {
   const updated = await Product.findByIdAndUpdate(id, updatedProduct);
+  if (!updated) throw new Error("Product not found");
 };
 export const deleteProduct: Function = async (id: string) => {
   const deleted = await Product.findByIdAndDelete(id);
