@@ -6,6 +6,7 @@ import {
   deleteProduct,
 } from "../controllers/productControllers";
 import { RequestHandler } from "express";
+import { Product } from "../models/Products";
 
 export const getProductHandler: RequestHandler = async (req, res) => {
   try {
@@ -19,10 +20,10 @@ export const getProductHandler: RequestHandler = async (req, res) => {
   }
 };
 export const createProductHandler: RequestHandler = async (req, res) => {
-  const { name, description, price, imageUrl, category, stock } = req.body;
+  const newProduct = new Product(req.body);
   try {
-    await createProduct(name, description, price, imageUrl, category, stock);
-    res.status(200).json(`The product ${name} was successfully created`);
+    await createProduct(newProduct);
+    res.status(200).json(newProduct);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
