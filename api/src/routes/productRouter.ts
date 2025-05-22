@@ -11,7 +11,6 @@ import {
 const productRouter = Router();
 
 productRouter.get("/", getProductHandler);
-productRouter.get("/:id", getProductHandler);
 productRouter.get("/:id", getProductByIdHandler);
 productRouter.post("/", createProductHandler);
 productRouter.put("/:id", updateProductHandler);
