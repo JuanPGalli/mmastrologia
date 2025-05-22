@@ -4,6 +4,7 @@ export const getAllProducts: Function = async () => {
   const products = await Product.find();
   return products;
 };
+
 export const getProductByName: Function = async (name: any) => {
   if (!name || typeof name !== "string")
     throw new Error("Falta el parámetro name");
@@ -11,6 +12,7 @@ export const getProductByName: Function = async (name: any) => {
   const products = await Product.find({ name: regex });
   return products;
 };
+
 export const getProductById: Function = async (id: string) => {
   const product = await Product.findById(id);
   if (!product) throw new Error("Producto no encontrado");
@@ -28,6 +30,7 @@ export const updateProductById: Function = async (
   const updated = await Product.findByIdAndUpdate(id, updatedProduct);
   if (!updated) throw new Error("Product not found");
 };
+
 export const deleteProduct: Function = async (id: string) => {
   const deleted = await Product.findByIdAndDelete(id);
   if (!deleted) throw new Error("Product not found");
