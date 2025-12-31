@@ -5,10 +5,12 @@ import Detail from './Views/Detail/Detail';
 import Landing from './Views/Landing/Landing';
 import About from './Views/About/About';
 import Contact from './Views/Contact/Contact';
+import Navbar from './Components/Navbar/Navbar';
 
 function App() {
   return (
     <div className='App'>
+      <Navbar />
       <Routes>
         <Route path={'/'} element={<Landing />} />
         <Route path={'/home'} element={<Home />} />
