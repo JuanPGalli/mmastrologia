@@ -3,7 +3,7 @@ import './Home.css';
 
 const Home = () => {
   return (
-    <div>
+    <div className='pt-20'>
       <h1>Astróloga y terapeuta holística</h1>
       <p>
         María Marta Galli es astróloga y terapeuta holística, especializada en astrología

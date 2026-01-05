@@ -2,7 +2,7 @@ import React from 'react';
 
 const About = () => {
   return (
-    <div>
+    <div className='pt-20'>
       <h1>Sobre mí</h1>
       <p>
         Soy María Marta Galli, astróloga y terapeuta holística, y desde hace años acompaño a
