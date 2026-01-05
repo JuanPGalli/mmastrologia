@@ -1,0 +1,12 @@
+.nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #18434e;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #0f2a30;
+  color: rgb(255,0,255);
+}
