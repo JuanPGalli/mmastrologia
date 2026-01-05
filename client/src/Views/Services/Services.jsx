@@ -10,7 +10,7 @@ const Services = () => {
     'Lectura de Tarot',
   ];
   return (
-    <ul>
+    <ul className='pt-20'>
       {consultas.map((element, index) => (
         <li key={index}>{element}</li>
       ))}
