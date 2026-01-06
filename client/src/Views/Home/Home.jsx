@@ -1,9 +1,10 @@
 import React from 'react';
 import './Home.css';
+const img_transparent = '/logo_transparente.png';
 
 const Home = () => {
   return (
-    <div className='pt-20'>
+    <div className='pt-20 bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)]'>
       <h1>Astróloga y terapeuta holística</h1>
       <p>
         María Marta Galli es astróloga y terapeuta holística, especializada en astrología
@@ -17,6 +18,7 @@ const Home = () => {
         con su esencia.
       </p>
       <a href='/about'>👉 Conocé más sobre mí</a>
+      <img src={img_transparent} alt='' />
     </div>
   );
 };
