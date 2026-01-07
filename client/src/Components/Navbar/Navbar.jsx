@@ -27,7 +27,7 @@ const Navbar = () => {
         {/* Links */}
         <ul
           className={`
-            absolute left-0 top-full w-full bg-white md:static md:flex md:w-auto
+            absolute left-0 top-full w-full bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] md:bg-none md:static md:flex md:w-auto
             ${isOpen ? 'block' : 'hidden'} md:block
           `}
         >
