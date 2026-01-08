@@ -1,6 +1,7 @@
 import React from 'react';
 import './Home.css';
 const img_transparent = '/logo_transparente.png';
+const img_mapa_astral = '/mapa_astral.png';
 
 const Home = () => {
   return (
@@ -19,6 +20,7 @@ const Home = () => {
       </p>
       <a href='/about'>👉 Conocé más sobre mí</a>
       <img src={img_transparent} alt='' />
+      <img src={img_mapa_astral} alt='' />
     </div>
   );
 };
