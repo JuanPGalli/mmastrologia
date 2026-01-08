@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-const logoNav = '/logo_mmgastrologia.jpeg';
+const logoNav = '/logo_transparente.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
 
@@ -11,7 +11,7 @@ const Navbar = () => {
       <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-3'>
         {/* Logo */}
         <a href='/' aria-label='Inicio'>
-          <img src={logoNav} alt='logo_navbar' className='h-10 w-auto' />
+          <img src={logoNav} alt='logo_navbar' className='h-15 w-auto' />
         </a>
 
         {/* Botón hamburguesa (mobile) */}
