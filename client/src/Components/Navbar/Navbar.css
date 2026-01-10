@@ -2,11 +2,17 @@
   display: block;
   padding: 0.75rem 1rem;
   font-weight: 500;
-  color: #18434e;
-  transition: color 0.2s ease;
+  color: #ffff;
+  transition: background-color 2s ease;
+  transition: color 10s ease;
 }
+/* background-color: rgba(147,116,192,1); */
 
 .nav-link:hover {
-  color: #0f2a30;
-  color: rgb(255,0,255);
+  /* color: rgb(214,151,184); */
+  color: blueviolet;
+}
+
+.nav-scrolled {
+  background-color: #7c3aed; /* Violeta */
 }
