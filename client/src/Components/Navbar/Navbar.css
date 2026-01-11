@@ -6,10 +6,8 @@
   transition: background-color 0.3s ease;
   transition: color 0.3s ease;
 }
-/* background-color: rgba(147,116,192,1); */
 
 .nav-link:hover {
-  /* color: rgb(214,151,184); */
   color: rgb(214, 151, 184);
 }
 
