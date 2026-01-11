@@ -70,7 +70,7 @@ const Home = () => {
 
           <div className='text-center mt-12'>
             <a
-              href='/consultas'
+              href='/services'
               className='inline-block text-purple-900 border border-purple-900 px-8 py-3 uppercase tracking-widest text-sm hover:bg-purple-900 hover:text-white transition'
             >
               Ver todas las consultas

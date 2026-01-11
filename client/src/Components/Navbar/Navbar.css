@@ -3,16 +3,16 @@
   padding: 0.75rem 1rem;
   font-weight: 500;
   color: #ffff;
-  transition: background-color 2s ease;
-  transition: color 10s ease;
+  transition: background-color 0.3s ease;
+  transition: color 0.3s ease;
 }
 /* background-color: rgba(147,116,192,1); */
 
 .nav-link:hover {
   /* color: rgb(214,151,184); */
-  color: blueviolet;
+  color: rgb(214, 151, 184);
 }
 
 .nav-scrolled {
-  background-color: #7c3aed; /* Violeta */
+  background-color: rgb(147,116,192); /* Violeta */
 }

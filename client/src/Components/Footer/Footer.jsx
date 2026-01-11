@@ -1,5 +1,12 @@
 import React from 'react';
-import { FaFacebook, FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa';
+import {
+  FaFacebook,
+  FaFacebookF,
+  FaInstagram,
+  FaTiktok,
+  FaYoutube,
+  FaYoutubeSquare,
+} from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -7,16 +14,20 @@ const Footer = () => {
       <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12'>
         {/* Contacto */}
         <div>
-          <h3 className='text-3xl font-semibold text-purple-700 mb-4'>CONTACTO</h3>
-          <br />
-          <p className='text-gray-700 text-2xl'>contacto@mmgastrologia.com</p>
-          <p className='text-gray-700 text-2xl'>WhatsApp: +54 9 11 5705-XXXX</p>
+          <h3 className='text-2xl md:text-3xl font-semibold text-[#3D3456] mb-0'>CONTACTO</h3>
+          <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
+          <p className='text-gray-700 font-thin text-xl md:text-2xl'>contacto@mmastrologia.com</p>
+          <p className='text-gray-700 font-thin text-xl md:text-2xl'>
+            WhatsApp: +54 9 11 5705-XXXX
+          </p>
         </div>
 
         {/* Redes */}
         <div>
-          <h3 className='text-3xl font-semibold text-purple-700 mb-4'>SIGA LAS REDES SOCIALES</h3>
-          <br />
+          <h3 className='text-2xl md:text-3xl font-semibold text-[#3D3456] mb-0'>
+            SIGA LAS REDES SOCIALES
+          </h3>
+          <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
           <div className='flex gap-4 text-4xl text-gray-700'>
             <span>
               <FaFacebook />
@@ -27,7 +38,9 @@ const Footer = () => {
             <span>
               <FaTiktok />
             </span>
-            <span>Youtube???</span>
+            <span>
+              <FaYoutube />
+            </span>
           </div>
         </div>
       </div>

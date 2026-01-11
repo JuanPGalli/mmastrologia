@@ -25,7 +25,7 @@ const Navbar = () => {
         scrolled ? 'bg-[rgb(147,116,192)]' : 'bg-transparent'
       } `}
     >
-      <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-3'>
+      <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
         {/* Logo */}
         <a href='/' aria-label='Inicio'>
           <img src={logoNav} alt='logo_navbar' className='h-15 w-auto' />
@@ -38,7 +38,7 @@ const Navbar = () => {
           aria-label='Abrir menú'
           aria-expanded={isOpen}
         >
-          ${!isOpen ? <FaBars /> : <FaTimes />}
+          {!isOpen ? <FaBars color='white' size={30} /> : <FaTimes color='white' size={30} />}
         </button>
 
         {/* Links */}
