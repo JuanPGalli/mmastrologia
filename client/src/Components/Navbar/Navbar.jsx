@@ -28,7 +28,7 @@ const Navbar = () => {
       <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
         {/* Logo */}
         <a href='/' aria-label='Inicio'>
-          <img src={logoNav} alt='logo_navbar' className='h-15 w-auto' />
+          <img src={logoNav} alt='logo_navbar' className='hidden md:block md:h-15 md:w-auto' />
         </a>
 
         {/* Botón hamburguesa (mobile) */}
