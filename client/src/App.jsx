@@ -6,7 +6,7 @@ import About from './Views/About/About';
 import Contact from './Views/Contact/Contact';
 import Navbar from './Components/Navbar/Navbar';
 import Services from './Views/Services/Services';
-import Login from './Views/login/login';
+import Login from './Views/login/Login';
 import Footer from './Components/Footer/Footer';
 
 function App() {
