@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  FaFacebook,
-  FaFacebookF,
-  FaInstagram,
-  FaTiktok,
-  FaYoutube,
-  FaYoutubeSquare,
-} from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 const Footer = () => {
   return (
