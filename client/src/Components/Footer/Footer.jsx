@@ -9,9 +9,23 @@ const Footer = () => {
         <div>
           <h3 className='text-2xl md:text-3xl font-semibold text-[#3D3456] mb-0'>CONTACTO</h3>
           <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
-          <p className='text-gray-700 font-thin text-xl md:text-2xl'>contacto@mmastrologia.com</p>
           <p className='text-gray-700 font-thin text-xl md:text-2xl'>
-            WhatsApp: +54 9 11 5705-7376
+            <a
+              href='mailto:mariamgalli71@hotmail.com'
+              className='hover:text-[#D697B8] transition-colors'
+            >
+              mariamgalli71@hotmail.com
+            </a>
+          </p>
+          <p className='text-gray-700 font-thin text-xl md:text-2xl'>
+            <a
+              href='http://wa.me/5491128933987'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#D697B8] transition-colors'
+            >
+              WhatsApp: +54 9 11 2893-3987
+            </a>
           </p>
         </div>
 
@@ -22,18 +36,38 @@ const Footer = () => {
           </h3>
           <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
           <div className='flex gap-4 text-4xl text-gray-700'>
-            <span>
+            <a
+              href='https://www.facebook.com/p/Maria-Galli-Rodriguez-100049051823987/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#D697B8] transition-colors'
+            >
               <FaFacebook />
-            </span>
-            <span>
+            </a>
+            <a
+              href='https://www.instagram.com/gallimariamarta/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#D697B8] transition-colors'
+            >
               <FaInstagram />
-            </span>
-            <span>
+            </a>
+            <a
+              href='https://www.tiktok.com/@gallimariamarta'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#D697B8] transition-colors'
+            >
               <FaTiktok />
-            </span>
-            <span>
+            </a>
+            <a
+              href=''
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-[#D697B8] transition-colors'
+            >
               <FaYoutube />
-            </span>
+            </a>
           </div>
         </div>
       </div>
