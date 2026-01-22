@@ -11,7 +11,7 @@ const Footer = () => {
           <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
           <p className='text-gray-700 font-thin text-xl md:text-2xl'>contacto@mmastrologia.com</p>
           <p className='text-gray-700 font-thin text-xl md:text-2xl'>
-            WhatsApp: +54 9 11 5705-XXXX
+            WhatsApp: +54 9 11 5705-7376
           </p>
         </div>
 
