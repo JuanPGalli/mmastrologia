@@ -83,7 +83,7 @@ const Footer = () => {
       {/* Copyright */}
       <br />
       <div className='text-center text-xs text-gray-500 mt-10'>
-        © 2026 Maria Marta Galli – Todos los direitos reservados
+        © 2026 Maria Marta Galli – Todos los derechos reservados
       </div>
     </footer>
   );
