@@ -69,7 +69,7 @@ const Services = () => {
               <p className='text-gray-600 mb-6'>{service.shortDescription}</p>
 
               <a
-                href={`/detail/${service.id}`}
+                href={`/services/${service.id}`}
                 className='inline-block border border-purple-800 px-6 py-2 text-sm uppercase tracking-widest text-purple-800 hover:bg-purple-800 hover:text-white transition'
               >
                 Ver detalle
