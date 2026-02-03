@@ -1,4 +1,5 @@
 import React from 'react';
+import CTASection from '../../Components/CTASection/CTASection';
 
 const services = [
   {
@@ -78,6 +79,14 @@ const Services = () => {
           </article>
         ))}
       </section>
+      <CTASection
+        title='Acompañamiento consciente para tu proceso personal'
+        description='Cada consulta es un espacio de escucha, claridad y transformación. Si sentís que algo se repite, podemos trabajarlo juntas.'
+        primaryText='Reservar una consulta'
+        primaryLink='/contact'
+        secondaryText='¿No sabés qué consulta elegir?'
+        secondaryLink='/contact'
+      />
     </main>
   );
 };
