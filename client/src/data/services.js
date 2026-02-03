@@ -3,7 +3,7 @@ export const services = [
     id: 'astrologia',
     title: 'Astrología',
     subtitle: 'Carta natal y revolución solar',
-    image: '/mapa_astral.png',
+    image: '/images/carta-natal.png',
     description: `
 La astrología es una herramienta profunda de autoconocimiento que permite comprender
 tu personalidad, tus talentos, desafíos y los ciclos que estás atravesando.
@@ -23,7 +23,7 @@ decisiones alineadas con tu proceso vital.
     id: 'constelaciones-familiares',
     title: 'Constelaciones Familiares',
     subtitle: 'Sanación de vínculos y patrones inconscientes',
-    image: '/constelaciones.jpg',
+    image: '/images/constelaciones-familiares.png',
     description: `
 Las constelaciones familiares permiten observar y ordenar dinámicas ocultas
 que se repiten a lo largo del sistema familiar. A través de este trabajo,
@@ -42,7 +42,7 @@ es posible liberar cargas, comprender conflictos y abrir espacio a una nueva mir
     id: 'registros-akashicos',
     title: 'Registros Akáshicos',
     subtitle: 'Lectura del alma y guía espiritual',
-    image: '/akashicos.jpg',
+    image: '/images/registros-akashicos.png',
     description: `
 La lectura de Registros Akáshicos permite acceder a la información del alma
 para obtener claridad, comprensión y orientación en momentos de duda o cambio.
@@ -61,7 +61,7 @@ Es un espacio de escucha profunda y conexión espiritual.
     id: 'reiki',
     title: 'Reiki',
     subtitle: 'Armonización energética integral',
-    image: '/reiki.jpg',
+    image: '/images/reiki.png',
     description: `
 El Reiki es una técnica de canalización de energía que promueve la relajación,
 el equilibrio emocional y el bienestar general. La sesión ayuda a liberar
@@ -80,7 +80,7 @@ bloqueos y restaurar la armonía energética.
     id: 'lectura-de-runas',
     title: 'Lectura de Runas',
     subtitle: 'Orientación simbólica ancestral',
-    image: '/runas.jpg',
+    image: '/images/runas.png',
     description: `
 La lectura de runas brinda una mirada simbólica y profunda sobre situaciones
 actuales. A través de este lenguaje ancestral, se obtiene orientación para
@@ -99,7 +99,7 @@ comprender procesos y tomar decisiones con mayor conciencia.
     id: 'lectura-de-tarot',
     title: 'Lectura de Tarot',
     subtitle: 'Claridad y orientación consciente',
-    image: '/tarot.jpg',
+    image: '/images/tarot.png',
     description: `
 El tarot es una herramienta de guía que permite explorar situaciones,
 emociones y caminos posibles. La lectura se enfoca en brindar claridad,
