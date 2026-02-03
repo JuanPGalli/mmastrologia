@@ -1,66 +1,60 @@
-/* import React from 'react';
-
- const Services = () => {
-  let consultas = [
-    'Astrologia',
-    'Constelaciones familiares',
-    'Registros Akashicos',
-    'Reiki',
-    'Lectura de Runas',
-    'Lectura de Tarot',
-  ];
-  return (
-    <ul className='pt-20'>
-      {consultas.map((element, index) => (
-        <li key={index}>{element}</li>
-      ))}
-    </ul>
-  );
-};
-
-export default Services; */
-
 import React from 'react';
 
 const services = [
   {
-    id: 'carta-natal',
-    title: 'Carta Natal',
-    description: 'Un mapa profundo de tu personalidad, potenciales y desafíos de vida.',
-    image: '/services/carta-natal.jpg',
+    id: 'astrologia',
+    title: 'Astrología',
+    shortDescription:
+      'Carta Natal, Revolución Solar y análisis de ciclos personales para el autoconocimiento.',
+    image: '/services/astrologia.jpg',
   },
   {
-    id: 'revolucion-solar',
-    title: 'Revolución Solar',
-    description: 'Análisis del año personal que comienza en tu cumpleaños.',
-    image: '/services/revolucion-solar.jpg',
+    id: 'constelaciones-familiares',
+    title: 'Constelaciones Familiares',
+    shortDescription:
+      'Un abordaje terapéutico para comprender y sanar dinámicas familiares profundas.',
+    image: '/services/constelaciones.jpg',
   },
   {
     id: 'registros-akashicos',
     title: 'Registros Akáshicos',
-    description: 'Lectura del alma para obtener claridad y sanación.',
+    shortDescription:
+      'Lecturas del alma que brindan claridad, comprensión y orientación espiritual.',
     image: '/services/registros.jpg',
   },
   {
     id: 'reiki',
     title: 'Reiki',
-    description: 'Armonización energética para cuerpo, mente y espíritu.',
+    shortDescription: 'Armonización energética para equilibrar cuerpo, mente y emociones.',
     image: '/services/reiki.jpg',
+  },
+  {
+    id: 'lectura-de-runas',
+    title: 'Lectura de Runas',
+    shortDescription: 'Orientación simbólica ancestral para procesos de decisión y cambio.',
+    image: '/services/runas.jpg',
+  },
+  {
+    id: 'lectura-de-tarot',
+    title: 'Lectura de Tarot',
+    shortDescription: 'Una mirada profunda sobre el presente para tomar decisiones conscientes.',
+    image: '/services/tarot.jpg',
   },
 ];
 
 const Services = () => {
   return (
-    <main className='pt-32 bg-[#f7f3fb]'>
+    <main className='pt-32 bg-[#f7f3fb] min-h-screen'>
       {/* Intro */}
       <section className='max-w-5xl mx-auto px-6 text-center mb-16'>
-        <h1 className='text-4xl text-purple-900 font-light mb-6'>Consultas y acompañamientos</h1>
-        <p className='text-gray-700 text-lg'>
-          Cada consulta es un espacio personalizado de guía, autoconocimiento y transformación.
+        <h1 className='text-4xl font-light text-purple-900 mb-6'>Consultas y acompañamientos</h1>
+        <p className='text-lg text-gray-700'>
+          Cada consulta es un espacio de escucha, guía y acompañamiento, adaptado a tu momento
+          personal y proceso de vida.
         </p>
       </section>
 
-      {/* Grid */}
+      {/* Servicios */}
       <section className='max-w-6xl mx-auto px-6 grid gap-10 md:grid-cols-2'>
         {services.map((service) => (
           <article
@@ -71,11 +65,12 @@ const Services = () => {
 
             <div className='p-6'>
               <h2 className='text-2xl text-purple-800 mb-3'>{service.title}</h2>
-              <p className='text-gray-600 mb-6'>{service.description}</p>
+
+              <p className='text-gray-600 mb-6'>{service.shortDescription}</p>
 
               <a
                 href={`/detail/${service.id}`}
-                className='inline-block text-sm uppercase tracking-widest border border-purple-800 px-6 py-2 text-purple-800 hover:bg-purple-800 hover:text-white transition'
+                className='inline-block border border-purple-800 px-6 py-2 text-sm uppercase tracking-widest text-purple-800 hover:bg-purple-800 hover:text-white transition'
               >
                 Ver detalle
               </a>
