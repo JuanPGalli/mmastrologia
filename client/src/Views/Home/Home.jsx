@@ -10,7 +10,7 @@ const Home = () => {
         style={{ backgroundImage: "url('/mapa_astral.png')" }}
       >
         {/* Overlay */}
-        <div className='absolute inset-0 bg-gradient-to-b from-black/70 via-purple-900/60 to-black/80' />
+        <div className='absolute inset-0 bg-linear-to-b from-black/70 via-purple-900/60 to-black/80' />
 
         {/* Content */}
         <div className='relative z-10 max-w-4xl mx-auto px-6 text-center text-white'>
