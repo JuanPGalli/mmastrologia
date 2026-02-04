@@ -34,7 +34,11 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
-        scrolled ? 'bg-[rgb(147,116,192)]' : 'bg-transparent'
+        isOpen
+          ? 'bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)]'
+          : scrolled
+            ? 'bg-[rgb(147,116,192)]'
+            : 'bg-transparent'
       } `}
     >
       <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
