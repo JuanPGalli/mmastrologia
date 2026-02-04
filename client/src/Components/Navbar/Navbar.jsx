@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 const logoNav = '/logo_transparente.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -18,6 +19,17 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
+
+  const handleLoginClick = (e) => {
+    e.preventDefault();
+
+    Swal.fire({
+      icon: 'info',
+      title: '¡Sección en construcción!',
+      text: 'Estamos trabajando para habilitar el inicio de sesión muy pronto.',
+      confirmButtonText: 'Entendido',
+    });
+  };
 
   return (
     <nav
@@ -69,7 +81,7 @@ const Navbar = () => {
             </a>
           </li>
           <li>
-            <a className='nav-link' href='/login'>
+            <a className='nav-link' href='/login' onClick={handleLoginClick}>
               Log In
             </a>
           </li>
