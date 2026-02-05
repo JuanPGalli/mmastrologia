@@ -2,7 +2,7 @@ import React from 'react';
 
 const About = () => {
   return (
-    <main className='pt-32'>
+    <main className='pt-32 bg-[#f7f3fb]'>
       {/* HERO */}
       <section className='max-w-5xl mx-auto px-6'>
         <div className='grid md:grid-cols-2 gap-12 items-center'>
@@ -59,7 +59,7 @@ const About = () => {
       </section>
 
       {/* CTA */}
-      <section className='mt-20 text-center'>
+      <section className='mt-20 pb-20 text-center'>
         <h2 className='text-2xl text-purple-900 mb-4'>¿Querés una consulta personalizada?</h2>
 
         <p className='text-purple-700 mb-8'>Te invito a conocer las consultas disponibles.</p>
