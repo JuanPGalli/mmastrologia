@@ -3,10 +3,13 @@ const logoNav = '/logo_transparente.png';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import './Navbar.css';
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,12 +36,14 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-100 ${
         isOpen
-          ? 'bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)]'
+          ? 'bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] text-white'
           : scrolled
-            ? 'bg-[rgb(147,116,192)]'
-            : 'bg-transparent'
+            ? 'bg-[rgb(147,116,192)] text-white'
+            : !scrolled && isHome
+              ? 'bg-transparent text-white'
+              : 'bg-transparent text-gray-700'
       } `}
     >
       <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
@@ -54,7 +59,13 @@ const Navbar = () => {
           aria-label='Abrir menú'
           aria-expanded={isOpen}
         >
-          {!isOpen ? <FaBars color='white' size={30} /> : <FaTimes color='white' size={30} />}
+          {!isOpen && isHome ? (
+            <FaBars color='white' size={30} />
+          ) : !isOpen && !isHome ? (
+            <FaBars color='gray' size={30} />
+          ) : (
+            <FaTimes color='white' size={30} />
+          )}
         </button>
 
         {/* Links */}
