@@ -43,7 +43,7 @@ const Navbar = () => {
             ? 'bg-[rgb(147,116,192)] text-white'
             : !scrolled && isHome
               ? 'bg-transparent text-white'
-              : 'bg-transparent text-purple-900'
+              : 'bg-transparent text-purple-700'
       } `}
     >
       <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
