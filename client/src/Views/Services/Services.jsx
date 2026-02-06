@@ -7,39 +7,39 @@ const services = [
     title: 'Astrología',
     shortDescription:
       'Carta Natal, Revolución Solar y análisis de ciclos personales para el autoconocimiento.',
-    image: '/images/carta-natal.png',
+    image: '/images/carta-natal-sin-titulo.png',
   },
   {
     id: 'constelaciones-familiares',
     title: 'Constelaciones Familiares',
     shortDescription:
       'Un abordaje terapéutico para comprender y sanar dinámicas familiares profundas.',
-    image: '/images/constelaciones-familiares.png',
+    image: '/images/constelaciones-familiares-sin-titulo.png',
   },
   {
     id: 'registros-akashicos',
     title: 'Registros Akáshicos',
     shortDescription:
       'Lecturas del alma que brindan claridad, comprensión y orientación espiritual.',
-    image: '/images/registros-akashicos.png',
+    image: '/images/registros-akashicos-sin-titulo.png',
   },
   {
     id: 'reiki',
     title: 'Reiki',
     shortDescription: 'Armonización energética para equilibrar cuerpo, mente y emociones.',
-    image: '/images/reiki.png',
+    image: '/images/reiki-sin-titulo.png',
   },
   {
     id: 'lectura-de-runas',
     title: 'Lectura de Runas',
     shortDescription: 'Orientación simbólica ancestral para procesos de decisión y cambio.',
-    image: '/images/runas.png',
+    image: '/images/runas-sin-titulo.png',
   },
   {
     id: 'lectura-de-tarot',
     title: 'Lectura de Tarot',
     shortDescription: 'Una mirada profunda sobre el presente para tomar decisiones conscientes.',
-    image: '/images/tarot.png',
+    image: '/images/tarot-sin-titulo.png',
   },
 ];
 
