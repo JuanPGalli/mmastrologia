@@ -15,7 +15,7 @@ const About = () => {
                 w-72 h-72
                 rounded-full
                 object-cover
-                object-top
+
                 shadow-lg
               '
             />
