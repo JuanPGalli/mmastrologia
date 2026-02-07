@@ -62,8 +62,10 @@ const Navbar = () => {
         >
           {!isOpen && isHome ? (
             <FaBars color='white' size={30} />
-          ) : !isOpen && !isHome ? (
+          ) : !isOpen && !isHome && !scrolled ? (
             <FaBars color='rgb(126 34 206)' size={30} />
+          ) : !isOpen && !isHome && scrolled ? (
+            <FaBars color='white' size={30} />
           ) : (
             <FaTimes color='white' size={30} />
           )}
