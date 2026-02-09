@@ -95,7 +95,7 @@ const Services = () => {
       </section>
       <CTASection
         title='Acompañamiento consciente para tu proceso personal'
-        description='Cada consulta es un espacio de escucha, claridad y transformación. Si sentís que algo se repite, podemos trabajarlo juntas.'
+        description='Cada consulta es un espacio de escucha, claridad y transformación. Si sentís que algo se repite, podemos trabajarlo conjuntamente.'
         primaryText='Reservar una consulta'
         primaryLink='/contact'
         secondaryText='¿No sabés qué consulta elegir?'
