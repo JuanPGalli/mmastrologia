@@ -108,7 +108,7 @@ Main site views:
 
 ### Implemented
 - Complete frontend
-- Navegation
+- Navigation
 - Complete frontend
 - Netlify deployment
 
@@ -153,5 +153,5 @@ npm run dev
 
 ---
 ## 👤 Autor
-Developed by **Juan P. Galli**<br>
+Developed by **Juan P. Galli** <br>
 Real-world project oriented to production and scalability.
