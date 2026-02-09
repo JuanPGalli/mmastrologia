@@ -129,24 +129,24 @@ Vistas principales del sitio:
 1. Clonar el repositorio
 ```bash
 git clone https://github.com/JuanPGalli/mmastrologia.git
-Instalar dependencias
-
+```
+2. Instalar dependencias
+```bash
 npm install
-Ejecutar en desarrollo
-
+```
+3. Ejecutar en desarrollo
+```bash
 npm run dev
+```
+---
+## 🚀 Próximos pasos
+- Implementar backend (Node / Express)
+- Guardar servicios en base de datos
+- Panel admin para gestión de consultas
+- Integración con pagos
+- SEO avanzado
 
-🚀 Próximos pasos
-Implementar backend (Node / Express)
-
-Guardar servicios en base de datos
-
-Panel admin para gestión de consultas
-
-Integración con pagos
-
-SEO avanzado
-
-👤 Autor
-Desarrollado por Juan P. Galli
+---
+## 👤 Autor
+Desarrollado por **Juan P. Galli**<br>
 Proyecto real orientado a producción y escalabilidad.
