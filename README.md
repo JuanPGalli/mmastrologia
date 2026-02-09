@@ -104,7 +104,7 @@ Main site views:
 
 ## 🚧 Project Status
 
-🟢 **Project Status**
+🟢 **Under active development**
 
 ### Implemented
 - Complete frontend
