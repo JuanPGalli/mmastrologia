@@ -1,22 +1,22 @@
-# MM Astrología 🌙
+# MM Astrology 🌙
 
-Sitio web profesional de **María Marta Galli**, astróloga y terapeuta holística.
-El proyecto está orientado a presentar servicios de acompañamiento espiritual, facilitar el contacto con consultantes y construir una presencia digital clara, cálida y confiable.
-
----
-
-## 🧭 Objetivo del proyecto
-
-Crear una web moderna, responsive y orientada a la conversión que permita:
-
-- Presentar servicios holísticos de forma clara
-- Generar confianza a través del contenido y el diseño
-- Facilitar el contacto directo vía WhatsApp
-- Escalar a futuro con backend, dashboard de administración y pagos
+Professional website of **María Marta Galli**, astrologer and holistic therapist.
+The project is aimed at presenting spiritual guidance services, facilitating contact with clients, and building a clear, warm, and trustworthy digital presence.
 
 ---
 
-## 🛠 Tecnologías utilizadas
+## 🧭 Project Objective
+
+To create a modern, responsive, and conversion-oriented website that allows to:
+
+- Present holistic services clearly
+- Build trust through content and design
+- Facilitate direct contact via WhatsApp
+- Scale in the future with backend, admin dashboard, and payments
+
+---
+
+## 🛠 Technologies Used
 
 - **React** (Vite)
 - **React Router DOM**
@@ -27,7 +27,7 @@ Crear una web moderna, responsive y orientada a la conversión que permita:
 
 ---
 
-## 📁 Estructura del proyecto
+## 📁 Project Structure
 
 ```
 src/
@@ -49,104 +49,108 @@ src/
 
 
 ### 🧩 Components
-Componentes reutilizables y globales:
-- `Navbar`: navegación principal con menú responsive
-- `Footer`: información de contacto y redes
-- `CTASection`: llamados a la acción reutilizables
+Reusable and global components:
+- `Navbar`: main navigation with responsive menu
+- `Footer`: contact information and social links
+- `CTASection`: reusable call-to-action blocks
 
 ### 📄 Views
-Vistas principales del sitio:
-- **Home**: hero + resumen de servicios
-- **Services**: listado completo de consultas
-- **Detail**: detalle individual de cada servicio
-- **About**: información profesional y personal
-- **Contact**: formulario con validaciones y envío a WhatsApp
+Main site views:
+- **Home**: hero section + services overview
+- **Services**: full list of consultations
+- **Detail**: individual service detail
+- **About**: professional and personal information
+- **Contact**: form with validations and WhatsApp submission
 
 ---
 
-## 🧭 Rutas principales
+## 🧭 Main Routes
 
-| Ruta | Descripción |
+| Route | Description |
 |-----|------------|
-| `/` | Página de inicio |
-| `/services` | Listado de consultas |
-| `/services/:id` | Detalle del servicio |
-| `/about` | Sobre mí |
-| `/contact` | Contacto |
+| `/` | Home page |
+| `/services` | Services list |
+| `/services/:id` | Service detail |
+| `/about` | About |
+| `/contact` | Contact |
 
-> La ruta de login no está activa por el momento.
-
----
-
-## ✨ Funcionalidades destacadas
-
-- Hero con imagen de fondo y overlay
-- Navbar responsive con menú hamburguesa
-- Cards de servicios con imágenes
-- Vista detalle optimizada para conversión
-- CTA estratégicos según la etapa del usuario
-- Formulario de contacto con:
-  - Validación de email
-  - Validación de WhatsApp
-  - Envío directo a WhatsApp con mensaje prearmado
-  - SweetAlert de éxito / error
+> Login route is not active at the moment.
 
 ---
 
-## 🎨 Diseño y UX
+## ✨ Key Features
 
-- Estética holística y profesional
-- Paleta basada en violetas suaves
-- Tipografía clara y respirable
-- Jerarquía visual orientada a lectura y conversión
+- Hero section with background image and overlay
+- Responsive navbar with bars menu
+- Service cards with images
+- Detail view optimized for conversion
+- Strategic CTAs based on user journey stage
+- Contact form with:
+  - Email validation
+  - WhatsApp validation
+  - Direct WhatsApp submission with pre-filled message
+  - Success / error SweetAlert notifications
 
 ---
 
-## 🚧 Estado del proyecto
+## 🎨 Design & UX
 
-🟢 **En desarrollo activo**
+- Holistic and professional aesthetic
+- Soft violet-based color palette
+- Clear and breathable typography
+- Visual hierarchy focused on readability and conversion
 
-### Implementado
-- Frontend completo
-- Navegación
-- Contacto funcional
-- Deploy en Netlify
+---
 
-### Pendiente / futuro
-- **Blog de contenidos** sobre astrología, ciclos de vida y autoconocimiento.
-- **Sistema de suscripción a newsletter** para recibir novedades.
-- **Envío de artículos, actualizaciones y promociones de servicios**.
+## 🚧 Project Status
+
+🟢 **Project Status**
+
+### Implemented
+- Complete frontend
+- Navegation
+- Complete frontend
+- Netlify deployment
+
+### Pending / Future
+- **Pending / Future** about astrology, life cycles, and self-knowledge.
+- **Newsletter subscription system** to receive news.
+- **Sending articles, updates, and service promotions**.
 - Backend
-- Dashboard de administración
-- Persistencia en base de datos
-- Sistema de pagos
-- Autenticación
+- Admin dashboard
+- Database persistence
+- Payment system
+- Authentication
 
 ---
 
-## ▶️ Instalación y uso
+## ▶️ Installation & Usage
 
-1. Clonar el repositorio
+1. Clone the repository
 ```bash
 git clone https://github.com/JuanPGalli/mmastrologia.git
-Instalar dependencias
+```
 
+2. Install dependencies
+```bash
 npm install
-Ejecutar en desarrollo
+```
 
+3. Run in development
+```bash
 npm run dev
+```
 
-🚀 Próximos pasos
-Implementar backend (Node / Express)
+---
 
-Guardar servicios en base de datos
+## 🚀 Next Steps
 
-Panel admin para gestión de consultas
+- Implement backend (Node / Express)
+- Store services in database
+- Admin panel for consultation management
+- Payment integration
+- Advanced SEO
 
-Integración con pagos
-
-SEO avanzado
-
-👤 Autor
-Desarrollado por Juan P. Galli
-Proyecto real orientado a producción y escalabilidad.
+## 👤 Autor
+Developed by **Juan P. Galli**<br>
+Real-world project oriented to production and scalability.
