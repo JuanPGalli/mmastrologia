@@ -1,24 +1,72 @@
 export const services = [
   {
-    id: 'astrologia',
+    id: 'astrologia-carta-natal',
     title: 'Astrología',
-    subtitle: 'Carta natal y revolución solar',
+    subtitle: 'Carta Natal',
     image: '/images/carta-natal.png',
     description: `
 La astrología es una herramienta profunda de autoconocimiento que permite comprender
 tu personalidad, tus talentos, desafíos y los ciclos que estás atravesando.
+
 A través de la carta natal y la revolución solar, se obtiene claridad para tomar
 decisiones alineadas con tu proceso vital.
+En esta sesión te guío en un viaje profundo a través de tu carta natal, para conectar
+con las energías disponibles, tus potencialidades, luces y sombras, y las distintas
+áreas de tu vida.
+
+Exploramos patrones inconscientes, talentos y desafíos, con el objetivo de tomar
+conciencia de tus energías y comprender cómo potenciarlas para tu crecimiento
+personal.
     `,
     includes: [
       'Lectura completa de carta natal',
-      'Análisis de vínculos, vocación y propósito',
-      'Revolución solar (opcional)',
+      'Análisis de tu ADN cósmico, talentos innatos y propósito de vida',
     ],
     duration: '60 a 90 minutos',
     modality: 'Online',
   },
+  {
+    id: 'astrologia-revolucion-solar',
+    title: 'Astrología',
+    subtitle: 'Revolución Solar',
+    image: '/images/revolucion-solar.png',
+    description: `
+La astrología es una herramienta profunda de autoconocimiento que permite comprender
+tu personalidad, tus talentos, desafíos y los ciclos que estás atravesando.
 
+A través de la carta natal y la revolución solar, se obtiene claridad para tomar
+decisiones alineadas con tu proceso vital.
+
+En esta sesión analizamos las energías disponibles desde tu cumpleaños actual hasta
+el próximo. La Revolución Solar pone el foco en determinadas áreas de tu carta natal
+que la vida te invita a mirar, integrar y trabajar durante ese año.
+
+Al observar tu Revolución Solar año tras año, se revela una coherencia profunda en tu
+camino de vida y en los aprendizajes que se presentan a través de situaciones, vínculos
+y experiencias.
+    `,
+    includes: ['Tu hoja de ruta anual y los temas principales de tu próximo cumpleaños.'],
+    duration: '60 a 90 minutos',
+    modality: 'Online',
+  },
+  {
+    id: 'astrologia-ciclos-personales',
+    title: 'Astrología',
+    subtitle: 'Ciclos Personales',
+    image: '/images/ciclos-personales.png',
+    description: `
+En esta sesión te acompaño a conectar con los tránsitos astrológicos activos en el momento
+de la consulta. Analizamos cómo estas energías influyen en tu presente y, si es pertinente,
+también en períodos cercanos pasados o futuros.
+
+Cada lectura requiere un análisis previo, ya que la astrología, los tránsitos y la
+Revolución Solar trabajan en conjunto para brindar una comprensión más profunda de tu
+proceso personal.
+    `,
+    includes: ['Guía de tiempos y tránsitos actuales para la toma de decisiones estratégicas'],
+    duration: '60 a 90 minutos',
+    modality: 'Online',
+  },
   {
     id: 'constelaciones-familiares',
     title: 'Constelaciones Familiares',
@@ -28,6 +76,14 @@ decisiones alineadas con tu proceso vital.
 Las constelaciones familiares permiten observar y ordenar dinámicas ocultas
 que se repiten a lo largo del sistema familiar. A través de este trabajo,
 es posible liberar cargas, comprender conflictos y abrir espacio a una nueva mirada.
+
+En esta sesión te acompaño a conectar con los tránsitos astrológicos activos en el
+momento de la consulta. Analizamos cómo estas energías influyen en tu presente y, si
+es pertinente, también en períodos cercanos pasados o futuros.
+
+Cada lectura requiere un análisis previo, ya que la astrología, los tránsitos y la
+Revolución Solar trabajan en conjunto para brindar una comprensión más profunda de
+tu proceso personal.
     `,
     includes: [
       'Abordaje sistémico del conflicto',
@@ -47,6 +103,18 @@ es posible liberar cargas, comprender conflictos y abrir espacio a una nueva mir
 La lectura de Registros Akáshicos permite acceder a la información del alma
 para obtener claridad, comprensión y orientación en momentos de duda o cambio.
 Es un espacio de escucha profunda y conexión espiritual.
+
+En esta sesión realizamos la apertura de tus Registros Akáshicos, los consultamos
+y los cerramos al finalizar. Previamente preparás unas siete preguntas relacionadas
+con temas que se repiten, situaciones que no encontrás cómo resolver o aspectos de
+tu vida que deseas comprender desde una nueva mirada.
+
+Más allá de la información que puedas recibir, el enfoque de la lectura es profundo:
+recuperar tu poder personal, tomar conciencia y decidir qué hacer con lo que emerge.
+
+La información es una guía; el verdadero proceso continúa en vos.
+
+Será un gusto acompañarte en este camino.
     `,
     includes: [
       'Lectura personalizada',

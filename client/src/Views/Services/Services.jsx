@@ -3,11 +3,24 @@ import CTASection from '../../Components/CTASection/CTASection';
 
 const services = [
   {
-    id: 'astrologia',
-    title: 'Astrología',
+    id: 'astrologia-carta-natal',
+    title: 'Astrología - Carta Natal',
     shortDescription:
-      'Carta Natal, Revolución Solar y análisis de ciclos personales para el autoconocimiento.',
+      'Descubre tu potencial personal y desactiva patrones repetitivos inconscientes.',
     image: '/images/carta-natal-sin-titulo.png',
+  },
+  {
+    id: 'astrologia-revolucion-solar',
+    title: 'Astrología - Revolución Solar',
+    shortDescription:
+      'Identifica las oportunidades y retos específicos que marcarán tu año astral.',
+    image: '/images/revolucion-solar-sin-titulo.png',
+  },
+  {
+    id: 'astrologia-ciclos-personales',
+    title: 'Astrología - Ciclos Personales',
+    shortDescription: 'Conoce el mejor momento para actuar, esperar o transformar tus proyectos.',
+    image: '/images/ciclos-personales.png',
   },
   {
     id: 'constelaciones-familiares',
@@ -32,7 +45,8 @@ const services = [
   {
     id: 'lectura-de-runas',
     title: 'Lectura de Runas',
-    shortDescription: 'Orientación simbólica ancestral para procesos de decisión y cambio.',
+    shortDescription:
+      'Orientación simbólica ancestral para guiarte en procesos de decisión y cambio.',
     image: '/images/runas-sin-titulo.png',
   },
   {
