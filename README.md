@@ -151,6 +151,7 @@ npm run dev
 - Payment integration
 - Advanced SEO
 
+---
 ## 👤 Autor
 Developed by **Juan P. Galli**<br>
 Real-world project oriented to production and scalability.
