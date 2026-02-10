@@ -109,7 +109,7 @@ Main site views:
 ### Implemented
 - Complete frontend
 - Navigation
-- Complete frontend
+- Functional contact
 - Netlify deployment
 
 ### Pending / Future
