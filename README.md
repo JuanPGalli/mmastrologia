@@ -113,9 +113,9 @@ Main site views:
 - Netlify deployment
 
 ### Pending / Future
-- **Pending / Future** about astrology, life cycles, and self-knowledge.
-- **Newsletter subscription system** to receive news.
-- **Sending articles, updates, and service promotions**.
+- **Content Blog** about astrology, life cycles, and self-knowledge
+- **Newsletter subscription system**
+- **Sending articles, updates, and service promotions**
 - Backend
 - Admin dashboard
 - Database persistence
