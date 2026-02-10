@@ -118,8 +118,8 @@ Principais páginas do site:
 - **Envio de artigos, atualizações e promoções de serviços**
 - Backend
 - Painel administrativo
-- Painel administrativo
 - Persistência em banco de dados
+- Sistema de pagamentos
 - Autenticação
 
 ---
