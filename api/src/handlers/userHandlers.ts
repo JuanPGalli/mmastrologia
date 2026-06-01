@@ -1,6 +1,5 @@
 import { registerUser, loginUser } from "../controllers/userController";
 import { RequestHandler } from "express";
-import { Product } from "../models/Products";
 
 export const registerUserHandler: RequestHandler = async (req, res) => {
   const { name, email, password } = req.body;

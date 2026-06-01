@@ -1,10 +1,29 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { services } from '../../data/services';
+import { fetchServiceBySlug } from '../../api/services';
 
 const Detail = () => {
   const { id } = useParams();
+  const [loadedService, setLoadedService] = useState({
+    slug: '',
+    service: undefined,
+  });
 
-  const service = services.find((s) => s.id === id);
+  useEffect(() => {
+    fetchServiceBySlug(id).then((result) => {
+      setLoadedService({ slug: id, service: result });
+    });
+  }, [id]);
+
+  const service = loadedService.slug === id ? loadedService.service : undefined;
+
+  if (!service && loadedService.slug !== id) {
+    return (
+      <div className='pt-32 text-center'>
+        <p className='text-gray-600'>Cargando consulta...</p>
+      </div>
+    );
+  }
 
   if (!service) {
     return (
@@ -19,7 +38,6 @@ const Detail = () => {
 
   return (
     <main className='pt-32'>
-      {/* HERO */}
       <section className='max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12'>
         <img src={service.image} alt={service.title} className='rounded-lg shadow' />
 
@@ -31,7 +49,7 @@ const Detail = () => {
           <p className='text-gray-700 leading-relaxed mb-6'>{service.description}</p>
 
           <ul className='space-y-2 mb-6'>
-            {service.includes.map((item, index) => (
+            {service.includes?.map((item, index) => (
               <li key={index} className='text-gray-600'>
                 • {item}
               </li>
