@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { IUser, User } from "../models/User";
 import { hashPassword, comparePasswords } from "../utils/hash";
 import { generateToken } from "../utils/jwt";
 
@@ -25,14 +25,15 @@ export const loginUser = async (email: string, password: string) => {
   const valid = await comparePasswords(password, user.password);
   if (!valid) throw new Error("Contraseña incorrecta");
 
-  const token = generateToken(user._id.toString());
+  const token = generateToken(user.id, user.role || "user");
 
   return {
     token,
     user: {
-      id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role || "user",
     },
   };
 };

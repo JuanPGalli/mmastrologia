@@ -5,9 +5,9 @@ import {
   loginUserHandler,
 } from "../handlers/userHandlers";
 
-const productRouter = Router();
+const userRouter = Router();
 
-productRouter.post("/register", registerUserHandler);
-productRouter.get("/login", loginUserHandler);
+userRouter.post("/register", registerUserHandler);
+userRouter.post("/login", loginUserHandler);
 
-export default productRouter;
+export default userRouter;

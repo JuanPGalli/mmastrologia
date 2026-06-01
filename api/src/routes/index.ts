@@ -1,9 +1,14 @@
 import { Router } from "express";
-import productRouter from "./productRouter";
-//import userRouter from "./userRouter";
+import serviceRouter from "./serviceRouter";
+import userRouter from "./userRouter";
 
 const router = Router();
 
-router.use("/product", productRouter);
+router.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
-router.use("/user" /* userRouter */);
+router.use("/services", serviceRouter);
+router.use("/auth", userRouter);
+
+export default router;
