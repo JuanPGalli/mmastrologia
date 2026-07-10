@@ -10,7 +10,7 @@ type ServiceFilters = {
 export const getAllServices = async (filters: ServiceFilters = {}) => {
   const query: FilterQuery<IService> = {};
 
-  if (filters.includeInactive !== "true") {
+  if (filters.includeInactive !== true && filters.includeInactive !== "true") {
     query.active = true;
   }
 
