@@ -26,6 +26,15 @@ export const getServicesHandler: RequestHandler = async (req, res) => {
   }
 };
 
+export const getAdminServicesHandler: RequestHandler = async (_req, res) => {
+  try {
+    const services = await getAllServices({ includeInactive: true });
+    res.status(200).json(services);
+  } catch (error: unknown) {
+    sendError(res, error);
+  }
+};
+
 export const getServiceBySlugHandler: RequestHandler = async (req, res) => {
   try {
     const service = await getServiceBySlug(req.params.slug);

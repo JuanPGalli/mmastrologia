@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { services as fallbackServices } from '../data/services';
+import { getStoredSession } from './auth';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -42,4 +43,36 @@ export const fetchServiceBySlug = async (slug) => {
   } catch {
     return getFallbackServices().find((service) => service.slug === slug);
   }
+};
+
+const getAdminHeaders = () => {
+  const session = getStoredSession();
+
+  if (!session?.token) {
+    throw new Error('Necesitás iniciar sesión como administradora.');
+  }
+
+  return {
+    Authorization: `Bearer ${session.token}`,
+  };
+};
+
+export const fetchAdminServices = async () => {
+  if (!apiUrl) throw new Error('Configurá VITE_API_URL para administrar servicios.');
+
+  const response = await axios.get(`${apiUrl}/api/services/admin`, {
+    headers: getAdminHeaders(),
+  });
+
+  return response.data.map(normalizeService);
+};
+
+export const updateAdminService = async (id, payload) => {
+  if (!apiUrl) throw new Error('Configurá VITE_API_URL para administrar servicios.');
+
+  const response = await axios.put(`${apiUrl}/api/services/${id}`, payload, {
+    headers: getAdminHeaders(),
+  });
+
+  return normalizeService(response.data);
 };
