@@ -9,6 +9,9 @@ import Services from './Views/Services/Services';
 import Login from './Views/Login/Login';
 import Footer from './Components/Footer/Footer';
 import AdminServices from './Views/AdminServices/AdminServices';
+import Blog from './Views/Blog/Blog';
+import BlogDetail from './Views/BlogDetail/BlogDetail';
+import AdminBlog from './Views/AdminBlog/AdminBlog';
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
         <Route path={'/contact'} element={<Contact />} />
         <Route path={'/login'} element={<Login />} />
         <Route path={'/admin/services'} element={<AdminServices />} />
+        <Route path={'/blog'} element={<Blog />} />
+        <Route path={'/blog/:slug'} element={<BlogDetail />} />
+        <Route path={'/admin/blog'} element={<AdminBlog />} />
       </Routes>
       <Footer />
     </div>

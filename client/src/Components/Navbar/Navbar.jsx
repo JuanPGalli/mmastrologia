@@ -89,6 +89,11 @@ const Navbar = () => {
             </a>
           </li>
           <li>
+            <a className='nav-link' href='/blog'>
+              Blog
+            </a>
+          </li>
+          <li>
             <a className='nav-link' href='/about'>
               Sobre Mi
             </a>
