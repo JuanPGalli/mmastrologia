@@ -147,14 +147,23 @@ const AdminServices = () => {
             </p>
           </div>
 
-          <button
-            type='button'
-            onClick={signOut}
-            className='inline-flex items-center justify-center gap-2 border border-purple-900 px-4 py-2 text-sm uppercase tracking-widest text-purple-900 hover:bg-purple-900 hover:text-white transition'
-          >
-            <FaPowerOff aria-hidden='true' />
-            Salir
-          </button>
+          <div className='flex items-center gap-3'>
+            <button
+              type='button'
+              onClick={() => navigate('/admin')}
+              className='text-sm text-purple-900 underline underline-offset-4 hover:text-purple-950'
+            >
+              ← Panel admin
+            </button>
+            <button
+              type='button'
+              onClick={signOut}
+              className='inline-flex items-center justify-center gap-2 border border-purple-900 px-4 py-2 text-sm uppercase tracking-widest text-purple-900 hover:bg-purple-900 hover:text-white transition'
+            >
+              <FaPowerOff aria-hidden='true' />
+              Salir
+            </button>
+          </div>
         </div>
 
         <div className='grid lg:grid-cols-[320px_1fr] gap-8'>

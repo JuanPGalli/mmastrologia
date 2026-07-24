@@ -9,6 +9,7 @@ import Services from './Views/Services/Services';
 import Login from './Views/Login/Login';
 import Footer from './Components/Footer/Footer';
 import AdminServices from './Views/AdminServices/AdminServices';
+import AdminHome from './Views/AdminHome/AdminHome';
 import Blog from './Views/Blog/Blog';
 import BlogDetail from './Views/BlogDetail/BlogDetail';
 import AdminBlog from './Views/AdminBlog/AdminBlog';
@@ -24,6 +25,7 @@ function App() {
         <Route path={'/about'} element={<About />} />
         <Route path={'/contact'} element={<Contact />} />
         <Route path={'/login'} element={<Login />} />
+        <Route path={'/admin'} element={<AdminHome />} />
         <Route path={'/admin/services'} element={<AdminServices />} />
         <Route path={'/blog'} element={<Blog />} />
         <Route path={'/blog/:slug'} element={<BlogDetail />} />

@@ -24,7 +24,7 @@ const Login = () => {
 
     try {
       await login(credentials);
-      navigate('/admin/services');
+      navigate('/admin');
     } catch (requestError) {
       setError(requestError.response?.data?.error || requestError.message);
     } finally {
