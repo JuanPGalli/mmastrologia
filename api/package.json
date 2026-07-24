@@ -9,6 +9,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "seed:admin": "npm run build && node dist/scripts/seedAdmin.js",
     "seed:services": "npm run build && node dist/scripts/seedServices.js",
+    "seed:posts": "npm run build && node dist/scripts/seedPosts.js",
     "typecheck": "tsc --noEmit",
     "test": "npm run typecheck"
   },
