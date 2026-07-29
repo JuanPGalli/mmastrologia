@@ -11,8 +11,8 @@
 />
 
     <!-- Adelanta la conexión al backend para que el primer fetch (servicios/posts) no pague DNS+TLS desde cero -->
-    <link rel="preconnect" href="https://mmastrologia-production.up.railway.app" crossorigin />
-    <link rel="dns-prefetch" href="https://mmastrologia-production.up.railway.app" />
+    <link rel="preconnect" href=%VITE_API_URL% crossorigin />
+    <link rel="dns-prefetch" href=%VITE_API_URL% />
 
     <!-- La imagen de fondo del hero es el elemento más grande de la primera pantalla (LCP): se precarga -->
     <link rel="preload" as="image" href="/mapa_astral.png" fetchpriority="high" />
