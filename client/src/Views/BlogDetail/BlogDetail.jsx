@@ -102,6 +102,8 @@ const BlogDetail = () => {
           <img
             src={post.image}
             alt={post.title}
+            fetchPriority='high'
+            decoding='async'
             className='w-full max-h-96 object-cover rounded-lg shadow mb-10'
           />
         )}

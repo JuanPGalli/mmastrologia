@@ -39,7 +39,13 @@ const Detail = () => {
   return (
     <main className='pt-32'>
       <section className='max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12'>
-        <img src={service.image} alt={service.title} className='rounded-lg shadow' />
+        <img
+          src={service.image}
+          alt={service.title}
+          fetchPriority='high'
+          decoding='async'
+          className='rounded-lg shadow'
+        />
 
         <div>
           <h1 className='text-4xl font-light text-purple-900 mb-4'>{service.title}</h1>

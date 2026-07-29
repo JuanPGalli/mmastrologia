@@ -88,7 +88,13 @@ const Blog = () => {
               className='bg-white shadow-md overflow-hidden hover:shadow-xl transition flex flex-col'
             >
               {post.image && (
-                <img src={post.image} alt={post.title} className='w-full h-48 object-cover' />
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  loading='lazy'
+                  decoding='async'
+                  className='w-full h-48 object-cover'
+                />
               )}
 
               <div className='p-6 flex flex-col flex-1'>

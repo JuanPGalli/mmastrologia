@@ -26,7 +26,13 @@ const Services = () => {
             key={service.slug}
             className='bg-white shadow-md overflow-hidden hover:shadow-xl transition'
           >
-            <img src={service.image} alt={service.title} className='w-full h-56 object-cover' />
+            <img
+              src={service.image}
+              alt={service.title}
+              loading='lazy'
+              decoding='async'
+              className='w-full h-56 object-cover'
+            />
 
             <div className='p-6'>
               <h2 className='text-2xl text-purple-800 mb-3'>{service.title}</h2>
