@@ -1,5 +1,12 @@
 import React from 'react';
-import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import {
+  FaFacebook,
+  FaInstagram,
+  FaTiktok,
+  FaYoutube,
+  FaWhatsapp,
+  FaRegEnvelope,
+} from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -11,10 +18,11 @@ const Footer = () => {
           <div className='w-45 border-t-[3px] border-[#D697B8] mt-1 mb-6 h-0 box-border'></div>
           <p className='text-gray-700 font-thin text-xl md:text-2xl'>
             <a
-              href='mailto:mariamgalli71@hotmail.com'
-              className='hover:text-[#D697B8] transition-colors'
+              href='mailto:mariamartagalli.contacto@gmail.com'
+              className='flex items-center gap-3 hover:text-[#D697B8] transition-colors'
             >
-              mariamgalli71@hotmail.com
+              <FaRegEnvelope className='text-slate-400 text-3xl shrink-0' />
+              <span>mariamartagalli.contacto@gmail.com</span>
             </a>
           </p>
           <p className='text-gray-700 font-thin text-xl md:text-2xl'>
@@ -22,9 +30,10 @@ const Footer = () => {
               href='http://wa.me/5491128933987'
               target='_blank'
               rel='noopener noreferrer'
-              className='hover:text-[#D697B8] transition-colors'
+              className='flex items-center gap-3 hover:text-[#D697B8] transition-colors'
             >
-              WhatsApp: +54 9 11 2893-3987
+              <FaWhatsapp className='text-[#25D366] text-3xl shrink-0' />
+              <span>+54 9 11 2893-3987</span>
             </a>
           </p>
         </div>
