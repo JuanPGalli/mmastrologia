@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FaPowerOff, FaSave, FaSearch } from 'react-icons/fa';
+import ImageUploadField from '../../Components/ImageUploadField/ImageUploadField';
 import { useNavigate } from 'react-router-dom';
 import { clearSession, getStoredSession } from '../../api/auth';
 import { fetchAdminServices, updateAdminService } from '../../api/services';
@@ -264,15 +265,7 @@ const AdminServices = () => {
                 />
               </label>
 
-              <label className='block md:col-span-2'>
-                <span className='text-sm text-gray-600'>Imagen</span>
-                <input
-                  name='image'
-                  value={form.image}
-                  onChange={updateField}
-                  className='mt-1 w-full border border-gray-200 px-3 py-2'
-                />
-              </label>
+              <ImageUploadField name='image' value={form.image} onChange={updateField} />
 
               <label className='block md:col-span-2'>
                 <span className='text-sm text-gray-600'>Descripción</span>

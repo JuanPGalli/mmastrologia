@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchServiceBySlug } from '../../api/services';
+import { cloudinaryUrl } from '../../utils/cloudinary';
 
 const Detail = () => {
   const { id } = useParams();
@@ -40,7 +41,7 @@ const Detail = () => {
     <main className='pt-32'>
       <section className='max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12'>
         <img
-          src={service.image}
+          src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_800')}
           alt={service.title}
           fetchPriority='high'
           decoding='async'

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { addComment, fetchPostBySlug } from '../../api/posts';
+import { cloudinaryUrl } from '../../utils/cloudinary';
 
 const formatDate = (value) =>
   value
@@ -100,7 +101,7 @@ const BlogDetail = () => {
 
         {post.image && (
           <img
-            src={post.image}
+            src={cloudinaryUrl(post.image, 'f_auto,q_auto,w_1000')}
             alt={post.title}
             fetchPriority='high'
             decoding='async'

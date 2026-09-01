@@ -3,7 +3,7 @@ export const services = [
     id: 'astrologia-carta-natal',
     title: 'Astrología',
     subtitle: 'Carta Natal',
-    image: '/images/carta-natal.png',
+    image: 'https://res.cloudinary.com/ydsjcgim/image/upload/carta-natal-sin-titulo',
     description: `
 La astrología es una herramienta profunda de autoconocimiento que permite comprender
 tu personalidad, tus talentos, desafíos y los ciclos que estás atravesando.
@@ -29,7 +29,8 @@ personal.
     id: 'astrologia-revolucion-solar',
     title: 'Astrología',
     subtitle: 'Revolución Solar',
-    image: '/images/revolucion-solar.png',
+    image:
+      'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278299/revolucion-solar-sin-titulo.png',
     description: `
 La astrología es una herramienta profunda de autoconocimiento que permite comprender
 tu personalidad, tus talentos, desafíos y los ciclos que estás atravesando.
@@ -53,7 +54,7 @@ y experiencias.
     id: 'astrologia-ciclos-personales',
     title: 'Astrología',
     subtitle: 'Ciclos Personales',
-    image: '/images/ciclos-personales.png',
+    image: 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278397/ciclos-personales.png',
     description: `
 En esta sesión te acompaño a conectar con los tránsitos astrológicos activos en el momento
 de la consulta. Analizamos cómo estas energías influyen en tu presente y, si es pertinente,
@@ -71,7 +72,8 @@ proceso personal.
     id: 'constelaciones-familiares',
     title: 'Constelaciones Familiares',
     subtitle: 'Sanación de vínculos y patrones inconscientes',
-    image: '/images/constelaciones-familiares.png',
+    image:
+      'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278777/constelaciones-familiares-sin-titulo.png',
     description: `
 Las constelaciones familiares permiten observar y ordenar dinámicas ocultas
 que se repiten a lo largo del sistema familiar. A través de este trabajo,
@@ -98,7 +100,8 @@ tu proceso personal.
     id: 'registros-akashicos',
     title: 'Registros Akáshicos',
     subtitle: 'Lectura del alma y guía espiritual',
-    image: '/images/registros-akashicos.png',
+    image:
+      'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278822/registros-akashicos-sin-titulo.png',
     description: `
 La lectura de Registros Akáshicos permite acceder a la información del alma
 para obtener claridad, comprensión y orientación en momentos de duda o cambio.
@@ -129,7 +132,7 @@ Será un gusto acompañarte en este camino.
     id: 'reiki',
     title: 'Reiki',
     subtitle: 'Armonización energética integral',
-    image: '/images/reiki.png',
+    image: 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278947/reiki-sin-titulo.png',
     description: `
 El Reiki es una técnica de canalización de energía que promueve la relajación,
 el equilibrio emocional y el bienestar general. La sesión ayuda a liberar
@@ -148,7 +151,7 @@ bloqueos y restaurar la armonía energética.
     id: 'lectura-de-runas',
     title: 'Lectura de Runas',
     subtitle: 'Orientación simbólica ancestral',
-    image: '/images/runas.png',
+    image: 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788278993/runas-sin-titulo.png',
     description: `
 La lectura de runas brinda una mirada simbólica y profunda sobre situaciones
 actuales. A través de este lenguaje ancestral, se obtiene orientación para
@@ -167,7 +170,7 @@ comprender procesos y tomar decisiones con mayor conciencia.
     id: 'lectura-de-tarot',
     title: 'Lectura de Tarot',
     subtitle: 'Claridad y orientación consciente',
-    image: '/images/tarot.png',
+    image: 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788279036/tarot-sin-titulo.png',
     description: `
 El tarot es una herramienta de guía que permite explorar situaciones,
 emociones y caminos posibles. La lectura se enfoca en brindar claridad,
