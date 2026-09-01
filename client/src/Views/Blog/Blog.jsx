@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
+import { cloudinaryUrl } from '../../utils/cloudinary';
 
 const formatDate = (value) =>
   value
@@ -88,13 +89,15 @@ const Blog = () => {
               className='bg-white shadow-md overflow-hidden hover:shadow-xl transition flex flex-col'
             >
               {post.image && (
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  loading='lazy'
-                  decoding='async'
-                  className='w-full h-48 object-cover'
-                />
+                <div className='aspect-video bg-purple-50'>
+                  <img
+                    src={cloudinaryUrl(post.image, 'f_auto,q_auto,w_500')}
+                    alt={post.title}
+                    loading='lazy'
+                    decoding='async'
+                    className='w-full h-full object-cover'
+                  />
+                </div>
               )}
 
               <div className='p-6 flex flex-col flex-1'>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchServices, getFallbackServices } from '../../api/services';
+import { cloudinaryUrl } from '../../utils/cloudinary';
 
 const Services = () => {
   const [services, setServices] = useState(getFallbackServices());
@@ -26,13 +27,15 @@ const Services = () => {
             key={service.slug}
             className='bg-white shadow-md overflow-hidden hover:shadow-xl transition'
           >
-            <img
-              src={service.image}
-              alt={service.title}
-              loading='lazy'
-              decoding='async'
-              className='w-full h-56 object-cover'
-            />
+            <div className='aspect-video bg-purple-50'>
+              <img
+                src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_600')}
+                alt={service.title}
+                loading='lazy'
+                decoding='async'
+                className='w-full h-full object-cover'
+              />
+            </div>
 
             <div className='p-6'>
               <h2 className='text-2xl text-purple-800 mb-3'>{service.title}</h2>

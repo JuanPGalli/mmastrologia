@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FaPlus, FaPowerOff, FaSave, FaSearch, FaTrash } from 'react-icons/fa';
+import ImageUploadField from '../../Components/ImageUploadField/ImageUploadField';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { clearSession, getStoredSession } from '../../api/auth';
@@ -342,16 +343,12 @@ const AdminBlog = () => {
                 />
               </label>
 
-              <label className='block md:col-span-2'>
-                <span className='text-sm text-gray-600'>Imagen destacada (URL)</span>
-                <input
-                  name='image'
-                  value={form.image}
-                  onChange={updateField}
-                  className='mt-1 w-full border border-gray-200 px-3 py-2'
-                  placeholder='https://...'
-                />
-              </label>
+              <ImageUploadField
+                name='image'
+                value={form.image}
+                onChange={updateField}
+                label='Imagen destacada'
+              />
 
               <label className='block md:col-span-2'>
                 <span className='text-sm text-gray-600'>Resumen (excerpt)</span>
