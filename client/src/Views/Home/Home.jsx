@@ -5,7 +5,6 @@ import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 import testimonials from '../../data/testimonials';
-import './Home.css';
 
 const steps = [
   {
