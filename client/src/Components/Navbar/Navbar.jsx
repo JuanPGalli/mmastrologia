@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-const logoNav =
-  'https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788280204/Logo-MMA.png';
+const logoNav = '/Logo-MMA.png';
 
 import { FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
@@ -90,6 +89,14 @@ const Navbar = () => {
           <li>
             <a className='nav-link' href='/contact'>
               Contacto
+            </a>
+          </li>
+          <li>
+            <a
+              href='/agendar'
+              className='inline-block bg-purple-800 text-white px-4 py-2 rounded-full text-sm hover:bg-purple-900 transition'
+            >
+              Agendar
             </a>
           </li>
           <li>
