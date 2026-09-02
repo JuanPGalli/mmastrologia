@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { paramValue } from "../utils/params";
 import {
   addCommentToPost,
   createPost,
@@ -39,7 +40,7 @@ export const getAdminPostsHandler: RequestHandler = async (req, res) => {
 
 export const getPostBySlugHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await getPostBySlug(req.params.slug);
+    const post = await getPostBySlug(paramValue(req.params.slug));
     res.status(200).json(post);
   } catch (error: unknown) {
     sendError(res, error);
@@ -48,7 +49,7 @@ export const getPostBySlugHandler: RequestHandler = async (req, res) => {
 
 export const getPostByIdHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await getPostById(req.params.id);
+    const post = await getPostById(paramValue(req.params.id));
     res.status(200).json(post);
   } catch (error: unknown) {
     sendError(res, error);
@@ -66,7 +67,7 @@ export const createPostHandler: RequestHandler = async (req, res) => {
 
 export const updatePostHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await updatePostById(req.params.id, req.body);
+    const post = await updatePostById(paramValue(req.params.id), req.body);
     res.status(200).json(post);
   } catch (error: unknown) {
     sendError(res, error);
@@ -75,7 +76,7 @@ export const updatePostHandler: RequestHandler = async (req, res) => {
 
 export const deletePostHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await deletePostById(req.params.id);
+    const post = await deletePostById(paramValue(req.params.id));
     res.status(200).json({ message: "Artículo eliminado", post });
   } catch (error: unknown) {
     sendError(res, error);
@@ -84,7 +85,7 @@ export const deletePostHandler: RequestHandler = async (req, res) => {
 
 export const addCommentHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await addCommentToPost(req.params.slug, req.body);
+    const post = await addCommentToPost(paramValue(req.params.slug), req.body);
     res.status(201).json(post);
   } catch (error: unknown) {
     sendError(res, error);
@@ -93,7 +94,7 @@ export const addCommentHandler: RequestHandler = async (req, res) => {
 
 export const deleteCommentHandler: RequestHandler = async (req, res) => {
   try {
-    const post = await deleteCommentFromPost(req.params.id, req.params.commentId);
+    const post = await deleteCommentFromPost(paramValue(req.params.id), paramValue(req.params.commentId));
     res.status(200).json(post);
   } catch (error: unknown) {
     sendError(res, error);
