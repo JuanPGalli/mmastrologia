@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { paramValue } from "../utils/params";
 import {
   createService,
   deleteServiceById,
@@ -37,7 +38,7 @@ export const getAdminServicesHandler: RequestHandler = async (_req, res) => {
 
 export const getServiceBySlugHandler: RequestHandler = async (req, res) => {
   try {
-    const service = await getServiceBySlug(req.params.slug);
+    const service = await getServiceBySlug(paramValue(req.params.slug));
     res.status(200).json(service);
   } catch (error: unknown) {
     sendError(res, error);
@@ -46,7 +47,7 @@ export const getServiceBySlugHandler: RequestHandler = async (req, res) => {
 
 export const getServiceByIdHandler: RequestHandler = async (req, res) => {
   try {
-    const service = await getServiceById(req.params.id);
+    const service = await getServiceById(paramValue(req.params.id));
     res.status(200).json(service);
   } catch (error: unknown) {
     sendError(res, error);
@@ -64,7 +65,7 @@ export const createServiceHandler: RequestHandler = async (req, res) => {
 
 export const updateServiceHandler: RequestHandler = async (req, res) => {
   try {
-    const service = await updateServiceById(req.params.id, req.body);
+    const service = await updateServiceById(paramValue(req.params.id), req.body);
     res.status(200).json(service);
   } catch (error: unknown) {
     sendError(res, error);
@@ -73,7 +74,7 @@ export const updateServiceHandler: RequestHandler = async (req, res) => {
 
 export const deleteServiceHandler: RequestHandler = async (req, res) => {
   try {
-    const service = await deleteServiceById(req.params.id);
+    const service = await deleteServiceById(paramValue(req.params.id));
     res.status(200).json({ message: "Servicio eliminado", service });
   } catch (error: unknown) {
     sendError(res, error);
