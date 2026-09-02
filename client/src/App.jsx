@@ -5,6 +5,7 @@ import Home from './Views/Home/Home';
 import Detail from './Views/Detail/Detail';
 import About from './Views/About/About';
 import Contact from './Views/Contact/Contact';
+import Agendar from './Views/Agendar/Agendar';
 import Navbar from './Components/Navbar/Navbar';
 import Services from './Views/Services/Services';
 import Footer from './Components/Footer/Footer';
@@ -30,6 +31,7 @@ function App() {
           <Route path={'/services/:id'} element={<Detail />} />
           <Route path={'/about'} element={<About />} />
           <Route path={'/contact'} element={<Contact />} />
+          <Route path={'/agendar'} element={<Agendar />} />
           <Route path={'/login'} element={<Login />} />
           <Route path={'/admin'} element={<AdminHome />} />
           <Route path={'/admin/services'} element={<AdminServices />} />
