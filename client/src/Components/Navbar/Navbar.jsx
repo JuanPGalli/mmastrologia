@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-const logoNav = '/Logo-MMA.png';
+const logoNav = 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788280204/Logo-MMA.png';
 
 import { FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
