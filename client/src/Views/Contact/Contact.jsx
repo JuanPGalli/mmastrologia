@@ -1,37 +1,32 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { sendContactMessage } from '../../api/contact';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phoneRegex = /^\+?[0-9\s-]{8,15}$/;
 
 const WHATSAPP_NUMBER = '5491128933987';
 
+const initialForm = { name: '', email: '', phone: '', message: '', website: '' };
+
 const Contact = () => {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
+  const [form, setForm] = useState(initialForm);
+  const [sending, setSending] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const validateForm = () => {
-    if (!form.name || !form.email || !form.phone || !form.message) {
-      return 'Por favor completá todos los campos.';
+    if (!form.name || !form.email || !form.message) {
+      return 'Por favor completá nombre, email y tu consulta.';
     }
     if (!emailRegex.test(form.email)) {
       return 'El email ingresado no es válido.';
     }
-    if (!phoneRegex.test(form.phone)) {
-      return 'El número de WhatsApp no es válido.';
-    }
     return null;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const error = validateForm();
@@ -45,31 +40,27 @@ const Contact = () => {
       return;
     }
 
-    const whatsappMessage = encodeURIComponent(
-      `Hola, soy ${form.name}.
-Email: ${form.email}
-WhatsApp: ${form.phone}
+    setSending(true);
 
-Consulta:
-${form.message}`,
-    );
-
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Mensaje listo para enviar',
-      text: 'Al hacer click se abrirá WhatsApp con tu consulta.',
-      showCancelButton: true,
-      confirmButtonText: 'Abrir WhatsApp',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#7c3aed',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.open(whatsappUrl, '_blank');
-        setForm({ name: '', email: '', phone: '', message: '' });
-      }
-    });
+    try {
+      await sendContactMessage(form);
+      setForm(initialForm);
+      Swal.fire({
+        icon: 'success',
+        title: 'Mensaje enviado',
+        text: 'Gracias por escribir. Te voy a responder a la brevedad.',
+        confirmButtonColor: '#7c3aed',
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudo enviar',
+        text: err.message,
+        confirmButtonColor: '#7c3aed',
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -83,6 +74,18 @@ ${form.message}`,
         </p>
 
         <form onSubmit={handleSubmit} className='bg-white shadow-md rounded-xl p-8 space-y-6'>
+          {/* Honeypot anti-spam: invisible para personas, si un bot lo completa se descarta */}
+          <input
+            type='text'
+            name='website'
+            value={form.website}
+            onChange={handleChange}
+            tabIndex='-1'
+            autoComplete='off'
+            className='hidden'
+            aria-hidden='true'
+          />
+
           <input
             type='text'
             name='name'
@@ -104,7 +107,7 @@ ${form.message}`,
           <input
             type='text'
             name='phone'
-            placeholder='WhatsApp (con código de país)'
+            placeholder='WhatsApp (opcional, con código de país)'
             value={form.phone}
             onChange={handleChange}
             className='w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300'
@@ -121,11 +124,24 @@ ${form.message}`,
 
           <button
             type='submit'
-            className='w-full bg-purple-700 text-white py-4 rounded-full hover:bg-purple-800 transition'
+            disabled={sending}
+            className='w-full bg-purple-700 text-white py-4 rounded-full hover:bg-purple-800 transition disabled:opacity-60'
           >
-            Enviar consulta por WhatsApp
+            {sending ? 'Enviando...' : 'Enviar consulta'}
           </button>
         </form>
+
+        <p className='text-center text-sm text-gray-500 mt-6'>
+          ¿Preferís escribir directo?{' '}
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}`}
+            target='_blank'
+            rel='noreferrer'
+            className='text-purple-800 underline underline-offset-4 hover:text-purple-950'
+          >
+            Escribime por WhatsApp
+          </a>
+        </p>
       </section>
     </main>
   );

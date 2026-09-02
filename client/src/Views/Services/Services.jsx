@@ -57,7 +57,7 @@ const Services = () => {
         title='Acompañamiento consciente para tu proceso personal'
         description='Cada consulta es un espacio de escucha, claridad y transformación. Si sentís que algo se repite, podemos trabajarlo conjuntamente.'
         primaryText='Reservar una consulta'
-        primaryLink='/contact'
+        primaryLink='/agendar'
         secondaryText='¿No sabés qué consulta elegir?'
         secondaryLink='/contact'
       />

@@ -155,7 +155,7 @@ const Blog = () => {
         title='¿Querés profundizar en tu propio proceso?'
         description='Cada consulta es un espacio de escucha, claridad y transformación personal.'
         primaryText='Reservar una consulta'
-        primaryLink='/contact'
+        primaryLink='/agendar'
       />
     </main>
   );

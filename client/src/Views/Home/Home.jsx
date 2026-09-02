@@ -30,11 +30,7 @@ const trustPoints = [
 
 const formatDate = (value) =>
   value
-    ? new Date(value).toLocaleDateString('es-AR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+    ? new Date(value).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
 
 const Home = () => {
@@ -57,10 +53,7 @@ const Home = () => {
       {/* HERO */}
       <section
         className='relative min-h-screen flex items-center bg-cover bg-center'
-        style={{
-          backgroundImage:
-            "url('https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788280251/mapa_astral.png')",
-        }}
+        style={{ backgroundImage: "url('/mapa_astral.png')" }}
       >
         <div className='absolute inset-0 bg-linear-to-b from-black/70 via-purple-900/60 to-black/80' />
 
@@ -81,7 +74,7 @@ const Home = () => {
 
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
-              to='/contact'
+              to='/agendar'
               className='inline-block bg-white text-purple-900 px-8 py-3 uppercase tracking-widest text-sm font-medium hover:bg-purple-100 transition shadow-lg'
             >
               Reservá tu consulta
@@ -157,8 +150,8 @@ const Home = () => {
             ¿Nunca hiciste una consulta? Así es el proceso
           </h2>
           <p className='text-center text-gray-600 mb-12 max-w-2xl mx-auto'>
-            Sin protocolos rígidos ni tecnicismos: un espacio pensado para que te sientas acompañada
-            desde el primer contacto.
+            Sin protocolos rígidos ni tecnicismos: un espacio pensado para que te sientas
+            acompañada desde el primer contacto.
           </p>
 
           <div className='grid gap-10 md:grid-cols-3'>
@@ -178,9 +171,7 @@ const Home = () => {
       {testimonials.length > 0 && (
         <Reveal as='section' className='bg-[#f7f3fb] py-20'>
           <div className='max-w-4xl mx-auto px-6 text-center'>
-            <h2 className='text-3xl mb-12 text-purple-900 font-light'>
-              Lo que cuentan quienes ya vinieron
-            </h2>
+            <h2 className='text-3xl mb-12 text-purple-900 font-light'>Lo que cuentan quienes ya vinieron</h2>
 
             <div className='grid gap-8 md:grid-cols-2'>
               {testimonials.map((testimonial) => (
@@ -249,7 +240,7 @@ const Home = () => {
         title='¿Sentís que es momento de tomar claridad?'
         description='Reservá tu consulta y demos el primer paso juntas, a tu ritmo.'
         primaryText='Reservar una consulta'
-        primaryLink='/contact'
+        primaryLink='/agendar'
         secondaryText='Ver todas las consultas disponibles'
         secondaryLink='/services'
       />

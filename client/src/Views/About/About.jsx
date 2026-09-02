@@ -9,7 +9,7 @@ const About = () => {
           {/* Foto */}
           <div className='flex justify-center'>
             <img
-              src='/images/about.jpeg'
+              src='https://res.cloudinary.com/ydsjcgim/image/upload/v1788279628/about.jpg'
               alt='María Marta Galli – Astróloga y terapeuta holística'
               className='
                 w-72 h-72

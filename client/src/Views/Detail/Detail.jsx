@@ -67,7 +67,7 @@ const Detail = () => {
           <p className='text-sm text-gray-500'>💻 Modalidad: {service.modality}</p>
 
           <a
-            href='/contact'
+            href='/agendar'
             className='inline-block mt-8 bg-purple-700 text-white px-8 py-3 uppercase tracking-widest text-sm hover:bg-purple-900 transition'
           >
             Reservar consulta
