@@ -5,7 +5,6 @@ import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 import testimonials from '../../data/testimonials';
-import './Home.css';
 
 const steps = [
   {
@@ -59,7 +58,7 @@ const Home = () => {
         className='relative min-h-screen flex items-center bg-cover bg-center'
         style={{
           backgroundImage:
-            "url('https://res.cloudinary.com/ydsjcgim/image/upload/v1788280251/mapa_astral.png')",
+            "url('https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788280251/mapa_astral.png')",
         }}
       >
         <div className='absolute inset-0 bg-linear-to-b from-black/70 via-purple-900/60 to-black/80' />
