@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../../Components/Reveal/Reveal';
+import NovedadesSection from '../../Components/NovedadesSection/NovedadesSection';
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
 import { cloudinaryUrl } from '../../utils/cloudinary';
@@ -36,8 +37,27 @@ const formatDate = (value) =>
       })
     : '';
 
+const HERO_IMAGE =
+  'https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto,w_1600/v1788280251/mapa_astral.png';
+
 const Home = () => {
   const [latestPosts, setLatestPosts] = useState([]);
+
+  useEffect(() => {
+    // Precarga la imagen del hero solo mientras estamos en el Home (evita el
+    // warning de "preloaded but not used" en el resto de las páginas, ya que
+    // este link vivía antes en index.html y se aplicaba a todo el sitio).
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = HERO_IMAGE;
+    link.fetchPriority = 'high';
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -57,8 +77,7 @@ const Home = () => {
       <section
         className='relative min-h-screen flex items-center bg-cover bg-center'
         style={{
-          backgroundImage:
-            "url('https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788280251/mapa_astral.png')",
+          backgroundImage: `url('${HERO_IMAGE}')`,
         }}
       >
         <div className='absolute inset-0 bg-linear-to-b from-black/70 via-purple-900/60 to-black/80' />
@@ -106,6 +125,8 @@ const Home = () => {
           ))}
         </div>
       </Reveal>
+
+      <NovedadesSection />
 
       {/* SERVICIOS */}
       <Reveal as='section' className='bg-[#f7f3fb] py-20'>
