@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FaBook, FaGear, FaRightFromBracket } from 'react-icons/fa6';
+import { FaBook, FaBullhorn, FaGear, FaRightFromBracket } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { clearSession, getStoredSession } from '../../api/auth';
 
@@ -35,7 +35,7 @@ const AdminHome = () => {
           </button>
         </div>
 
-        <div className='grid gap-5 sm:grid-cols-2'>
+        <div className='grid gap-5 sm:grid-cols-3'>
           <button
             onClick={() => navigate('/admin/services')}
             className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
@@ -59,6 +59,19 @@ const AdminHome = () => {
             <span className='text-lg font-medium text-purple-950'>Blog</span>
             <span className='text-sm text-gray-600'>
               Crear artículos, moderar comentarios y administrar el contenido del blog.
+            </span>
+          </button>
+
+          <button
+            onClick={() => navigate('/admin/novedades')}
+            className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
+          >
+            <span className='inline-flex h-10 w-10 items-center justify-center bg-purple-900 text-white'>
+              <FaBullhorn aria-hidden='true' />
+            </span>
+            <span className='text-lg font-medium text-purple-950'>Novedades</span>
+            <span className='text-sm text-gray-600'>
+              Anunciar ferias, apariciones y eventos puntuales en el Home.
             </span>
           </button>
         </div>
