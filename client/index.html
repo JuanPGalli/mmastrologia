@@ -13,6 +13,57 @@
     <!-- Adelanta la conexión al backend para que el primer fetch (servicios/posts) no pague DNS+TLS desde cero -->
     <link rel="preconnect" href="%VITE_API_URL%" crossorigin />
     <link rel="dns-prefetch" href="%VITE_API_URL%" />
+
+    <!--
+      Precarga la imagen del hero SOLO si estamos entrando por el Home ('/').
+      Va como script inline (no como <link> fijo) para poder ser condicional
+      por ruta; al ser sincrónico y estar en el <head>, el navegador lo
+      ejecuta mientras parsea el HTML, mucho antes de bajar el bundle de JS
+      — el mismo timing que tendría un <link rel="preload"> estático, pero
+      sin generar el warning en el resto de las páginas.
+      Si cambiás la imagen del hero, actualizá esta URL Y la constante
+      HERO_IMAGE en client/src/Views/Home/Home.jsx (son la misma imagen).
+    -->
+    <script>
+      if (location.pathname === '/') {
+        var heroPreload = document.createElement('link');
+        heroPreload.rel = 'preload';
+        heroPreload.as = 'image';
+        heroPreload.href =
+          'https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto,w_1600/v1788280251/mapa_astral.png';
+        heroPreload.fetchPriority = 'high';
+        document.head.appendChild(heroPreload);
+      }
+    </script>
+
+    <!--
+      Google Search Console: verificación de propiedad por meta tag.
+      Reemplazá el contenido por el código que te da Search Console al
+      agregar la propiedad como "Etiqueta HTML" (Configuración > Verificación
+      de la propiedad). Si no está configurada, esta línea no molesta.
+    -->
+    <meta name="google-site-verification" content="%VITE_GSC_VERIFICATION%" />
+
+    <!-- Google Analytics 4 -->
+    <script>
+      (function () {
+        var GA_ID = '%VITE_GA4_MEASUREMENT_ID%';
+        if (!GA_ID || GA_ID.indexOf('%') === 0) return;
+
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+        window.gtag = gtag;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

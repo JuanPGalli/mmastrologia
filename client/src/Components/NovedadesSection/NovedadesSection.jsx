@@ -76,7 +76,9 @@ const NovedadesSection = () => {
                   )}
 
                   <h3 className='text-xl text-purple-950 font-medium mb-2'>{novedad.title}</h3>
-                  <p className='text-sm text-gray-600 mb-4 flex-1'>{novedad.description}</p>
+                  <p className='text-sm text-gray-600 mb-4 flex-1 whitespace-pre-line'>
+                    {novedad.description}
+                  </p>
 
                   <div className='flex items-center gap-4 mt-auto pt-2'>
                     {novedad.ctaText && novedad.ctaLink && (

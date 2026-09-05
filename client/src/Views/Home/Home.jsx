@@ -4,6 +4,7 @@ import Reveal from '../../Components/Reveal/Reveal';
 import NovedadesSection from '../../Components/NovedadesSection/NovedadesSection';
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
+import { fetchServices } from '../../api/services';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 import testimonials from '../../data/testimonials';
 
@@ -42,20 +43,17 @@ const HERO_IMAGE =
 
 const Home = () => {
   const [latestPosts, setLatestPosts] = useState([]);
+  const [featuredServices, setFeaturedServices] = useState([]);
 
   useEffect(() => {
-    // Precarga la imagen del hero solo mientras estamos en el Home (evita el
-    // warning de "preloaded but not used" en el resto de las páginas, ya que
-    // este link vivía antes en index.html y se aplicaba a todo el sitio).
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = HERO_IMAGE;
-    link.fetchPriority = 'high';
-    document.head.appendChild(link);
+    let cancelled = false;
+
+    fetchServices().then((data) => {
+      if (!cancelled) setFeaturedServices((data || []).slice(0, 3));
+    });
 
     return () => {
-      document.head.removeChild(link);
+      cancelled = true;
     };
   }, []);
 
@@ -83,13 +81,15 @@ const Home = () => {
         <div className='absolute inset-0 bg-linear-to-b from-black/70 via-purple-900/60 to-black/80' />
 
         <div className='relative z-10 max-w-4xl mx-auto px-6 text-center text-white'>
-          <h1 className='text-4xl md:text-5xl font-light tracking-wide mb-6'>
+          <h1 className='text-5xl md:text-6xl font-light tracking-wide mb-3'>María Marta Galli</h1>
+
+          <p className='text-xl md:text-2xl mb-6 text-amber-300 tracking-wide'>
             Astróloga y terapeuta holística
-          </h1>
+          </p>
 
           <p className='text-lg md:text-xl mb-4 text-white/90'>
-            María Marta Galli acompaña procesos de autoconocimiento y transformación personal a
-            través de la astrología psicológica y herramientas energéticas.
+            Acompaño procesos de autoconocimiento y transformación personal a través de la
+            astrología psicológica y herramientas energéticas.
           </p>
 
           <p className='text-base md:text-lg mb-10 text-white/80'>
@@ -100,7 +100,7 @@ const Home = () => {
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
               to='/agendar'
-              className='inline-block bg-white text-purple-900 px-8 py-3 uppercase tracking-widest text-sm font-medium hover:bg-purple-100 transition shadow-lg'
+              className='inline-block bg-amber-400 text-purple-950 px-8 py-3 uppercase tracking-widest text-sm font-semibold hover:bg-amber-300 hover:scale-105 transition shadow-lg shadow-amber-900/30'
             >
               Reservá tu consulta
             </Link>
@@ -135,28 +135,31 @@ const Home = () => {
             Consultas y acompañamientos
           </h2>
 
-          <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-4'>
-            <div className='bg-white p-6 text-center shadow-sm'>
-              <h3 className='text-lg mb-2 text-purple-800'>Astrología</h3>
-              <p className='text-sm text-gray-600'>
-                Carta natal, revolución solar y ciclos personales.
-              </p>
-            </div>
-
-            <div className='bg-white p-6 text-center shadow-sm'>
-              <h3 className='text-lg mb-2 text-purple-800'>Registros Akáshicos</h3>
-              <p className='text-sm text-gray-600'>Lecturas del alma para claridad y sanación.</p>
-            </div>
-
-            <div className='bg-white p-6 text-center shadow-sm'>
-              <h3 className='text-lg mb-2 text-purple-800'>Reiki</h3>
-              <p className='text-sm text-gray-600'>Armonización energética integral.</p>
-            </div>
-
-            <div className='bg-white p-6 text-center shadow-sm'>
-              <h3 className='text-lg mb-2 text-purple-800'>Tarot y Runas</h3>
-              <p className='text-sm text-gray-600'>Orientación simbólica y espiritual.</p>
-            </div>
+          <div className='grid gap-8 md:grid-cols-3'>
+            {featuredServices.map((service, index) => (
+              <Reveal key={service.slug} delay={index * 120}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className='group block bg-white shadow-sm hover:shadow-lg transition overflow-hidden h-full'
+                >
+                  {service.image && (
+                    <div className='aspect-video bg-purple-50 overflow-hidden'>
+                      <img
+                        src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_500')}
+                        alt={service.title}
+                        loading='lazy'
+                        decoding='async'
+                        className='w-full h-full object-cover group-hover:scale-105 transition duration-300'
+                      />
+                    </div>
+                  )}
+                  <div className='p-6'>
+                    <h3 className='text-lg mb-2 text-purple-800'>{service.title}</h3>
+                    <p className='text-sm text-gray-600'>{service.shortDescription}</p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
           </div>
 
           <div className='text-center mt-12'>
