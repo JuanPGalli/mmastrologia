@@ -214,7 +214,7 @@ const AdminBlog = () => {
   };
 
   return (
-    <main className='pt-28 min-h-screen bg-[#f7f3fb]'>
+    <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
       <section className='max-w-7xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>

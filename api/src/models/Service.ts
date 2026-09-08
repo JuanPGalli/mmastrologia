@@ -23,6 +23,7 @@ export interface IService extends Document {
   duration?: string;
   modality?: string;
   price?: number;
+  calendlyUrl?: string;
   ctaLabel?: string;
   ctaUrl?: string;
   videoUrl?: string;
@@ -71,6 +72,7 @@ const serviceSchema = new Schema<IService>(
     duration: { type: String, trim: true },
     modality: { type: String, trim: true },
     price: { type: Number, min: 0 },
+    calendlyUrl: { type: String, trim: true },
     ctaLabel: { type: String, trim: true },
     ctaUrl: { type: String, trim: true },
     videoUrl: { type: String, trim: true },

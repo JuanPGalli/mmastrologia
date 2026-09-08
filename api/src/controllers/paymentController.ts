@@ -1,5 +1,6 @@
 import { MercadoPagoConfig, Preference, Payment as MPPayment } from "mercadopago";
 import { IPayment, Payment } from "../models/Payment";
+import { Service } from "../models/Service";
 
 const getClient = () => {
   if (!process.env.MP_ACCESS_TOKEN) {
@@ -8,12 +9,11 @@ const getClient = () => {
   return new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 };
 
-const CONSULTA_PRICE_ARS = Number(process.env.CONSULTA_PRICE_ARS || 95000);
-
 type PreferencePayload = {
   name?: unknown;
   email?: unknown;
   phone?: unknown;
+  serviceId?: unknown;
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,12 +22,26 @@ export const createPaymentPreference = async (payload: PreferencePayload) => {
   const name = typeof payload.name === "string" ? payload.name.trim() : "";
   const email = typeof payload.email === "string" ? payload.email.trim() : "";
   const phone = typeof payload.phone === "string" ? payload.phone.trim() : "";
+  const serviceId = typeof payload.serviceId === "string" ? payload.serviceId.trim() : "";
 
   if (!name || !email) {
     throw new Error("Faltan nombre y email.");
   }
   if (!emailRegex.test(email)) {
     throw new Error("El email ingresado no es válido.");
+  }
+  if (!serviceId) {
+    throw new Error("Falta indicar qué consulta se está reservando.");
+  }
+
+  // El precio SIEMPRE se busca en el servidor a partir del servicio elegido,
+  // nunca se confía en un monto que venga del navegador.
+  const service = await Service.findById(serviceId);
+  if (!service || !service.active) {
+    throw new Error("La consulta seleccionada no está disponible.");
+  }
+  if (!service.price || service.price <= 0) {
+    throw new Error("Esta consulta todavía no tiene un precio configurado.");
   }
 
   const frontendUrl = process.env.FRONTEND_URL;
@@ -39,7 +53,9 @@ export const createPaymentPreference = async (payload: PreferencePayload) => {
     name,
     email,
     phone: phone || undefined,
-    amount: CONSULTA_PRICE_ARS,
+    serviceId: service._id,
+    serviceTitle: service.title,
+    amount: service.price,
     currency: "ARS",
     status: "pending",
   });
@@ -54,10 +70,10 @@ export const createPaymentPreference = async (payload: PreferencePayload) => {
     body: {
       items: [
         {
-          id: "consulta-astrologica",
-          title: "Consulta astrológica — María Marta Galli",
+          id: String(service._id),
+          title: `${service.title} — María Marta Galli`,
           quantity: 1,
-          unit_price: CONSULTA_PRICE_ARS,
+          unit_price: service.price,
           currency_id: "ARS",
         },
       ],
@@ -83,11 +99,15 @@ export const getPaymentByReference = async (reference: string) => {
   const payment = await Payment.findById(reference);
   if (!payment) throw new Error("Pago no encontrado");
 
-  // Solo devolvemos lo necesario para prellenar Calendly, nada más.
+  const service = await Service.findById(payment.serviceId);
+
+  // Solo devolvemos lo necesario para la página de éxito, nada más.
   return {
     name: payment.name,
     email: payment.email,
     status: payment.status,
+    serviceTitle: payment.serviceTitle,
+    calendlyUrl: service?.calendlyUrl || undefined,
   };
 };
 

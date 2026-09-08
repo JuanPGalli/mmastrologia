@@ -6,6 +6,8 @@ export interface IPayment extends Document {
   name: string;
   email: string;
   phone?: string;
+  serviceId: mongoose.Types.ObjectId;
+  serviceTitle: string;
   amount: number;
   currency: string;
   status: PaymentStatus;
@@ -20,6 +22,10 @@ const paymentSchema = new Schema<IPayment>(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
     phone: { type: String, trim: true },
+    serviceId: { type: Schema.Types.ObjectId, ref: "Service", required: true },
+    // Copiamos el título al momento del pago: si el servicio se renombra o
+    // borra después, el historial de pagos sigue siendo legible.
+    serviceTitle: { type: String, required: true, trim: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true, default: "ARS" },
     status: {
