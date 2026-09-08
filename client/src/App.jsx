@@ -20,6 +20,7 @@ const AdminHome = lazy(() => import('./Views/AdminHome/AdminHome'));
 const AdminServices = lazy(() => import('./Views/AdminServices/AdminServices'));
 const AdminBlog = lazy(() => import('./Views/AdminBlog/AdminBlog'));
 const AdminNovedades = lazy(() => import('./Views/AdminNovedades/AdminNovedades'));
+const AdminPayments = lazy(() => import('./Views/AdminPayments/AdminPayments'));
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path={'/blog/:slug'} element={<BlogDetail />} />
           <Route path={'/admin/blog'} element={<AdminBlog />} />
           <Route path={'/admin/novedades'} element={<AdminNovedades />} />
+          <Route path={'/admin/payments'} element={<AdminPayments />} />
         </Routes>
       </Suspense>
       <Footer />
