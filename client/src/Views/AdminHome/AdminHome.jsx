@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FaBook, FaBullhorn, FaGear, FaRightFromBracket } from 'react-icons/fa6';
+import { FaBook, FaBullhorn, FaCreditCard, FaGear, FaRightFromBracket } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { clearSession, getStoredSession } from '../../api/auth';
 
@@ -20,7 +20,7 @@ const AdminHome = () => {
 
   return (
     <main className='pt-28 min-h-screen bg-[#f7f3fb] px-6'>
-      <section className='mx-auto max-w-3xl'>
+      <section className='mx-auto max-w-5xl'>
         <div className='flex items-center justify-between mb-8'>
           <div>
             <h1 className='text-2xl font-light text-purple-950'>Panel de administración</h1>
@@ -35,7 +35,7 @@ const AdminHome = () => {
           </button>
         </div>
 
-        <div className='grid gap-5 sm:grid-cols-3'>
+        <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
           <button
             onClick={() => navigate('/admin/services')}
             className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
@@ -72,6 +72,19 @@ const AdminHome = () => {
             <span className='text-lg font-medium text-purple-950'>Novedades</span>
             <span className='text-sm text-gray-600'>
               Anunciar ferias, apariciones y eventos puntuales en el Home.
+            </span>
+          </button>
+
+          <button
+            onClick={() => navigate('/admin/payments')}
+            className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
+          >
+            <span className='inline-flex h-10 w-10 items-center justify-center bg-purple-900 text-white'>
+              <FaCreditCard aria-hidden='true' />
+            </span>
+            <span className='text-lg font-medium text-purple-950'>Pagos</span>
+            <span className='text-sm text-gray-600'>
+              Ver quién pagó, cuánto y en qué estado está cada consulta.
             </span>
           </button>
         </div>
