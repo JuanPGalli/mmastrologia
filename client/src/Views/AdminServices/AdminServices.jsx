@@ -18,6 +18,8 @@ const emptySelection = {
   includes: '',
   active: true,
   order: 0,
+  price: '',
+  calendlyUrl: '',
   seoDescription: '',
 };
 
@@ -34,6 +36,8 @@ const toServiceForm = (service) => ({
   includes: service.includes?.join('\n') || '',
   active: Boolean(service.active),
   order: service.order || 0,
+  price: service.price ?? '',
+  calendlyUrl: service.calendlyUrl || '',
   seoDescription: service.seo?.description || '',
 });
 
@@ -117,6 +121,8 @@ const AdminServices = () => {
           .filter(Boolean),
         active: form.active,
         order: Number(form.order),
+        price: form.price === '' ? undefined : Number(form.price),
+        calendlyUrl: form.calendlyUrl,
         seo: {
           description: form.seoDescription,
         },
@@ -138,7 +144,7 @@ const AdminServices = () => {
   };
 
   return (
-    <main className='pt-28 min-h-screen bg-[#f7f3fb]'>
+    <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
       <section className='max-w-7xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>
@@ -261,6 +267,32 @@ const AdminServices = () => {
                   name='modality'
                   value={form.modality}
                   onChange={updateField}
+                  className='mt-1 w-full border border-gray-200 px-3 py-2'
+                />
+              </label>
+
+              <label className='block'>
+                <span className='text-sm text-gray-600'>Precio (ARS)</span>
+                <input
+                  type='number'
+                  min='0'
+                  name='price'
+                  value={form.price}
+                  onChange={updateField}
+                  placeholder='95000'
+                  className='mt-1 w-full border border-gray-200 px-3 py-2'
+                />
+              </label>
+
+              <label className='block'>
+                <span className='text-sm text-gray-600'>
+                  Link de Calendly propio (opcional)
+                </span>
+                <input
+                  name='calendlyUrl'
+                  value={form.calendlyUrl}
+                  onChange={updateField}
+                  placeholder='Si lo dejás vacío, usa el general de /agendar'
                   className='mt-1 w-full border border-gray-200 px-3 py-2'
                 />
               </label>

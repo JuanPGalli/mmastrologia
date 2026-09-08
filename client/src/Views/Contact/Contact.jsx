@@ -64,7 +64,7 @@ const Contact = () => {
   };
 
   return (
-    <main className='pt-32 min-h-screen bg-[#f7f3fb]'>
+    <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
       <section className='max-w-4xl mx-auto px-6'>
         <h1 className='text-4xl font-light text-purple-900 mb-6 text-center'>Contacto</h1>
 

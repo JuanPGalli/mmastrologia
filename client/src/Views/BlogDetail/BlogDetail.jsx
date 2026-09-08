@@ -65,7 +65,7 @@ const BlogDetail = () => {
 
   if (!post && loaded.slug !== slug) {
     return (
-      <div className='pt-32 text-center'>
+      <div className='pt-36 text-center'>
         <p className='text-gray-600'>Cargando artículo...</p>
       </div>
     );
@@ -73,7 +73,7 @@ const BlogDetail = () => {
 
   if (!post) {
     return (
-      <div className='pt-32 text-center'>
+      <div className='pt-36 text-center'>
         <h2 className='text-2xl'>Artículo no encontrado</h2>
         <Link to='/blog' className='text-purple-700 underline'>
           Volver al blog
@@ -85,7 +85,7 @@ const BlogDetail = () => {
   const comments = post.comments?.filter((comment) => comment.approved !== false) || [];
 
   return (
-    <main className='pt-32 bg-[#f7f3fb] min-h-screen'>
+    <main className='pt-36 bg-[#f7f3fb] min-h-screen'>
       <article className='max-w-3xl mx-auto px-6'>
         {post.category && (
           <span className='text-xs uppercase tracking-widest text-purple-500'>

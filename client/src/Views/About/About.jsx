@@ -2,14 +2,14 @@ import React from 'react';
 
 const About = () => {
   return (
-    <main className='pt-32 bg-[#f7f3fb]'>
+    <main className='pt-36 bg-[#f7f3fb]'>
       {/* HERO */}
       <section className='max-w-5xl mx-auto px-6'>
         <div className='grid md:grid-cols-2 gap-12 items-center'>
           {/* Foto */}
           <div className='flex justify-center'>
             <img
-              src='https://res.cloudinary.com/ydsjcgim/image/upload/v1788279628/about.jpg'
+              src='https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788279628/about.jpg'
               alt='María Marta Galli – Astróloga y terapeuta holística'
               className='
                 w-72 h-72

@@ -69,7 +69,7 @@ const AdminPayments = () => {
   };
 
   return (
-    <main className='pt-28 min-h-screen bg-[#f7f3fb]'>
+    <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
       <section className='max-w-6xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>
@@ -131,6 +131,7 @@ const AdminPayments = () => {
                   <th className='px-4 py-3'>Fecha</th>
                   <th className='px-4 py-3'>Nombre</th>
                   <th className='px-4 py-3'>Email</th>
+                  <th className='px-4 py-3'>Consulta</th>
                   <th className='px-4 py-3'>Monto</th>
                   <th className='px-4 py-3'>Estado</th>
                 </tr>
@@ -149,6 +150,7 @@ const AdminPayments = () => {
                       </td>
                       <td className='px-4 py-3'>{payment.name}</td>
                       <td className='px-4 py-3'>{payment.email}</td>
+                      <td className='px-4 py-3'>{payment.serviceTitle || '—'}</td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         {formatAmount(payment.amount, payment.currency)}
                       </td>

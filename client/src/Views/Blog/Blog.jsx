@@ -50,7 +50,7 @@ const Blog = () => {
   };
 
   return (
-    <main className='pt-32 bg-[#f7f3fb] min-h-screen'>
+    <main className='pt-36 bg-[#f7f3fb] min-h-screen'>
       <section className='max-w-5xl mx-auto px-6 text-center mb-12'>
         <h1 className='text-4xl font-light text-purple-900 mb-6'>Blog</h1>
         <p className='text-lg text-gray-700 mb-8'>

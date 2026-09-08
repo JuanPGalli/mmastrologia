@@ -19,7 +19,7 @@ const AdminHome = () => {
   };
 
   return (
-    <main className='pt-28 min-h-screen bg-[#f7f3fb] px-6'>
+    <main className='pt-36 min-h-screen bg-[#f7f3fb] px-6'>
       <section className='mx-auto max-w-5xl'>
         <div className='flex items-center justify-between mb-8'>
           <div>
