@@ -4,6 +4,7 @@ import userRouter from "./userRouter";
 import postRouter from "./postRouter";
 import contactRouter from "./contactRouter";
 import novedadRouter from "./novedadRouter";
+import paymentRouter from "./paymentRouter";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/auth", userRouter);
 router.use("/posts", postRouter);
 router.use("/contact", contactRouter);
 router.use("/novedades", novedadRouter);
+router.use("/payments", paymentRouter);
 
 export default router;
