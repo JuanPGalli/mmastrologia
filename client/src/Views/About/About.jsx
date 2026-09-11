@@ -1,8 +1,14 @@
 import React from 'react';
+import Seo from '../../Components/Seo/Seo';
 
 const About = () => {
   return (
     <main className='pt-36 bg-[#f7f3fb]'>
+      <Seo
+        title='Sobre mí'
+        description='Conocé a María Marta Galli, astróloga y terapeuta holística especializada en astrología psicológica y evolutiva.'
+        path='/about'
+      />
       {/* HERO */}
       <section className='max-w-5xl mx-auto px-6'>
         <div className='grid md:grid-cols-2 gap-12 items-center'>

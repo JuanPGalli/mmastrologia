@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../../Components/Reveal/Reveal';
+import Seo from '../../Components/Seo/Seo';
 import NovedadesSection from '../../Components/NovedadesSection/NovedadesSection';
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
@@ -71,6 +72,10 @@ const Home = () => {
 
   return (
     <main>
+      <Seo
+        description='Astrología psicológica y evolutiva con María Marta Galli. Cartas natales, Reiki, tarot y acompañamiento holístico para tu autoconocimiento.'
+        path='/'
+      />
       {/* HERO */}
       <section
         className='relative min-h-screen flex items-center bg-cover bg-center'

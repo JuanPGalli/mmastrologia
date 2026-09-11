@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FaPowerOff } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
+import Seo from '../../Components/Seo/Seo';
 import { clearSession, getStoredSession } from '../../api/auth';
 import { fetchAdminPayments } from '../../api/payments';
 
@@ -70,6 +71,7 @@ const AdminPayments = () => {
 
   return (
     <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+      <Seo title='Pagos' noIndex />
       <section className='max-w-6xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>

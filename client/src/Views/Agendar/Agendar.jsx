@@ -6,6 +6,8 @@ import { FaCircleCheck } from 'react-icons/fa6';
 import { createPaymentPreference, fetchPaymentByReference } from '../../api/payments';
 import { fetchServiceBySlug, fetchServices } from '../../api/services';
 import { formatARS } from '../../utils/currency';
+import { getStoredSession } from '../../api/auth';
+import Seo from '../../Components/Seo/Seo';
 
 const CALENDLY_URL = import.meta.env.VITE_CALENDLY_URL;
 
@@ -24,7 +26,14 @@ const Agendar = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [loadingServices, setLoadingServices] = useState(true);
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [form, setForm] = useState(() => {
+    const session = getStoredSession();
+    return {
+      name: session?.user?.name || '',
+      email: session?.user?.email || '',
+      phone: '',
+    };
+  });
   const [submitting, setSubmitting] = useState(false);
 
   // Estado inicial: traer los servicios con precio para elegir (o preseleccionar
@@ -124,6 +133,7 @@ const Agendar = () => {
   if (status === 'approved' && reference) {
     return (
       <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+        <Seo title='Pago confirmado' noIndex />
         <section className='max-w-5xl mx-auto px-6 pb-16'>
           {!loadingPayer && payer && (
             <div className='max-w-2xl mx-auto bg-white border border-green-200 rounded-xl shadow-sm p-6 mb-8 flex items-start gap-4'>
@@ -165,6 +175,7 @@ const Agendar = () => {
   if (status === 'failure') {
     return (
       <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+        <Seo title='Pago no procesado' noIndex />
         <section className='max-w-2xl mx-auto px-6 pb-16 text-center'>
           <h1 className='text-3xl font-light text-purple-900 mb-4'>El pago no se pudo procesar</h1>
           <p className='text-gray-600 mb-8'>
@@ -184,6 +195,7 @@ const Agendar = () => {
   if (status === 'pending') {
     return (
       <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+        <Seo title='Pago pendiente' noIndex />
         <section className='max-w-2xl mx-auto px-6 pb-16 text-center'>
           <h1 className='text-3xl font-light text-purple-900 mb-4'>Tu pago está pendiente</h1>
           <p className='text-gray-600'>

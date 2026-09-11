@@ -18,7 +18,10 @@ type PreferencePayload = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const createPaymentPreference = async (payload: PreferencePayload) => {
+export const createPaymentPreference = async (
+  payload: PreferencePayload,
+  customerId?: string
+) => {
   const name = typeof payload.name === "string" ? payload.name.trim() : "";
   const email = typeof payload.email === "string" ? payload.email.trim() : "";
   const phone = typeof payload.phone === "string" ? payload.phone.trim() : "";
@@ -53,6 +56,7 @@ export const createPaymentPreference = async (payload: PreferencePayload) => {
     name,
     email,
     phone: phone || undefined,
+    customerId: customerId || undefined,
     serviceId: service._id,
     serviceTitle: service.title,
     amount: service.price,
@@ -113,6 +117,10 @@ export const getPaymentByReference = async (reference: string) => {
 
 export const getAllPaymentsAdmin = async () => {
   return Payment.find().sort({ createdAt: -1 });
+};
+
+export const getMyPayments = async (customerId: string) => {
+  return Payment.find({ customerId }).sort({ createdAt: -1 });
 };
 
 const mapMpStatus = (status: string | undefined): IPayment["status"] => {

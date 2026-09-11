@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import CTASection from '../../Components/CTASection/CTASection';
+import Seo from '../../Components/Seo/Seo';
 import { fetchPosts } from '../../api/posts';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 
@@ -51,6 +52,11 @@ const Blog = () => {
 
   return (
     <main className='pt-36 bg-[#f7f3fb] min-h-screen'>
+      <Seo
+        title='Blog'
+        description='Artículos sobre astrología, autoconocimiento y bienestar emocional escritos por María Marta Galli.'
+        path='/blog'
+      />
       <section className='max-w-5xl mx-auto px-6 text-center mb-12'>
         <h1 className='text-4xl font-light text-purple-900 mb-6'>Blog</h1>
         <p className='text-lg text-gray-700 mb-8'>

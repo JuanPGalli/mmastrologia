@@ -1,1 +1,6 @@
+http://mariamartagalli.com/* https://mariamartagalli.com.ar/:splat 301!
+https://mariamartagalli.com/* https://mariamartagalli.com.ar/:splat 301!
+http://www.mariamartagalli.com/* https://mariamartagalli.com.ar/:splat 301!
+https://www.mariamartagalli.com/* https://mariamartagalli.com.ar/:splat 301!
+
 /*    /index.html   200

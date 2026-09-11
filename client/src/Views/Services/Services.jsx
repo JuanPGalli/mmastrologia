@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CTASection from '../../Components/CTASection/CTASection';
+import Seo from '../../Components/Seo/Seo';
 import { fetchServices, getFallbackServices } from '../../api/services';
 import { cloudinaryUrl } from '../../utils/cloudinary';
+import { formatARS } from '../../utils/currency';
 
 const Services = () => {
   const [services, setServices] = useState(getFallbackServices());
@@ -12,7 +14,12 @@ const Services = () => {
   }, []);
 
   return (
-    <main className='pt-32 bg-[#f7f3fb] min-h-screen'>
+    <main className='pt-36 bg-[#f7f3fb] min-h-screen'>
+      <Seo
+        title='Consultas y Servicios'
+        description='Carta natal, revolución solar, Reiki, tarot, runas y constelaciones familiares con María Marta Galli.'
+        path='/services'
+      />
       <section className='max-w-5xl mx-auto px-6 text-center mb-16'>
         <h1 className='text-4xl font-light text-purple-900 mb-6'>Consultas y acompañamientos</h1>
         <p className='text-lg text-gray-700'>
@@ -40,14 +47,29 @@ const Services = () => {
             <div className='p-6'>
               <h2 className='text-2xl text-purple-800 mb-3'>{service.title}</h2>
 
-              <p className='text-gray-600 mb-6'>{service.shortDescription}</p>
+              <p className='text-gray-600 mb-3'>{service.shortDescription}</p>
 
-              <Link
-                to={`/services/${service.slug}`}
-                className='inline-block border border-purple-800 px-6 py-2 text-sm uppercase tracking-widest text-purple-800 hover:bg-purple-800 hover:text-white transition'
-              >
-                Ver detalle
-              </Link>
+              {service.price > 0 && (
+                <p className='text-purple-900 font-medium mb-4'>{formatARS(service.price)}</p>
+              )}
+
+              <div className='flex flex-wrap gap-3'>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className='inline-block border border-purple-800 px-6 py-2 text-sm uppercase tracking-widest text-purple-800 hover:bg-purple-800 hover:text-white transition'
+                >
+                  Ver detalle
+                </Link>
+
+                {service.price > 0 && (
+                  <Link
+                    to={`/agendar?service=${service.slug}`}
+                    className='inline-block bg-purple-800 px-6 py-2 text-sm uppercase tracking-widest text-white hover:bg-purple-900 transition'
+                  >
+                    Reservar
+                  </Link>
+                )}
+              </div>
             </div>
           </article>
         ))}

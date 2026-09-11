@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { FaBook, FaBullhorn, FaCreditCard, FaGear, FaRightFromBracket } from 'react-icons/fa6';
+import Seo from '../../Components/Seo/Seo';
 import { useNavigate } from 'react-router-dom';
 import { clearSession, getStoredSession } from '../../api/auth';
 
@@ -20,6 +21,7 @@ const AdminHome = () => {
 
   return (
     <main className='pt-36 min-h-screen bg-[#f7f3fb] px-6'>
+      <Seo title='Panel de administración' noIndex />
       <section className='mx-auto max-w-5xl'>
         <div className='flex items-center justify-between mb-8'>
           <div>

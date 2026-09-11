@@ -16,6 +16,10 @@ import BlogDetail from './Views/BlogDetail/BlogDetail';
 // (solo la astróloga), así que se cargan en un chunk aparte y no pesan
 // en la primera carga de las páginas públicas.
 const Login = lazy(() => import('./Views/Login/Login'));
+const Register = lazy(() => import('./Views/Register/Register'));
+const ForgotPassword = lazy(() => import('./Views/ForgotPassword/ForgotPassword'));
+const ResetPassword = lazy(() => import('./Views/ResetPassword/ResetPassword'));
+const MiCuenta = lazy(() => import('./Views/MiCuenta/MiCuenta'));
 const AdminHome = lazy(() => import('./Views/AdminHome/AdminHome'));
 const AdminServices = lazy(() => import('./Views/AdminServices/AdminServices'));
 const AdminBlog = lazy(() => import('./Views/AdminBlog/AdminBlog'));
@@ -35,6 +39,10 @@ function App() {
           <Route path={'/contact'} element={<Contact />} />
           <Route path={'/agendar'} element={<Agendar />} />
           <Route path={'/login'} element={<Login />} />
+          <Route path={'/register'} element={<Register />} />
+          <Route path={'/forgot-password'} element={<ForgotPassword />} />
+          <Route path={'/reset-password'} element={<ResetPassword />} />
+          <Route path={'/cuenta'} element={<MiCuenta />} />
           <Route path={'/admin'} element={<AdminHome />} />
           <Route path={'/admin/services'} element={<AdminServices />} />
           <Route path={'/blog'} element={<Blog />} />

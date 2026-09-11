@@ -9,7 +9,10 @@ export const createPaymentPreference = async (payload) => {
   }
 
   try {
-    const response = await axios.post(`${apiUrl}/api/payments/preference`, payload);
+    const session = getStoredSession();
+    const headers = session?.token ? { Authorization: `Bearer ${session.token}` } : undefined;
+
+    const response = await axios.post(`${apiUrl}/api/payments/preference`, payload, { headers });
     return response.data;
   } catch (error) {
     const message = error?.response?.data?.error || 'No se pudo iniciar el pago. Intentá de nuevo.';
@@ -37,6 +40,21 @@ export const fetchAdminPayments = async () => {
   }
 
   const response = await axios.get(`${apiUrl}/api/payments/admin`, {
+    headers: { Authorization: `Bearer ${session.token}` },
+  });
+
+  return response.data;
+};
+
+export const fetchMyPayments = async () => {
+  if (!apiUrl) throw new Error('Configurá VITE_API_URL para ver tus consultas.');
+
+  const session = getStoredSession();
+  if (!session?.token) {
+    throw new Error('Necesitás iniciar sesión.');
+  }
+
+  const response = await axios.get(`${apiUrl}/api/payments/mine`, {
     headers: { Authorization: `Bearer ${session.token}` },
   });
 

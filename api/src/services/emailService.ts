@@ -52,3 +52,22 @@ export const sendContactEmail = async (data: ContactMessage) => {
     `,
   });
 };
+
+export const sendPasswordResetEmail = async (to: string, resetUrl: string) => {
+  const from = process.env.RESEND_FROM_EMAIL || "MMAstrologia <onboarding@resend.dev>";
+  const resend = getClient();
+
+  await resend.emails.send({
+    from,
+    to,
+    subject: "Recuperá tu contraseña — MMAstrologia",
+    html: `
+      <div style="font-family: sans-serif; line-height: 1.6;">
+        <h2>Recuperar contraseña</h2>
+        <p>Recibimos una solicitud para restablecer tu contraseña. Si fuiste vos, hacé click en el siguiente link (válido por 1 hora):</p>
+        <p><a href="${resetUrl}">Restablecer mi contraseña</a></p>
+        <p>Si no fuiste vos, podés ignorar este email.</p>
+      </div>
+    `,
+  });
+};
