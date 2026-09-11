@@ -1,8 +1,10 @@
 import { RequestHandler } from "express";
 import { paramValue } from "../utils/params";
+import { AuthRequest } from "../middleware/auth";
 import {
   createPaymentPreference,
   getAllPaymentsAdmin,
+  getMyPayments,
   getPaymentByReference,
   processPaymentWebhook,
 } from "../controllers/paymentController";
@@ -17,9 +19,23 @@ export const getAdminPaymentsHandler: RequestHandler = async (_req, res) => {
   }
 };
 
-export const postPreferenceHandler: RequestHandler = async (req, res) => {
+export const getMyPaymentsHandler: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    const result = await createPaymentPreference(req.body);
+    if (!req.user) {
+      res.status(401).json({ error: "Necesitás iniciar sesión." });
+      return;
+    }
+    const payments = await getMyPayments(req.user.id);
+    res.status(200).json(payments);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "No se pudieron obtener tus pagos.";
+    res.status(400).json({ error: message });
+  }
+};
+
+export const postPreferenceHandler: RequestHandler = async (req: AuthRequest, res) => {
+  try {
+    const result = await createPaymentPreference(req.body, req.user?.id);
     res.status(200).json(result);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "No se pudo iniciar el pago.";

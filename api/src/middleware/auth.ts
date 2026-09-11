@@ -44,3 +44,27 @@ export const requireAdmin: RequestHandler = (
 
   next();
 };
+
+// Para endpoints públicos que además quieren saber (sin exigirlo) si quien
+// llama está logueado — por ejemplo, para vincular un pago a su cuenta.
+export const optionalAuth: RequestHandler = (
+  req: AuthRequest,
+  _res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith("Bearer ")
+    ? authHeader.slice("Bearer ".length)
+    : undefined;
+
+  if (token) {
+    try {
+      const payload = verifyToken(token);
+      req.user = { id: payload.id, role: payload.role };
+    } catch {
+      // Token inválido: seguimos como invitado, sin cortar la request.
+    }
+  }
+
+  next();
+};

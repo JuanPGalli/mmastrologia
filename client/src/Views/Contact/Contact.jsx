@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { sendContactMessage } from '../../api/contact';
+import Seo from '../../Components/Seo/Seo';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -65,6 +66,11 @@ const Contact = () => {
 
   return (
     <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+      <Seo
+        title='Contacto'
+        description='Escribile a María Marta Galli para consultas, disponibilidad y orientación sobre qué acompañamiento es más adecuado para vos.'
+        path='/contact'
+      />
       <section className='max-w-4xl mx-auto px-6'>
         <h1 className='text-4xl font-light text-purple-900 mb-6 text-center'>Contacto</h1>
 

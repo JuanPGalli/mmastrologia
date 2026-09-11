@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FaPlus, FaPowerOff, FaSave, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Seo from '../../Components/Seo/Seo';
 import Swal from 'sweetalert2';
 import ImageUploadField from '../../Components/ImageUploadField/ImageUploadField';
 import { clearSession, getStoredSession } from '../../api/auth';
@@ -177,6 +178,7 @@ const AdminNovedades = () => {
 
   return (
     <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+      <Seo title='Administrar novedades' noIndex />
       <section className='max-w-7xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>

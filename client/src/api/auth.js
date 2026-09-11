@@ -42,10 +42,46 @@ export const login = async ({ email, password }) => {
     password,
   });
 
-  if (response.data.user?.role !== 'admin') {
-    throw new Error('Este usuario no tiene permisos de administración.');
+  storeSession(response.data);
+  return response.data;
+};
+
+export const register = async ({ name, email, password }) => {
+  if (!apiUrl) {
+    throw new Error('Configurá VITE_API_URL para registrarte.');
   }
 
+  await axios.post(`${apiUrl}/api/auth/register`, { name, email, password });
+};
+
+export const requestPasswordReset = async (email) => {
+  if (!apiUrl) {
+    throw new Error('Configurá VITE_API_URL para continuar.');
+  }
+
+  const response = await axios.post(`${apiUrl}/api/auth/forgot-password`, { email });
+  return response.data;
+};
+
+export const resetPassword = async ({ email, token, password }) => {
+  if (!apiUrl) {
+    throw new Error('Configurá VITE_API_URL para continuar.');
+  }
+
+  const response = await axios.post(`${apiUrl}/api/auth/reset-password`, {
+    email,
+    token,
+    password,
+  });
+  return response.data;
+};
+
+export const loginWithGoogle = async (idToken) => {
+  if (!apiUrl) {
+    throw new Error('Configurá VITE_API_URL para iniciar sesión.');
+  }
+
+  const response = await axios.post(`${apiUrl}/api/auth/google`, { idToken });
   storeSession(response.data);
   return response.data;
 };

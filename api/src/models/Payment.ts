@@ -6,6 +6,7 @@ export interface IPayment extends Document {
   name: string;
   email: string;
   phone?: string;
+  customerId?: mongoose.Types.ObjectId;
   serviceId: mongoose.Types.ObjectId;
   serviceTitle: string;
   amount: number;
@@ -22,6 +23,9 @@ const paymentSchema = new Schema<IPayment>(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
     phone: { type: String, trim: true },
+    // Opcional: si quien paga estaba logueada, queda vinculado a su cuenta
+    // para su historial en "Mi cuenta". Si es invitada, queda sin definir.
+    customerId: { type: Schema.Types.ObjectId, ref: "User" },
     serviceId: { type: Schema.Types.ObjectId, ref: "Service", required: true },
     // Copiamos el título al momento del pago: si el servicio se renombra o
     // borra después, el historial de pagos sigue siendo legible.

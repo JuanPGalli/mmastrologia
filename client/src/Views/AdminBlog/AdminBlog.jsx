@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FaPlus, FaPowerOff, FaSave, FaSearch, FaTrash } from 'react-icons/fa';
 import ImageUploadField from '../../Components/ImageUploadField/ImageUploadField';
+import Seo from '../../Components/Seo/Seo';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { clearSession, getStoredSession } from '../../api/auth';
@@ -215,6 +216,7 @@ const AdminBlog = () => {
 
   return (
     <main className='pt-36 min-h-screen bg-[#f7f3fb]'>
+      <Seo title='Administrar blog' noIndex />
       <section className='max-w-7xl mx-auto px-6 pb-16'>
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8'>
           <div>

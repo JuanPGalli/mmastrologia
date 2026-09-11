@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { addComment, fetchPostBySlug } from '../../api/posts';
+import Seo from '../../Components/Seo/Seo';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 
 const formatDate = (value) =>
@@ -86,6 +87,12 @@ const BlogDetail = () => {
 
   return (
     <main className='pt-36 bg-[#f7f3fb] min-h-screen'>
+      <Seo
+        title={post.title}
+        description={post.excerpt}
+        image={post.image}
+        path={`/blog/${post.slug}`}
+      />
       <article className='max-w-3xl mx-auto px-6'>
         {post.category && (
           <span className='text-xs uppercase tracking-widest text-purple-500'>
