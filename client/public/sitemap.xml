@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mmastrologia.netlify.app/</loc>
+    <loc>https://mariamartagalli.com.ar/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mmastrologia.netlify.app/services</loc>
+    <loc>https://mariamartagalli.com.ar/services</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://mmastrologia.netlify.app/blog</loc>
+    <loc>https://mariamartagalli.com.ar/blog</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mmastrologia.netlify.app/about</loc>
+    <loc>https://mariamartagalli.com.ar/about</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mmastrologia.netlify.app/contact</loc>
+    <loc>https://mariamartagalli.com.ar/contact</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mmastrologia.netlify.app/agendar</loc>
+    <loc>https://mariamartagalli.com.ar/agendar</loc>
     <priority>0.8</priority>
   </url>
 </urlset>

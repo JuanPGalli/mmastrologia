@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'María Marta Galli | Astróloga y terapeuta holística';
-const SITE_URL = 'https://mmastrologia.netlify.app';
+const SITE_URL = 'https://mariamartagalli.com.ar';
 const DEFAULT_DESCRIPTION =
   'Astrología psicológica y evolutiva. Consultas personalizadas para el autoconocimiento y bienestar emocional.';
 const DEFAULT_IMAGE = 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788280251/mapa_astral.png';
