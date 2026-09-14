@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /login
 
-Sitemap: https://mmastrologia.netlify.app/sitemap.xml
+Sitemap: https://mariamartagalli.com.ar/sitemap.xml
