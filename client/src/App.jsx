@@ -7,6 +7,7 @@ import About from './Views/About/About';
 import Contact from './Views/Contact/Contact';
 import Agendar from './Views/Agendar/Agendar';
 import Navbar from './Components/Navbar/Navbar';
+import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 import Services from './Views/Services/Services';
 import Footer from './Components/Footer/Footer';
 import Blog from './Views/Blog/Blog';
@@ -25,10 +26,12 @@ const AdminServices = lazy(() => import('./Views/AdminServices/AdminServices'));
 const AdminBlog = lazy(() => import('./Views/AdminBlog/AdminBlog'));
 const AdminNovedades = lazy(() => import('./Views/AdminNovedades/AdminNovedades'));
 const AdminPayments = lazy(() => import('./Views/AdminPayments/AdminPayments'));
+const AdminReviews = lazy(() => import('./Views/AdminReviews/AdminReviews'));
 
 function App() {
   return (
     <div className='App'>
+      <ScrollToTop />
       <Navbar />
       <Suspense fallback={<div className='pt-32 min-h-screen bg-[#f7f3fb]' />}>
         <Routes>
@@ -50,6 +53,7 @@ function App() {
           <Route path={'/admin/blog'} element={<AdminBlog />} />
           <Route path={'/admin/novedades'} element={<AdminNovedades />} />
           <Route path={'/admin/payments'} element={<AdminPayments />} />
+          <Route path={'/admin/reviews'} element={<AdminReviews />} />
         </Routes>
       </Suspense>
       <Footer />

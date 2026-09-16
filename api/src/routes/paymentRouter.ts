@@ -3,6 +3,7 @@ import {
   getAdminPaymentsHandler,
   getMyPaymentsHandler,
   getPaymentHandler,
+  patchScheduleHandler,
   postPreferenceHandler,
   postWebhookHandler,
 } from "../handlers/paymentHandlers";
@@ -15,6 +16,7 @@ paymentRouter.post("/preference", formLimiter, optionalAuth, postPreferenceHandl
 paymentRouter.get("/admin", requireAuth, requireAdmin, getAdminPaymentsHandler);
 paymentRouter.get("/mine", requireAuth, getMyPaymentsHandler);
 paymentRouter.get("/:reference", getPaymentHandler);
+paymentRouter.patch("/:reference/schedule", patchScheduleHandler);
 paymentRouter.post("/webhook", postWebhookHandler);
 
 export default paymentRouter;

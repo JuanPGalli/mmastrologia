@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FaBook, FaBullhorn, FaCreditCard, FaGear, FaRightFromBracket } from 'react-icons/fa6';
+import { FaBook, FaBullhorn, FaCreditCard, FaGear, FaRightFromBracket, FaStar } from 'react-icons/fa6';
 import Seo from '../../Components/Seo/Seo';
 import { useNavigate } from 'react-router-dom';
 import { clearSession, getStoredSession } from '../../api/auth';
@@ -37,7 +37,7 @@ const AdminHome = () => {
           </button>
         </div>
 
-        <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
           <button
             onClick={() => navigate('/admin/services')}
             className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
@@ -87,6 +87,19 @@ const AdminHome = () => {
             <span className='text-lg font-medium text-purple-950'>Pagos</span>
             <span className='text-sm text-gray-600'>
               Ver quién pagó, cuánto y en qué estado está cada consulta.
+            </span>
+          </button>
+
+          <button
+            onClick={() => navigate('/admin/reviews')}
+            className='flex flex-col items-start gap-3 bg-white p-6 text-left shadow-sm hover:shadow-md transition border border-transparent hover:border-purple-200'
+          >
+            <span className='inline-flex h-10 w-10 items-center justify-center bg-purple-900 text-white'>
+              <FaStar aria-hidden='true' />
+            </span>
+            <span className='text-lg font-medium text-purple-950'>Reseñas</span>
+            <span className='text-sm text-gray-600'>
+              Aprobar o rechazar las reseñas antes de que se muestren en el Home.
             </span>
           </button>
         </div>

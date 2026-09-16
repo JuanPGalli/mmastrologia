@@ -1,16 +1,35 @@
 import React, { useEffect, useState } from 'react';
-const logoNav =
-  'https://res.cloudinary.com/ydsjcgim/image/upload/f_auto,q_auto/v1788280204/Logo-MMA.png';
+const logoNav = 'https://res.cloudinary.com/ydsjcgim/image/upload/v1788280204/Logo-MMA.png';
 
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa';
 import './Navbar.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { clearSession, getStoredSession } from '../../api/auth';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === '/';
+  // Lectura sincrónica: se recalcula solo en cada render (p. ej. al cambiar
+  // de ruta), sin necesidad de sincronizarla con un efecto.
+  const session = getStoredSession();
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+
+  // Cierra el menú de usuario al navegar a otra página (ajuste de estado
+  // durante el render, evita el cascading-render de hacerlo en un efecto).
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname);
+    setMenuOpen(false);
+  }
+
+  const handleLogout = () => {
+    clearSession();
+    setMenuOpen(false);
+    navigate('/login');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,10 +119,52 @@ const Navbar = () => {
               Agendar
             </a>
           </li>
-          <li>
-            <a className='nav-link' href='/login'>
-              Log In
-            </a>
+          <li className='relative'>
+            {session ? (
+              <>
+                <button
+                  type='button'
+                  onClick={() => setMenuOpen((current) => !current)}
+                  className='flex items-center gap-2'
+                >
+                  {session.user.picture ? (
+                    <img
+                      src={session.user.picture}
+                      alt={session.user.name}
+                      className='h-8 w-8 rounded-full object-cover border border-white/60'
+                      referrerPolicy='no-referrer'
+                    />
+                  ) : (
+                    <FaUserCircle className='h-8 w-8' aria-hidden='true' />
+                  )}
+                </button>
+
+                {menuOpen && (
+                  <div className='absolute right-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg overflow-hidden z-50'>
+                    <p className='px-4 py-3 text-sm border-b border-gray-100 truncate'>
+                      {session.user.name}
+                    </p>
+                    <a
+                      href={session.user.role === 'admin' ? '/admin' : '/cuenta'}
+                      className='block px-4 py-2 text-sm hover:bg-purple-50'
+                    >
+                      {session.user.role === 'admin' ? 'Panel admin' : 'Mi cuenta'}
+                    </a>
+                    <button
+                      type='button'
+                      onClick={handleLogout}
+                      className='block w-full text-left px-4 py-2 text-sm hover:bg-purple-50 text-red-600'
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <a className='nav-link' href='/login'>
+                Log In
+              </a>
+            )}
           </li>
         </ul>
       </div>

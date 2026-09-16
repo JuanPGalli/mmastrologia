@@ -12,6 +12,7 @@ const toSafeUser = (user: IUser) => ({
   name: user.name,
   email: user.email,
   role: user.role || "user",
+  picture: user.picture,
 });
 
 export const registerUser = async (
@@ -114,13 +115,22 @@ export const loginWithGoogle = async (idToken: string) => {
       name: payload.name || payload.email.split("@")[0],
       email: payload.email,
       googleId: payload.sub,
+      picture: payload.picture,
       role: "user",
     });
     await user.save();
-  } else if (!user.googleId) {
-    // Ya existía con email/contraseña: vinculamos la cuenta de Google.
-    user.googleId = payload.sub;
-    await user.save();
+  } else {
+    let changed = false;
+    if (!user.googleId) {
+      // Ya existía con email/contraseña: vinculamos la cuenta de Google.
+      user.googleId = payload.sub;
+      changed = true;
+    }
+    if (payload.picture && user.picture !== payload.picture) {
+      user.picture = payload.picture;
+      changed = true;
+    }
+    if (changed) await user.save();
   }
 
   const token = generateToken(user.id, user.role || "user");

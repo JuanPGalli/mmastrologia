@@ -12,6 +12,7 @@ export interface IPayment extends Document {
   amount: number;
   currency: string;
   status: PaymentStatus;
+  scheduledAt?: Date;
   mpPreferenceId?: string;
   mpPaymentId?: string;
   createdAt: Date;
@@ -31,6 +32,7 @@ const paymentSchema = new Schema<IPayment>(
     // borra después, el historial de pagos sigue siendo legible.
     serviceTitle: { type: String, required: true, trim: true },
     amount: { type: Number, required: true },
+    scheduledAt: { type: Date },
     currency: { type: String, required: true, default: "ARS" },
     status: {
       type: String,

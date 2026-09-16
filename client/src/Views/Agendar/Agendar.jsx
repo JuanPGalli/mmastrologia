@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { InlineWidget } from 'react-calendly';
+import { Link, useSearchParams } from 'react-router-dom';
+import { InlineWidget, useCalendlyEventListener } from 'react-calendly';
 import Swal from 'sweetalert2';
 import { FaCircleCheck } from 'react-icons/fa6';
-import { createPaymentPreference, fetchPaymentByReference } from '../../api/payments';
+import {
+  createPaymentPreference,
+  fetchPaymentByReference,
+  saveScheduledDate,
+} from '../../api/payments';
 import { fetchServiceBySlug, fetchServices } from '../../api/services';
 import { formatARS } from '../../utils/currency';
 import { getStoredSession } from '../../api/auth';
@@ -35,6 +39,15 @@ const Agendar = () => {
     };
   });
   const [submitting, setSubmitting] = useState(false);
+  const [scheduled, setScheduled] = useState(false);
+
+  useCalendlyEventListener({
+    onEventScheduled: (event) => {
+      const eventUri = event.data.payload.event.uri;
+      if (reference) saveScheduledDate(reference, eventUri);
+      setScheduled(true);
+    },
+  });
 
   // Estado inicial: traer los servicios con precio para elegir (o preseleccionar
   // el que vino por query param desde /services o el detalle de un servicio).
@@ -151,19 +164,49 @@ const Agendar = () => {
           {loadingPayer ? (
             <p className='text-center text-gray-500'>Cargando...</p>
           ) : (payer?.calendlyUrl || CALENDLY_URL) ? (
-            <div className='max-w-2xl mx-auto bg-white shadow-md rounded-xl overflow-hidden'>
-              <InlineWidget
-                url={payer?.calendlyUrl || CALENDLY_URL}
-                prefill={{ name: payer?.name, email: payer?.email }}
-                styles={{ height: '700px' }}
-              />
-            </div>
+            <>
+              <div className='max-w-2xl mx-auto bg-white shadow-md rounded-xl overflow-hidden'>
+                <InlineWidget
+                  url={payer?.calendlyUrl || CALENDLY_URL}
+                  prefill={{ name: payer?.name, email: payer?.email }}
+                  styles={{ height: '700px' }}
+                />
+              </div>
+
+              {scheduled && (
+                <div className='max-w-2xl mx-auto mt-6 text-center'>
+                  <p className='text-green-700 mb-4'>
+                    ¡Turno confirmado! Te llegó la invitación por email.
+                  </p>
+                  <div className='flex items-center justify-center gap-4'>
+                    <Link
+                      to='/services'
+                      className='text-sm text-purple-800 underline underline-offset-4 hover:text-purple-950'
+                    >
+                      Ver otras consultas
+                    </Link>
+                    <Link
+                      to='/'
+                      className='text-sm text-purple-800 underline underline-offset-4 hover:text-purple-950'
+                    >
+                      Volver al inicio
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <div className='max-w-2xl mx-auto bg-white shadow-md rounded-xl p-10 text-center'>
-              <p className='text-gray-600'>
+              <p className='text-gray-600 mb-6'>
                 Tu pago se registró correctamente. Te vamos a escribir por email para coordinar el
                 horario — la agenda online todavía no está disponible.
               </p>
+              <Link
+                to='/'
+                className='text-sm text-purple-800 underline underline-offset-4 hover:text-purple-950'
+              >
+                Volver al inicio
+              </Link>
             </div>
           )}
         </section>

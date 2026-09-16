@@ -5,9 +5,12 @@ import Seo from '../../Components/Seo/Seo';
 import { fetchServices, getFallbackServices } from '../../api/services';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 import { formatARS } from '../../utils/currency';
+import { useFavorites } from '../../hooks/useFavorites';
+import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton';
 
 const Services = () => {
   const [services, setServices] = useState(getFallbackServices());
+  const { loggedIn, isFavorited, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     fetchServices().then(setServices);
@@ -34,13 +37,19 @@ const Services = () => {
             key={service.slug}
             className='bg-white shadow-md overflow-hidden hover:shadow-xl transition'
           >
-            <div className='aspect-video bg-purple-50'>
+            <div className='relative aspect-video bg-purple-50'>
               <img
                 src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_600')}
                 alt={service.title}
                 loading='lazy'
                 decoding='async'
                 className='w-full h-full object-cover'
+              />
+              <FavoriteButton
+                active={isFavorited('service', service._id)}
+                loggedIn={loggedIn}
+                onToggle={() => toggleFavorite('service', service._id)}
+                className='absolute top-3 right-3'
               />
             </div>
 

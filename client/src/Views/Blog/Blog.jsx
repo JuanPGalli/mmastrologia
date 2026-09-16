@@ -4,6 +4,8 @@ import CTASection from '../../Components/CTASection/CTASection';
 import Seo from '../../Components/Seo/Seo';
 import { fetchPosts } from '../../api/posts';
 import { cloudinaryUrl } from '../../utils/cloudinary';
+import { useFavorites } from '../../hooks/useFavorites';
+import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton';
 
 const formatDate = (value) =>
   value
@@ -15,6 +17,7 @@ const formatDate = (value) =>
     : '';
 
 const Blog = () => {
+  const { loggedIn, isFavorited, toggleFavorite } = useFavorites();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page') || 1);
   const q = searchParams.get('q') || '';
@@ -95,13 +98,19 @@ const Blog = () => {
               className='bg-white shadow-md overflow-hidden hover:shadow-xl transition flex flex-col'
             >
               {post.image && (
-                <div className='aspect-video bg-purple-50'>
+                <div className='relative aspect-video bg-purple-50'>
                   <img
                     src={cloudinaryUrl(post.image, 'f_auto,q_auto,w_500')}
                     alt={post.title}
                     loading='lazy'
                     decoding='async'
                     className='w-full h-full object-cover'
+                  />
+                  <FavoriteButton
+                    active={isFavorited('post', post._id)}
+                    loggedIn={loggedIn}
+                    onToggle={() => toggleFavorite('post', post._id)}
+                    className='absolute top-3 right-3'
                   />
                 </div>
               )}

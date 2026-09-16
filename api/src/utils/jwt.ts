@@ -8,7 +8,7 @@ export type AuthTokenPayload = {
 };
 
 export const generateToken = (id: string, role: string) => {
-  return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: "30d" });
 };
 
 export const verifyToken = (token: string): AuthTokenPayload => {
