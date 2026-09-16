@@ -5,6 +5,8 @@ import postRouter from "./postRouter";
 import contactRouter from "./contactRouter";
 import novedadRouter from "./novedadRouter";
 import paymentRouter from "./paymentRouter";
+import favoriteRouter from "./favoriteRouter";
+import reviewRouter from "./reviewRouter";
 
 const router = Router();
 
@@ -18,5 +20,7 @@ router.use("/posts", postRouter);
 router.use("/contact", contactRouter);
 router.use("/novedades", novedadRouter);
 router.use("/payments", paymentRouter);
+router.use("/favorites", favoriteRouter);
+router.use("/reviews", reviewRouter);
 
 export default router;

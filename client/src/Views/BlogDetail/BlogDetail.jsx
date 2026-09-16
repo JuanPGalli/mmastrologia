@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { addComment, fetchPostBySlug } from '../../api/posts';
 import Seo from '../../Components/Seo/Seo';
 import { cloudinaryUrl } from '../../utils/cloudinary';
+import { useFavorites } from '../../hooks/useFavorites';
+import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton';
 
 const formatDate = (value) =>
   value
@@ -17,6 +19,7 @@ const emptyForm = { name: '', email: '', text: '' };
 
 const BlogDetail = () => {
   const { slug } = useParams();
+  const { loggedIn, isFavorited, toggleFavorite } = useFavorites();
   const [loaded, setLoaded] = useState({ slug: '', post: undefined });
   const [form, setForm] = useState(emptyForm);
   const [status, setStatus] = useState('');
@@ -107,13 +110,21 @@ const BlogDetail = () => {
         </p>
 
         {post.image && (
-          <img
-            src={cloudinaryUrl(post.image, 'f_auto,q_auto,w_1000')}
-            alt={post.title}
-            fetchPriority='high'
-            decoding='async'
-            className='w-full max-h-96 object-cover rounded-lg shadow mb-10'
-          />
+          <div className='relative mb-10'>
+            <img
+              src={cloudinaryUrl(post.image, 'f_auto,q_auto,w_1000')}
+              alt={post.title}
+              fetchPriority='high'
+              decoding='async'
+              className='w-full max-h-96 object-cover rounded-lg shadow'
+            />
+            <FavoriteButton
+              active={isFavorited('post', post._id)}
+              loggedIn={loggedIn}
+              onToggle={() => toggleFavorite('post', post._id)}
+              className='absolute top-3 right-3'
+            />
+          </div>
         )}
 
         <div className='prose prose-purple max-w-none text-gray-700 leading-relaxed whitespace-pre-line mb-10'>

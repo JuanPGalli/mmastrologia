@@ -1,6 +1,7 @@
 import { MercadoPagoConfig, Preference, Payment as MPPayment } from "mercadopago";
 import { IPayment, Payment } from "../models/Payment";
 import { Service } from "../models/Service";
+import { sendPaymentConfirmationEmail } from "../services/emailService";
 
 const getClient = () => {
   if (!process.env.MP_ACCESS_TOKEN) {
@@ -123,6 +124,37 @@ export const getMyPayments = async (customerId: string) => {
   return Payment.find({ customerId }).sort({ createdAt: -1 });
 };
 
+export const setPaymentScheduledDate = async (reference: string, eventUri: string) => {
+  if (!eventUri || !eventUri.startsWith("https://api.calendly.com/")) {
+    throw new Error("Referencia de evento de Calendly inválida.");
+  }
+  if (!process.env.CALENDLY_API_TOKEN) {
+    throw new Error("CALENDLY_API_TOKEN no está configurada.");
+  }
+
+  const response = await fetch(eventUri, {
+    headers: { Authorization: `Bearer ${process.env.CALENDLY_API_TOKEN}` },
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo consultar el evento en Calendly.");
+  }
+
+  const data = (await response.json()) as { resource?: { start_time?: string } };
+  const startTime = data.resource?.start_time;
+  if (!startTime) {
+    throw new Error("Calendly no devolvió una fecha para este evento.");
+  }
+
+  const payment = await Payment.findById(reference);
+  if (!payment) throw new Error("Pago no encontrado.");
+
+  payment.scheduledAt = new Date(startTime);
+  await payment.save();
+
+  return payment;
+};
+
 const mapMpStatus = (status: string | undefined): IPayment["status"] => {
   if (status === "approved") return "approved";
   if (status === "rejected") return "rejected";
@@ -149,7 +181,17 @@ export const processPaymentWebhook = async (query: Record<string, unknown>) => {
   const payment = await Payment.findById(reference);
   if (!payment) return;
 
+  const wasAlreadyApproved = payment.status === "approved";
+
   payment.status = mapMpStatus(details.status);
   payment.mpPaymentId = String(details.id);
   await payment.save();
+
+  if (payment.status === "approved" && !wasAlreadyApproved) {
+    try {
+      await sendPaymentConfirmationEmail(payment.email, payment.name, payment.serviceTitle);
+    } catch (error) {
+      console.error("Error enviando email de confirmación de pago:", error);
+    }
+  }
 };

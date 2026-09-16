@@ -7,6 +7,7 @@ import {
   getMyPayments,
   getPaymentByReference,
   processPaymentWebhook,
+  setPaymentScheduledDate,
 } from "../controllers/paymentController";
 
 export const getAdminPaymentsHandler: RequestHandler = async (_req, res) => {
@@ -62,5 +63,18 @@ export const postWebhookHandler: RequestHandler = async (req, res) => {
   } catch (error: unknown) {
     console.error("Error procesando webhook de Mercado Pago:", error);
     res.status(200).send("ok");
+  }
+};
+
+export const patchScheduleHandler: RequestHandler = async (req, res) => {
+  try {
+    const payment = await setPaymentScheduledDate(
+      paramValue(req.params.reference),
+      req.body.eventUri
+    );
+    res.status(200).json(payment);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "No se pudo guardar la fecha.";
+    res.status(400).json({ error: message });
   }
 };

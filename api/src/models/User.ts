@@ -6,6 +6,7 @@ export interface IUser extends Document {
   password?: string;
   role?: string;
   googleId?: string;
+  picture?: string;
   resetTokenHash?: string;
   resetTokenExpires?: Date;
 }
@@ -21,6 +22,7 @@ const userSchema = new Schema<IUser>({
   },
   role: { type: String, default: "user" },
   googleId: { type: String, index: true },
+  picture: { type: String, trim: true },
   resetTokenHash: { type: String },
   resetTokenExpires: { type: Date },
 });

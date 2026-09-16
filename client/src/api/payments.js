@@ -60,3 +60,13 @@ export const fetchMyPayments = async () => {
 
   return response.data;
 };
+
+export const saveScheduledDate = async (reference, eventUri) => {
+  if (!apiUrl || !reference) return;
+
+  try {
+    await axios.patch(`${apiUrl}/api/payments/${reference}/schedule`, { eventUri });
+  } catch {
+    // No es crítico si falla: el turno ya quedó agendado en Calendly igual.
+  }
+};

@@ -6,8 +6,8 @@ import NovedadesSection from '../../Components/NovedadesSection/NovedadesSection
 import CTASection from '../../Components/CTASection/CTASection';
 import { fetchPosts } from '../../api/posts';
 import { fetchServices } from '../../api/services';
+import { fetchApprovedReviews } from '../../api/reviews';
 import { cloudinaryUrl } from '../../utils/cloudinary';
-import testimonials from '../../data/testimonials';
 
 const steps = [
   {
@@ -45,12 +45,25 @@ const HERO_IMAGE =
 const Home = () => {
   const [latestPosts, setLatestPosts] = useState([]);
   const [featuredServices, setFeaturedServices] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     let cancelled = false;
 
     fetchServices().then((data) => {
       if (!cancelled) setFeaturedServices((data || []).slice(0, 3));
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetchApprovedReviews().then((data) => {
+      if (!cancelled) setReviews(data || []);
     });
 
     return () => {
@@ -202,8 +215,8 @@ const Home = () => {
         </div>
       </Reveal>
 
-      {/* TESTIMONIOS — solo se muestra si hay contenido real cargado */}
-      {testimonials.length > 0 && (
+      {/* TESTIMONIOS — solo se muestra si hay reseñas reales aprobadas */}
+      {reviews.length > 0 && (
         <Reveal as='section' className='bg-[#f7f3fb] py-20'>
           <div className='max-w-4xl mx-auto px-6 text-center'>
             <h2 className='text-3xl mb-12 text-purple-900 font-light'>
@@ -211,12 +224,12 @@ const Home = () => {
             </h2>
 
             <div className='grid gap-8 md:grid-cols-2'>
-              {testimonials.map((testimonial) => (
-                <blockquote key={testimonial.name} className='bg-white p-8 shadow-sm text-left'>
-                  <p className='text-gray-700 italic mb-4'>“{testimonial.quote}”</p>
+              {reviews.map((review) => (
+                <blockquote key={review._id} className='bg-white p-8 shadow-sm text-left'>
+                  <p className='text-amber-500 mb-2'>{'★'.repeat(review.rating)}</p>
+                  <p className='text-gray-700 italic mb-4'>“{review.text}”</p>
                   <footer className='text-sm text-purple-800'>
-                    — {testimonial.name}
-                    {testimonial.detail ? `, ${testimonial.detail}` : ''}
+                    — {review.name}, {review.serviceTitle}
                   </footer>
                 </blockquote>
               ))}

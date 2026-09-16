@@ -4,9 +4,12 @@ import { fetchServiceBySlug } from '../../api/services';
 import Seo from '../../Components/Seo/Seo';
 import { cloudinaryUrl } from '../../utils/cloudinary';
 import { formatARS } from '../../utils/currency';
+import { useFavorites } from '../../hooks/useFavorites';
+import FavoriteButton from '../../Components/FavoriteButton/FavoriteButton';
 
 const Detail = () => {
   const { id } = useParams();
+  const { loggedIn, isFavorited, toggleFavorite } = useFavorites();
   const [loadedService, setLoadedService] = useState({
     slug: '',
     service: undefined,
@@ -48,13 +51,21 @@ const Detail = () => {
         path={`/services/${service.slug}`}
       />
       <section className='max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12'>
-        <img
-          src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_800')}
-          alt={service.title}
-          fetchPriority='high'
-          decoding='async'
-          className='rounded-lg shadow'
-        />
+        <div className='relative'>
+          <img
+            src={cloudinaryUrl(service.image, 'f_auto,q_auto,w_800')}
+            alt={service.title}
+            fetchPriority='high'
+            decoding='async'
+            className='rounded-lg shadow'
+          />
+          <FavoriteButton
+            active={isFavorited('service', service._id)}
+            loggedIn={loggedIn}
+            onToggle={() => toggleFavorite('service', service._id)}
+            className='absolute top-3 right-3'
+          />
+        </div>
 
         <div>
           <h1 className='text-4xl font-light text-purple-900 mb-4'>{service.title}</h1>
