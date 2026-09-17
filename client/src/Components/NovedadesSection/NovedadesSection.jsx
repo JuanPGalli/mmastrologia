@@ -209,12 +209,12 @@ const NovedadesSection = () => {
 
   return (
     <Reveal as='section' className='bg-purple-950 py-16'>
-      <div className='max-w-2xl mx-auto px-6'>
+      <div className='max-w-5xl mx-auto px-6'>
         <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>
           Novedades
         </h2>
 
-        <div className='space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           {novedades.map((novedad) => (
             <NovedadCard key={novedad._id} novedad={novedad} onExpand={setExpanded} />
           ))}
