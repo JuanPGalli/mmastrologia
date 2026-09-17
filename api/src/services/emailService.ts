@@ -74,10 +74,12 @@ export const sendPasswordResetEmail = async (to: string, resetUrl: string) => {
 export const sendPaymentConfirmationEmail = async (
   to: string,
   name: string,
-  serviceTitle: string
+  serviceTitle: string,
+  paymentId: string
 ) => {
   const from = process.env.RESEND_FROM_EMAIL || "María Marta Galli <onboarding@resend.dev>";
   const frontendUrl = process.env.FRONTEND_URL || "";
+  const scheduleUrl = `${frontendUrl.replace(/\/$/, "")}/agendar?status=approved&ref=${paymentId}`;
   const resend = getClient();
 
   await resend.emails.send({
@@ -89,7 +91,7 @@ export const sendPaymentConfirmationEmail = async (
         <h2>¡Hola ${escapeHtml(name)}!</h2>
         <p>Tu pago de <strong>${escapeHtml(serviceTitle)}</strong> fue confirmado correctamente.</p>
         <p>Si todavía no elegiste el día y horario de tu consulta, podés hacerlo acá:</p>
-        <p><a href="${frontendUrl.replace(/\/$/, "")}/agendar">Elegir horario</a></p>
+        <p><a href="${scheduleUrl}">Elegir horario</a></p>
         <p>¡Gracias por tu confianza!</p>
         <p>María Marta Galli</p>
       </div>

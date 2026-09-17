@@ -189,7 +189,12 @@ export const processPaymentWebhook = async (query: Record<string, unknown>) => {
 
   if (payment.status === "approved" && !wasAlreadyApproved) {
     try {
-      await sendPaymentConfirmationEmail(payment.email, payment.name, payment.serviceTitle);
+      await sendPaymentConfirmationEmail(
+        payment.email,
+        payment.name,
+        payment.serviceTitle,
+        String(payment._id)
+      );
     } catch (error) {
       console.error("Error enviando email de confirmación de pago:", error);
     }
