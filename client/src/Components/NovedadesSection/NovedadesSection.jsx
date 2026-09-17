@@ -31,28 +31,27 @@ const NovedadesSection = () => {
 
   if (novedades.length === 0) return null;
 
-  const singleItem = novedades.length === 1;
-
   return (
     <Reveal as='section' className='bg-purple-950 py-16'>
-      <div className='max-w-6xl mx-auto px-6'>
+      <div className='max-w-2xl mx-auto px-6'>
         <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>
           Novedades
         </h2>
 
-        <div className={`grid gap-6 ${singleItem ? 'max-w-3xl mx-auto' : 'lg:grid-cols-2'}`}>
+        {/* Apiladas una debajo de la otra: con fotos de orientación mixta
+            (verticales u horizontales), forzar una grilla lado a lado
+            recortaba mal según el caso. Con proporción fija arriba y texto
+            abajo, cualquier foto se ve prolija. */}
+        <div className='space-y-6'>
           {novedades.map((novedad) => {
             const range = formatRange(novedad.startDate, novedad.endDate);
 
             return (
-              <article
-                key={novedad._id}
-                className='bg-white overflow-hidden shadow-lg flex flex-col sm:flex-row'
-              >
+              <article key={novedad._id} className='bg-white overflow-hidden shadow-lg'>
                 {novedad.image && (
-                  <div className='aspect-video sm:aspect-auto sm:w-2/5 sm:shrink-0 bg-purple-50'>
+                  <div className='aspect-video bg-purple-50'>
                     <img
-                      src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_500')}
+                      src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_800')}
                       alt={novedad.title}
                       loading='lazy'
                       decoding='async'
@@ -61,7 +60,7 @@ const NovedadesSection = () => {
                   </div>
                 )}
 
-                <div className='p-6 flex flex-col flex-1'>
+                <div className='p-6'>
                   {(range || novedad.location) && (
                     <p className='text-xs uppercase tracking-widest text-purple-700 mb-2 flex items-center gap-1'>
                       {novedad.location && (
@@ -76,11 +75,11 @@ const NovedadesSection = () => {
                   )}
 
                   <h3 className='text-xl text-purple-950 font-medium mb-2'>{novedad.title}</h3>
-                  <p className='text-sm text-gray-600 mb-4 flex-1 whitespace-pre-line'>
+                  <p className='text-sm text-gray-600 mb-4 whitespace-pre-line'>
                     {novedad.description}
                   </p>
 
-                  <div className='flex items-center gap-4 mt-auto pt-2'>
+                  <div className='flex items-center gap-4'>
                     {novedad.ctaText && novedad.ctaLink && (
                       <Link
                         to={novedad.ctaLink}

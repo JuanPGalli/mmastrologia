@@ -82,7 +82,7 @@ const Navbar = () => {
         {/* Links */}
         <ul
           className={`
-            absolute left-0 top-full w-full bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] md:bg-none md:static md:flex md:w-auto
+            absolute left-0 top-full w-full bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] md:bg-none md:static md:flex md:items-center md:gap-5 md:w-auto
             ${isOpen ? 'block' : 'hidden'} md:block
           `}
         >
@@ -125,18 +125,21 @@ const Navbar = () => {
                 <button
                   type='button'
                   onClick={() => setMenuOpen((current) => !current)}
-                  className='flex items-center gap-2'
+                  className='flex items-center gap-2 pl-1'
                 >
                   {session.user.picture ? (
                     <img
                       src={session.user.picture}
                       alt={session.user.name}
-                      className='h-8 w-8 rounded-full object-cover border border-white/60'
+                      className='h-8 w-8 rounded-full object-cover border border-white/60 shrink-0'
                       referrerPolicy='no-referrer'
                     />
                   ) : (
-                    <FaUserCircle className='h-8 w-8' aria-hidden='true' />
+                    <FaUserCircle className='h-8 w-8 shrink-0' aria-hidden='true' />
                   )}
+                  <span className='hidden lg:inline text-sm max-w-[120px] truncate'>
+                    {session.user.name.split(' ')[0]}
+                  </span>
                 </button>
 
                 {menuOpen && (
