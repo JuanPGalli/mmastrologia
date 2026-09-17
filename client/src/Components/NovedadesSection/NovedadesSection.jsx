@@ -19,24 +19,25 @@ const NovedadCard = ({ novedad, onExpand }) => {
 
   return (
     <article className='bg-white overflow-hidden shadow-lg'>
+      {/* Las fotos que se suben acá suelen ser piezas gráficas ya
+          armadas (posters de Instagram, verticales u horizontales, con
+          texto adentro). Al ser una lista de una sola columna, no hace
+          falta forzar una proporción fija: cada imagen se muestra a su
+          tamaño natural, sin recortar y sin franjas de relleno. Solo se
+          limita la altura máxima para el caso extremo de una imagen
+          desproporcionadamente alta. */}
       {novedad.image && (
         <button
           type='button'
           onClick={() => onExpand(novedad)}
-          className='block w-full aspect-video bg-purple-50 relative overflow-hidden'
+          className='block w-full bg-purple-50'
         >
           <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_100')}
-            alt=''
-            aria-hidden='true'
-            className='absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-70'
-          />
-          <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_800')}
+            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_1000')}
             alt={novedad.title}
             loading='lazy'
             decoding='async'
-            className='relative w-full h-full object-contain'
+            className='w-full max-h-120 object-contain mx-auto'
           />
         </button>
       )}
@@ -129,9 +130,9 @@ const NovedadModal = ({ novedad, onClose }) => {
 
         {novedad.image && (
           <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_800')}
+            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_1000')}
             alt={novedad.title}
-            className='w-full max-h-[45vh] object-contain bg-purple-50'
+            className='w-full max-h-[70vh] object-contain bg-purple-50 mx-auto'
           />
         )}
 
@@ -200,9 +201,7 @@ const NovedadesSection = () => {
   return (
     <Reveal as='section' className='bg-purple-950 py-16'>
       <div className='max-w-2xl mx-auto px-6'>
-        <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>
-          Novedades
-        </h2>
+        <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>Novedades</h2>
 
         <div className='space-y-6'>
           {novedades.map((novedad) => (
