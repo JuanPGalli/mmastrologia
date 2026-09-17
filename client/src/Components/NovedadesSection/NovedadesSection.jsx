@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { FaInstagram, FaLocationDot, FaXmark } from 'react-icons/fa6';
 import Reveal from '../Reveal/Reveal';
@@ -19,24 +20,25 @@ const NovedadCard = ({ novedad, onExpand }) => {
 
   return (
     <article className='bg-white overflow-hidden shadow-lg'>
+      {/* Las fotos que se suben acá suelen ser piezas gráficas ya
+          armadas (posters de Instagram, verticales u horizontales, con
+          texto adentro). Al ser una lista de una sola columna, no hace
+          falta forzar una proporción fija: cada imagen se muestra a su
+          tamaño natural, sin recortar y sin franjas de relleno. Solo se
+          limita la altura máxima para el caso extremo de una imagen
+          desproporcionadamente alta. */}
       {novedad.image && (
         <button
           type='button'
           onClick={() => onExpand(novedad)}
-          className='block w-full aspect-video bg-purple-50 relative overflow-hidden'
+          className='block w-full bg-purple-50'
         >
           <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_100')}
-            alt=''
-            aria-hidden='true'
-            className='absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-70'
-          />
-          <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_800')}
+            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_1000')}
             alt={novedad.title}
             loading='lazy'
             decoding='async'
-            className='relative w-full h-full object-contain'
+            className='w-full max-h-120 object-contain mx-auto'
           />
         </button>
       )}
@@ -109,7 +111,14 @@ const NovedadModal = ({ novedad, onClose }) => {
 
   const range = formatRange(novedad.startDate, novedad.endDate);
 
-  return (
+  // Portal a document.body: si este modal se renderizara dentro del árbol
+  // normal, quedaría anidado bajo el <Reveal> de la sección, que le aplica
+  // `transform` una vez visible. Un ancestro con transform rompe
+  // `position: fixed` (el navegador lo posiciona relativo a ese ancestro,
+  // no a la pantalla), que es la causa de que el modal apareciera
+  // descentrado según el scroll y la card. Con el portal, `fixed` vuelve
+  // a ser relativo al viewport real.
+  return createPortal(
     <div
       className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-purple-950/60 backdrop-blur-sm'
       onClick={onClose}
@@ -129,9 +138,9 @@ const NovedadModal = ({ novedad, onClose }) => {
 
         {novedad.image && (
           <img
-            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_800')}
+            src={cloudinaryUrl(novedad.image, 'f_auto,q_auto,w_1000')}
             alt={novedad.title}
-            className='w-full max-h-[45vh] object-contain bg-purple-50'
+            className='w-full max-h-[70vh] object-contain bg-purple-50 mx-auto'
           />
         )}
 
@@ -175,7 +184,8 @@ const NovedadModal = ({ novedad, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
