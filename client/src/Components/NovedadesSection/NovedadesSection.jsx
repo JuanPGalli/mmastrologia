@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { FaInstagram, FaLocationDot, FaXmark } from 'react-icons/fa6';
 import Reveal from '../Reveal/Reveal';
@@ -110,7 +111,14 @@ const NovedadModal = ({ novedad, onClose }) => {
 
   const range = formatRange(novedad.startDate, novedad.endDate);
 
-  return (
+  // Portal a document.body: si este modal se renderizara dentro del árbol
+  // normal, quedaría anidado bajo el <Reveal> de la sección, que le aplica
+  // `transform` una vez visible. Un ancestro con transform rompe
+  // `position: fixed` (el navegador lo posiciona relativo a ese ancestro,
+  // no a la pantalla), que es la causa de que el modal apareciera
+  // descentrado según el scroll y la card. Con el portal, `fixed` vuelve
+  // a ser relativo al viewport real.
+  return createPortal(
     <div
       className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-purple-950/60 backdrop-blur-sm'
       onClick={onClose}
@@ -176,7 +184,8 @@ const NovedadModal = ({ novedad, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
@@ -201,7 +210,9 @@ const NovedadesSection = () => {
   return (
     <Reveal as='section' className='bg-purple-950 py-16'>
       <div className='max-w-2xl mx-auto px-6'>
-        <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>Novedades</h2>
+        <h2 className='text-white text-3xl md:text-4xl font-light mb-10 text-center'>
+          Novedades
+        </h2>
 
         <div className='space-y-6'>
           {novedades.map((novedad) => (
