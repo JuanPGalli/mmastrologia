@@ -10,6 +10,7 @@ import Navbar from './Components/Navbar/Navbar';
 import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 import Services from './Views/Services/Services';
 import Footer from './Components/Footer/Footer';
+import WhatsappFloatingButton from './Components/WhatsappFloatingButton/WhatsappFloatingButton';
 import Blog from './Views/Blog/Blog';
 import BlogDetail from './Views/BlogDetail/BlogDetail';
 
@@ -57,6 +58,7 @@ function App() {
         </Routes>
       </Suspense>
       <Footer />
+      <WhatsappFloatingButton />
     </div>
   );
 }

@@ -6,6 +6,8 @@ import {
   FaYoutube,
   FaWhatsapp,
   FaRegEnvelope,
+  FaGithub,
+  FaLinkedin,
 } from 'react-icons/fa';
 
 const Footer = () => {
@@ -93,6 +95,38 @@ const Footer = () => {
       <br />
       <div className='text-center text-xs text-gray-500 mt-10'>
         © 2026 Maria Marta Galli – Todos los derechos reservados
+      </div>
+
+      {/* Firma del desarrollador */}
+      <div className='flex items-center justify-center gap-3 text-xs text-gray-400 mt-3'>
+        <a
+          href='https://jpgdev.vercel.app'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='hover:text-[#D697B8] transition-colors'
+        >
+          Sitio desarrollado por Juan Pablo Galli
+        </a>
+        <span className='flex items-center gap-2 text-sm'>
+          <a
+            href='https://github.com/JuanPGalli'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='GitHub de Juan Pablo Galli'
+            className='hover:text-[#D697B8] transition-colors'
+          >
+            <FaGithub />
+          </a>
+          <a
+            href='https://www.linkedin.com/in/juan-pablo-galli-rodriguez'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='LinkedIn de Juan Pablo Galli'
+            className='hover:text-[#D697B8] transition-colors'
+          >
+            <FaLinkedin />
+          </a>
+        </span>
       </div>
     </footer>
   );
