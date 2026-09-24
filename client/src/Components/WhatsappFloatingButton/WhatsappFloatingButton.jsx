@@ -16,7 +16,7 @@ const WhatsappFloatingButton = () => {
       target='_blank'
       rel='noopener noreferrer'
       aria-label='Escribir por WhatsApp'
-      className='fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white text-3xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform'
+      className='fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 md:w-20 md:h-20 rounded-full bg-[#25D366] text-white text-4xl md:text-6xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform'
     >
       <FaWhatsapp />
     </a>
