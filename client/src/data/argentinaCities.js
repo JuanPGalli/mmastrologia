@@ -1,0 +1,36 @@
+// Lista fija de ciudades argentinas con coordenadas, para el selector de
+// lugar de nacimiento. Alcanza para la fase 1 (mercado Argentina). Cuando
+// se sume Brasil/internacional, esto se reemplaza por geocoding real
+// (ej. Nominatim/OpenStreetMap) en vez de agrandar esta lista a mano.
+export const ARGENTINA_CITIES = [
+  { label: 'Buenos Aires (CABA)', latitude: -34.6037, longitude: -58.3816 },
+  { label: 'La Plata', latitude: -34.9215, longitude: -57.9545 },
+  { label: 'Mar del Plata', latitude: -38.0055, longitude: -57.5426 },
+  { label: 'Rosario', latitude: -32.9468, longitude: -60.6393 },
+  { label: 'Santa Fe', latitude: -31.6333, longitude: -60.7 },
+  { label: 'Córdoba', latitude: -31.4201, longitude: -64.1888 },
+  { label: 'Mendoza', latitude: -32.8895, longitude: -68.8458 },
+  { label: 'San Juan', latitude: -31.5375, longitude: -68.5364 },
+  { label: 'San Luis', latitude: -33.3017, longitude: -66.3378 },
+  { label: 'Neuquén', latitude: -38.9516, longitude: -68.0591 },
+  { label: 'Bariloche', latitude: -41.1335, longitude: -71.3103 },
+  { label: 'Resistencia', latitude: -27.4514, longitude: -58.9867 },
+  { label: 'Corrientes', latitude: -27.4692, longitude: -58.834 },
+  { label: 'Posadas', latitude: -27.3671, longitude: -55.8961 },
+  { label: 'Formosa', latitude: -26.1849, longitude: -58.1731 },
+  { label: 'Salta', latitude: -24.7859, longitude: -65.4117 },
+  { label: 'Jujuy (San Salvador de Jujuy)', latitude: -24.1858, longitude: -65.2995 },
+  { label: 'Tucumán (San Miguel de Tucumán)', latitude: -26.8083, longitude: -65.2176 },
+  { label: 'Santiago del Estero', latitude: -27.7834, longitude: -64.2642 },
+  { label: 'Catamarca (San Fernando del Valle)', latitude: -28.4696, longitude: -65.7852 },
+  { label: 'La Rioja', latitude: -29.4131, longitude: -66.8558 },
+  { label: 'Paraná', latitude: -31.7333, longitude: -60.5297 },
+  { label: 'Bahía Blanca', latitude: -38.7183, longitude: -62.2663 },
+  { label: 'San Rafael', latitude: -34.6177, longitude: -68.3301 },
+  { label: 'Río Cuarto', latitude: -33.1301, longitude: -64.3499 },
+  { label: 'Comodoro Rivadavia', latitude: -45.8641, longitude: -67.496 },
+  { label: 'Río Gallegos', latitude: -51.6226, longitude: -69.2181 },
+  { label: 'Ushuaia', latitude: -54.8019, longitude: -68.303 },
+  { label: 'Viedma', latitude: -40.8135, longitude: -62.9967 },
+  { label: 'Santa Rosa (La Pampa)', latitude: -36.6167, longitude: -64.2833 },
+];

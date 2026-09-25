@@ -28,3 +28,15 @@ export const formLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Demasiadas solicitudes. Probá de nuevo en unos minutos." },
 });
+
+// Límite estricto para el informe astrológico con IA: cada request tiene un
+// costo real (llamada a Gemini). Independiente del control de suscripción
+// que se sume más adelante — esto es una protección de abuso a nivel red,
+// no reemplaza la validación de acceso pago.
+export const astroLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Demasiadas solicitudes de informe. Probá de nuevo más tarde." },
+});

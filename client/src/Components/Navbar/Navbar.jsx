@@ -45,14 +45,12 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-100 ${
-        isOpen
-          ? 'bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] text-white'
-          : scrolled
-            ? 'bg-[rgb(147,116,192)] text-white'
-            : !scrolled && isHome
-              ? 'bg-transparent text-white'
-              : 'bg-transparent text-purple-700'
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
+        isOpen || scrolled
+          ? 'bg-[rgb(147,116,192)] text-white'
+          : isHome
+            ? 'bg-transparent text-white'
+            : 'bg-transparent text-purple-700'
       } `}
     >
       <div className='mx-auto flex max-w-7xl items-center justify-between px-6 py-3'>
@@ -82,10 +80,14 @@ const Navbar = () => {
         {/* Links */}
         <ul
           className={`
-            nav-mobile-list absolute left-0 top-full w-full bg-[linear-gradient(180deg,#D4ACFB,#B84FCE)] md:bg-none md:static
-            flex-col md:flex-row md:items-center md:gap-5 md:w-auto
-            min-h-[100dvh] md:min-h-0 px-6 pt-2 pb-10 md:p-0
-            ${isOpen ? 'flex' : 'hidden'} md:flex
+            nav-mobile-list absolute left-0 top-full w-full
+            bg-[rgb(147,116,192)] md:bg-none md:static
+            flex flex-col md:flex-row md:items-center md:gap-5 md:w-auto
+            px-6 md:p-0
+            overflow-hidden md:overflow-visible
+            transition-[max-height,opacity] duration-300 ease-in-out
+            ${isOpen ? 'max-h-[100dvh] opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
+            md:max-h-none md:opacity-100 md:pointer-events-auto
           `}
         >
           <li>
