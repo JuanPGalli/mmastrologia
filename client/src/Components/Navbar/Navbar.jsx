@@ -102,6 +102,11 @@ const Navbar = () => {
             </a>
           </li>
           <li>
+            <a className='nav-link' href='/astrologo-virtual'>
+              Astrólogo Virtual
+            </a>
+          </li>
+          <li>
             <a className='nav-link' href='/about'>
               Sobre Mi
             </a>
