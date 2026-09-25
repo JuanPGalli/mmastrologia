@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/morgan": "^1.9.9",
     "bcrypt": "^6.0.0",
+    "circular-natal-horoscope-js": "^1.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
