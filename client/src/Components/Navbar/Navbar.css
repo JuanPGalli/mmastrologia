@@ -13,3 +13,24 @@
 .nav-scrolled {
   background-color: rgb(147,116,192); /* Violeta */
 }
+
+/* Restyle del menú mobile: antes quedaba muy apretado porque el
+   dropdown medía lo mismo que su contenido y el resto de la página
+   se veía pegado justo debajo. Ahora en mobile es un panel a pantalla
+   completa (min-h-[100dvh] en el JSX), con más aire entre ítems y un
+   separador sutil. En desktop (md:) no cambia nada. */
+@media (max-width: 767px) {
+  .nav-mobile-list > li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .nav-mobile-list > li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-mobile-list .nav-link {
+    padding: 0.5rem 0;
+    font-size: 1.15rem;
+  }
+}

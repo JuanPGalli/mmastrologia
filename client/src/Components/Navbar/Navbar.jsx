@@ -82,8 +82,10 @@ const Navbar = () => {
         {/* Links */}
         <ul
           className={`
-            absolute left-0 top-full w-full bg-[linear-gradient(90deg,#D4ACFB,#B84FCE)] md:bg-none md:static md:flex md:items-center md:gap-5 md:w-auto
-            ${isOpen ? 'block' : 'hidden'} md:block
+            nav-mobile-list absolute left-0 top-full w-full bg-[linear-gradient(180deg,#D4ACFB,#B84FCE)] md:bg-none md:static
+            flex-col md:flex-row md:items-center md:gap-5 md:w-auto
+            min-h-[100dvh] md:min-h-0 px-6 pt-2 pb-10 md:p-0
+            ${isOpen ? 'flex' : 'hidden'} md:flex
           `}
         >
           <li>
