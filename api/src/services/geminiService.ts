@@ -1,10 +1,12 @@
 import { CartaResumen } from "./astrologyService";
 
 // Modelo elegido tras comparar calidad y costo con Claude (ver decisiones
-// del proyecto): tiene tier gratuito confirmado. Al ser un modelo "preview",
-// Google puede reemplazarlo — si eso pasa, este es el único lugar que hay
-// que tocar.
-const GEMINI_MODEL = "gemini-3-flash-preview";
+// del proyecto). Se usó gemini-3-flash-preview inicialmente, pero al ser un
+// modelo "preview" devolvió errores 503 de saturación ("this model is
+// currently experiencing high demand") — se pasó a la versión estable
+// gemini-2.5-flash, que también tiene tier gratuito confirmado y no
+// depende de la disponibilidad de un modelo en preview.
+const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export type InformeAstrologico = {
@@ -83,7 +85,16 @@ export const generarInformeConGemini = async (
 
   if (!response.ok) {
     const detalle = await response.text();
-    throw new Error(`Gemini respondió con error (${response.status}): ${detalle}`);
+    // El detalle crudo de Gemini queda en los logs del servidor para
+    // debug, pero al usuario final no le sirve ver un JSON de Google.
+    console.error(`[geminiService] Gemini respondió ${response.status}:`, detalle);
+
+    if (response.status === 503 || response.status === 429) {
+      throw new Error(
+        "El servicio de IA está con mucha demanda en este momento. Probá de nuevo en un minuto."
+      );
+    }
+    throw new Error("No pudimos generar tu informe en este momento. Probá de nuevo más tarde.");
   }
 
   const data = (await response.json()) as {

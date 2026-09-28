@@ -1,5 +1,6 @@
 import { calcularCartaResumen, DatosNacimiento } from "../services/astrologyService";
 import { generarInformeConGemini, InformeAstrologico } from "../services/geminiService";
+import { ValidationError } from "../utils/errors";
 
 export type InformePayload = {
   year?: unknown;
@@ -21,16 +22,16 @@ const validarDatosNacimiento = (payload: InformePayload): DatosNacimiento => {
   const horaDesconocida = payload.horaDesconocida === true;
 
   if (!numeroValido(year) || !numeroValido(month) || !numeroValido(day)) {
-    throw new Error("Faltan la fecha de nacimiento (año, mes y día).");
+    throw new ValidationError("Faltan la fecha de nacimiento (año, mes y día).");
   }
   if (!numeroValido(latitude) || !numeroValido(longitude)) {
-    throw new Error("Falta el lugar de nacimiento.");
+    throw new ValidationError("Falta el lugar de nacimiento.");
   }
   if (typeof pregunta !== "string" || pregunta.trim().length < 5) {
-    throw new Error("Contanos tu pregunta con un poco más de detalle.");
+    throw new ValidationError("Contanos tu pregunta con un poco más de detalle.");
   }
   if (!horaDesconocida && (!numeroValido(hour) || !numeroValido(minute))) {
-    throw new Error("Falta la hora de nacimiento (o marcá que no la conocés).");
+    throw new ValidationError("Falta la hora de nacimiento (o marcá que no la conocés).");
   }
 
   return {
