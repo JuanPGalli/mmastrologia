@@ -32,16 +32,15 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    const SCROLL_THRESHOLD = 24;
     const handleScroll = () => {
-      if (scrollY > 0) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > SCROLL_THRESHOLD);
     };
+    handleScroll(); // sincroniza el estado inicial (por ej. al navegar
+    // client-side desde una página donde ya se había scrolleado)
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrolled]);
+  }, []);
 
   return (
     <nav
