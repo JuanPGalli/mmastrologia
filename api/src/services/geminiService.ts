@@ -1,12 +1,25 @@
 import { CartaResumen } from "./astrologyService";
 
-// Modelo elegido tras comparar calidad y costo con Claude (ver decisiones
-// del proyecto). Se usó gemini-3-flash-preview inicialmente, pero al ser un
-// modelo "preview" devolvió errores 503 de saturación ("this model is
-// currently experiencing high demand") — se pasó a la versión estable
-// gemini-2.5-flash, que también tiene tier gratuito confirmado y no
-// depende de la disponibilidad de un modelo en preview.
-const GEMINI_MODEL = "gemini-2.5-flash";
+// Historial de esta constante (para no repetir la misma sorpresa):
+// - gemini-3-flash-preview: devolvía 503 "high demand" seguido, por ser
+//   modelo preview.
+// - gemini-2.5-flash: Google lo discontinuó para API keys nuevas
+//   ("no longer available to new users") — confirmado por el 404 real
+//   que devolvió la API el 28/09/2026.
+// Se pasó a gemini-3.7-flash: es el modelo que el propio mensaje de error
+// de Google recomienda para reemplazar 2.5, y es la opción que Google
+// describe como la elegida para cargas de trabajo "cost-first" en vez de
+// gemini-3.8-flash (pensado para agentes de código de largo horizonte,
+// no para generar un informe de texto corto).
+// OJO: al momento de este cambio, Google viene recortando fuerte los
+// límites del free tier (algunos modelos bajaron de ~1500 a 20
+// requests/día sin aviso) y ya no publica los números en la
+// documentación. Si esto se vuelve a romper, lo más robusto no es cambiar
+// el modelo de nuevo sino activar facturación (billing) en el proyecto de
+// Google Cloud vinculado a la API key — el costo real por informe sigue
+// siendo una fracción de centavo, muy por debajo del riesgo de que el
+// free tier se corte sin aviso otra vez.
+const GEMINI_MODEL = "gemini-3.7-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export type InformeAstrologico = {
