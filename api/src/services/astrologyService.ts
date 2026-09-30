@@ -72,6 +72,80 @@ const casaQueContieneGrado = (houses: HoroscopeHouse[], grados: number): number 
   return null;
 };
 
+export type TransitosDia = {
+  solSignoNatal: string;
+  lunaSignoNatal: string;
+  lunaTransitoSigno: string;
+  lunaTransitandoCasa: number | null;
+  solTransitandoCasa: number | null;
+  saturnoTransitandoCasa: number | null;
+  horaConocida: boolean;
+};
+
+// Tránsitos relevantes para un horóscopo del día: la Luna es la que más
+// rápido se mueve (cambia de signo cada ~2.5 días) y es la que más define el
+// "tono" de un día puntual; se suma el Sol y Saturno (ya calculado en
+// calcularCartaResumen) como contexto de más largo plazo. No se recalculan
+// aspectos completos acá para mantener el costo/latencia bajos — esto se
+// llama una vez por usuario por día (ver HoroscopoDiario.ts).
+export const calcularTransitosDelDia = (datos: DatosNacimiento): TransitosDia => {
+  const hour = datos.horaDesconocida ? 12 : (datos.hour ?? 12);
+  const minute = datos.horaDesconocida ? 0 : (datos.minute ?? 0);
+
+  const natal = construirHoroscopio({
+    year: datos.year,
+    month: datos.month - 1,
+    day: datos.day,
+    hour,
+    minute,
+    latitude: datos.latitude,
+    longitude: datos.longitude,
+  });
+
+  const solSignoNatal: string = natal.CelestialBodies.sun.Sign.label;
+  const lunaSignoNatal: string = natal.CelestialBodies.moon.Sign.label;
+
+  const ahora = new Date();
+  const transito = construirHoroscopio({
+    year: ahora.getUTCFullYear(),
+    month: ahora.getUTCMonth(),
+    day: ahora.getUTCDate(),
+    hour: ahora.getUTCHours(),
+    minute: ahora.getUTCMinutes(),
+    latitude: datos.latitude,
+    longitude: datos.longitude,
+  });
+
+  const lunaTransitoSigno: string = transito.CelestialBodies.moon.Sign.label;
+
+  if (datos.horaDesconocida) {
+    return {
+      solSignoNatal,
+      lunaSignoNatal,
+      lunaTransitoSigno,
+      lunaTransitandoCasa: null,
+      solTransitandoCasa: null,
+      saturnoTransitandoCasa: null,
+      horaConocida: false,
+    };
+  }
+
+  const houses = natal.Houses as HoroscopeHouse[];
+  const lunaGrado: number = transito.CelestialBodies.moon.ChartPosition.Ecliptic.DecimalDegrees;
+  const solGrado: number = transito.CelestialBodies.sun.ChartPosition.Ecliptic.DecimalDegrees;
+  const saturnoGrado: number = transito.CelestialBodies.saturn.ChartPosition.Ecliptic.DecimalDegrees;
+
+  return {
+    solSignoNatal,
+    lunaSignoNatal,
+    lunaTransitoSigno,
+    lunaTransitandoCasa: casaQueContieneGrado(houses, lunaGrado),
+    solTransitandoCasa: casaQueContieneGrado(houses, solGrado),
+    saturnoTransitandoCasa: casaQueContieneGrado(houses, saturnoGrado),
+    horaConocida: true,
+  };
+};
+
 export const calcularCartaResumen = (datos: DatosNacimiento): CartaResumen => {
   // Sin hora exacta no se puede calcular el ascendente ni las casas de forma
   // confiable (cambian varios grados por hora) — usamos mediodía solo como

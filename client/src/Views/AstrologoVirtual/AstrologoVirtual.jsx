@@ -6,6 +6,7 @@ import { getStoredSession } from '../../api/auth';
 import { generarInformeAstrologico } from '../../api/astro';
 import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import Seo from '../../Components/Seo/Seo';
+import HoroscopoDiarioCard from '../../Components/HoroscopoDiarioCard/HoroscopoDiarioCard';
 
 const estadoInicial = {
   fecha: '',
@@ -51,6 +52,10 @@ const AstrologoVirtual = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [errorEsTecnico, setErrorEsTecnico] = useState(false);
+  // Cambia cada vez que se genera un informe exitosamente, para forzar que
+  // la card del horóscopo diario se vuelva a pedir (la primera vez que
+  // alguien genera un informe recién ahí queda guardada su carta natal).
+  const [horoscopoRefreshKey, setHoroscopoRefreshKey] = useState(0);
 
   useEffect(() => {
     if (!session) navigate('/login');
@@ -99,6 +104,7 @@ const AstrologoVirtual = () => {
       setInforme(resultado);
       setEsInformeGuardado(false);
       guardarInformeLocal(resultado);
+      setHoroscopoRefreshKey((k) => k + 1);
     } catch (requestError) {
       const status = requestError.response?.status;
       const mensaje = requestError.response?.data?.error || requestError.message;
@@ -134,6 +140,8 @@ const AstrologoVirtual = () => {
         <p className='text-gray-600 text-center mb-10'>
           Contanos tu fecha, hora y lugar de nacimiento, y qué te gustaría consultar.
         </p>
+
+        <HoroscopoDiarioCard key={horoscopoRefreshKey} />
 
         <form onSubmit={handleSubmit} className='bg-white shadow-lg p-8 space-y-6'>
           <div>
