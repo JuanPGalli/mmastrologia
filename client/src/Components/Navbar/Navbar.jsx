@@ -16,7 +16,7 @@ const Navbar = () => {
   // a diferencia de isOpen (que es un click del usuario), esto se
   // recalcula solo con el resize real.
   const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth >= 768,
+    () => typeof window !== 'undefined' && window.innerWidth >= 768
   );
   const location = useLocation();
   const navigate = useNavigate();
@@ -160,7 +160,7 @@ const Navbar = () => {
                   ) : (
                     <FaUserCircle className='h-8 w-8 shrink-0' aria-hidden='true' />
                   )}
-                  <span className='hidden lg:inline text-sm max-w-[120px] truncate'>
+                  <span className='hidden lg:inline text-sm max-w-30 truncate'>
                     {session.user.name.split(' ')[0]}
                   </span>
                 </button>
