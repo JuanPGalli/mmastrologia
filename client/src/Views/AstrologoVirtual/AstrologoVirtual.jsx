@@ -7,6 +7,7 @@ import { generarInformeAstrologico } from '../../api/astro';
 import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import Seo from '../../Components/Seo/Seo';
 import HoroscopoDiarioCard from '../../Components/HoroscopoDiarioCard/HoroscopoDiarioCard';
+import CartaNatalWheel from '../../Components/CartaNatalWheel/CartaNatalWheel';
 
 const estadoInicial = {
   fecha: '',
@@ -274,6 +275,8 @@ const AstrologoVirtual = () => {
                 )}
               </div>
             )}
+            {informe.rueda && <CartaNatalWheel rueda={informe.rueda} />}
+
             <div className='flex items-start gap-2'>
               <FaMagic className='text-purple-400 text-xl shrink-0 mt-1' aria-hidden='true' />
               <h2 className='text-xl text-purple-950 font-medium'>{informe.titulo}</h2>

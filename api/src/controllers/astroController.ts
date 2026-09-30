@@ -1,8 +1,10 @@
 import {
   calcularCartaResumen,
+  calcularDatosRueda,
   calcularTransitosDelDia,
   CartaResumen,
   DatosNacimiento,
+  DatosRueda,
 } from "../services/astrologyService";
 import {
   generarHoroscopoDiarioConGemini,
@@ -59,13 +61,14 @@ export const validarDatosNacimiento = (payload: InformePayload): DatosNacimiento
 
 export const generarInformeAstrologico = async (
   payload: InformePayload
-): Promise<InformeAstrologico & { carta: CartaResumen }> => {
+): Promise<InformeAstrologico & { carta: CartaResumen; rueda: DatosRueda }> => {
   const datosNacimiento = validarDatosNacimiento(payload);
   const pregunta = (payload.pregunta as string).trim();
 
   const carta = calcularCartaResumen(datosNacimiento);
+  const rueda = calcularDatosRueda(datosNacimiento);
   const informe = await generarInformeConGemini(carta, pregunta);
-  return { ...informe, carta };
+  return { ...informe, carta, rueda };
 };
 
 // Fecha de hoy en huso horario Argentina (no UTC), para que el horóscopo

@@ -146,6 +146,70 @@ export const calcularTransitosDelDia = (datos: DatosNacimiento): TransitosDia =>
   };
 };
 
+export type PuntoRueda = {
+  nombre: string; // 'sol' | 'luna' | 'mercurio' | ... — se usa para elegir el glifo en el frontend
+  signo: string;
+  grado: number; // 0-359.99, posición eclíptica absoluta (para ubicarlo en el círculo)
+};
+
+export type DatosRueda = {
+  ascendenteGrado: number | null;
+  casas: number[] | null; // 12 grados de inicio de cada casa, o null sin hora
+  planetas: PuntoRueda[];
+  horaConocida: boolean;
+};
+
+const CUERPOS_RUEDA = [
+  "sun",
+  "moon",
+  "mercury",
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+] as const;
+
+// Todo lo que necesita el frontend para dibujar la rueda como SVG: nada de
+// esto pasa por la IA, es la misma matemática que ya usa calcularCartaResumen,
+// solo que acá se expone la posición completa en vez de solo el resumen.
+export const calcularDatosRueda = (datos: DatosNacimiento): DatosRueda => {
+  const horaConocida = !datos.horaDesconocida;
+  const hour = horaConocida ? (datos.hour ?? 12) : 12;
+  const minute = horaConocida ? (datos.minute ?? 0) : 0;
+
+  const horoscope = construirHoroscopio({
+    year: datos.year,
+    month: datos.month - 1,
+    day: datos.day,
+    hour,
+    minute,
+    latitude: datos.latitude,
+    longitude: datos.longitude,
+  });
+
+  type CelestialBody = { Sign: { label: string }; ChartPosition: { Ecliptic: { DecimalDegrees: number } } };
+  const cuerpos = horoscope.CelestialBodies as unknown as Record<string, CelestialBody>;
+
+  const planetas: PuntoRueda[] = CUERPOS_RUEDA.map((nombre) => ({
+    nombre,
+    signo: cuerpos[nombre].Sign.label,
+    grado: cuerpos[nombre].ChartPosition.Ecliptic.DecimalDegrees,
+  }));
+
+  if (!horaConocida) {
+    return { ascendenteGrado: null, casas: null, planetas, horaConocida: false };
+  }
+
+  const houses = horoscope.Houses as HoroscopeHouse[];
+  const casas = houses.map((h) => h.ChartPosition.StartPosition.Ecliptic.DecimalDegrees);
+  const ascendenteGrado = casas[0]; // la cúspide de la casa 1 ES el ascendente
+
+  return { ascendenteGrado, casas, planetas, horaConocida: true };
+};
+
 export const calcularCartaResumen = (datos: DatosNacimiento): CartaResumen => {
   // Sin hora exacta no se puede calcular el ascendente ni las casas de forma
   // confiable (cambian varios grados por hora) — usamos mediodía solo como
