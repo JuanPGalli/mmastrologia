@@ -17,3 +17,12 @@ export const generarInformeAstrologico = async (datos) => {
   });
   return response.data;
 };
+
+export const obtenerHoroscopoDiario = async () => {
+  if (!apiUrl) throw new Error('El sitio no está configurado correctamente.');
+
+  const response = await axios.get(`${apiUrl}/api/astro/horoscopo-diario`, {
+    headers: authHeaders(),
+  });
+  return response.data;
+};
