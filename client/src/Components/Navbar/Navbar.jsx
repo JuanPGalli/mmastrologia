@@ -85,7 +85,7 @@ const Navbar = () => {
             px-6 md:p-0
             overflow-hidden md:overflow-visible
             transition-[max-height,opacity] duration-300 ease-in-out
-            ${isOpen ? 'max-h-[100dvh] opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
+            ${isOpen ? 'max-h-dvh opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
             md:max-h-none md:opacity-100 md:pointer-events-auto
           `}
         >
@@ -145,7 +145,7 @@ const Navbar = () => {
                   ) : (
                     <FaUserCircle className='h-8 w-8 shrink-0' aria-hidden='true' />
                   )}
-                  <span className='hidden lg:inline text-sm max-w-[120px] truncate'>
+                  <span className='hidden lg:inline text-sm max-w-30 truncate'>
                     {session.user.name.split(' ')[0]}
                   </span>
                 </button>
