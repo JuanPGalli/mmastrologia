@@ -10,6 +10,14 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Refleja el ancho real de pantalla (mismo breakpoint que md: de
+  // Tailwind, 768px), para que el fondo "menú mobile abierto" nunca pueda
+  // quedar pegado en desktop sin importar cuándo se agrande la ventana —
+  // a diferencia de isOpen (que es un click del usuario), esto se
+  // recalcula solo con el resize real.
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth >= 768,
+  );
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -32,6 +40,13 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    const mql = window.matchMedia('(min-width: 768px)');
+    const handleChange = (e) => setIsDesktop(e.matches);
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
     const SCROLL_THRESHOLD = 24;
     const handleScroll = () => {
       setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -45,7 +60,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
-        isOpen || scrolled
+        (isOpen && !isDesktop) || scrolled
           ? 'bg-[rgb(147,116,192)] text-white'
           : isHome
             ? 'bg-transparent text-white'
@@ -85,7 +100,7 @@ const Navbar = () => {
             px-6 md:p-0
             overflow-hidden md:overflow-visible
             transition-[max-height,opacity] duration-300 ease-in-out
-            ${isOpen ? 'max-h-[100dvh] opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
+            ${isOpen ? 'max-h-dvh opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
             md:max-h-none md:opacity-100 md:pointer-events-auto
           `}
         >
