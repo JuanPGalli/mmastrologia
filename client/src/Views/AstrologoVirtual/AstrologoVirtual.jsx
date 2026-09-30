@@ -255,6 +255,25 @@ const AstrologoVirtual = () => {
                 Tu último informe generado
               </p>
             )}
+            {informe.carta && (
+              <div className='bg-purple-50 -mx-8 -mt-8 px-8 py-4 mb-2 text-sm text-purple-900'>
+                <p className='font-medium mb-1'>Tu carta calculada</p>
+                <p>
+                  Sol en {informe.carta.solSigno} · Luna en {informe.carta.lunaSigno}
+                  {informe.carta.horaConocida && informe.carta.ascendenteSigno
+                    ? ` · Ascendente en ${informe.carta.ascendenteSigno}`
+                    : ''}
+                  {informe.carta.horaConocida && informe.carta.saturnoTransitandoCasa
+                    ? ` · Saturno transitando tu casa ${informe.carta.saturnoTransitandoCasa}`
+                    : ''}
+                </p>
+                {!informe.carta.horaConocida && (
+                  <p className='text-xs text-purple-600 mt-1'>
+                    Sin hora exacta no se calculan ascendente ni casas.
+                  </p>
+                )}
+              </div>
+            )}
             <div className='flex items-start gap-2'>
               <FaMagic className='text-purple-400 text-xl shrink-0 mt-1' aria-hidden='true' />
               <h2 className='text-xl text-purple-950 font-medium'>{informe.titulo}</h2>
