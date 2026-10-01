@@ -26,3 +26,14 @@ export const obtenerHoroscopoDiario = async () => {
   });
   return response.data;
 };
+
+export const generarSinastria = async (personaA, personaB) => {
+  if (!apiUrl) throw new Error('El sitio no está configurado correctamente.');
+
+  const response = await axios.post(
+    `${apiUrl}/api/astro/sinastria`,
+    { personaA, personaB },
+    { headers: authHeaders() }
+  );
+  return response.data;
+};

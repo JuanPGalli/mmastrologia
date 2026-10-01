@@ -1,4 +1,4 @@
-import { CartaResumen, TransitosDia } from "./astrologyService";
+import { AspectoSinastria, CartaResumen, PersonaSinastria, TransitosDia } from "./astrologyService";
 
 // Historial de esta constante (para no repetir la misma sorpresa):
 // - gemini-3-flash-preview: devolvía 503 "high demand" seguido, por ser
@@ -185,6 +185,66 @@ export const generarHoroscopoDiarioConGemini = async (
     SYSTEM_INSTRUCTION_HOROSCOPO,
     construirPromptHoroscopo(transitos),
     RESPONSE_SCHEMA_HOROSCOPO
+  );
+
+  return { ...parcial, disclaimer: DISCLAIMER_LEGAL };
+};
+
+export type SinastriaTexto = {
+  titulo: string;
+  texto: string;
+  disclaimer: string;
+};
+
+const SYSTEM_INSTRUCTION_SINASTRIA =
+  "Sos un astrólogo profesional que interpreta sinastría (compatibilidad astrológica entre dos personas) en " +
+  "español rioplatense, cálido y honesto — ni todo color de rosa ni alarmista. Recibís los signos de Sol, Luna, " +
+  "Venus, Marte (y Ascendente si está disponible) de dos personas, y los aspectos astrológicos YA CALCULADOS " +
+  "entre ambas cartas (no los calcules vos). Explicá qué dice la combinación sobre la dinámica entre ellos: " +
+  "puntos de conexión natural y también tensiones a trabajar. No asumas que es una pareja romántica salvo que " +
+  "se indique — puede ser cualquier tipo de vínculo.";
+
+const RESPONSE_SCHEMA_SINASTRIA = {
+  type: "OBJECT",
+  properties: {
+    titulo: { type: "STRING" },
+    texto: { type: "STRING" },
+  },
+  required: ["titulo", "texto"],
+};
+
+const construirPromptSinastria = (
+  personaA: PersonaSinastria,
+  personaB: PersonaSinastria,
+  aspectos: AspectoSinastria[]
+): string => {
+  const describirPersona = (p: PersonaSinastria) =>
+    p.puntos.map((punto) => `${punto.cuerpo} en ${punto.signo}`).join(", ");
+
+  const lineasAspectos =
+    aspectos.length > 0
+      ? aspectos
+          .slice(0, 8) // los 8 más exactos alcanzan para una interpretación con sentido
+          .map((a) => `- ${a.cuerpoA} (${personaA.nombre}) en ${a.tipo} con ${a.cuerpoB} (${personaB.nombre})`)
+          .join("\n")
+      : "- No hay aspectos mayores dentro del orbe estándar entre estos puntos.";
+
+  return (
+    `${personaA.nombre}: ${describirPersona(personaA)}\n` +
+    `${personaB.nombre}: ${describirPersona(personaB)}\n\n` +
+    `Aspectos entre ambas cartas:\n${lineasAspectos}`
+  );
+};
+
+export const generarSinastriaConGemini = async (
+  personaA: PersonaSinastria,
+  personaB: PersonaSinastria,
+  aspectos: AspectoSinastria[]
+): Promise<SinastriaTexto> => {
+  const parcial = await llamarGemini<Omit<SinastriaTexto, "disclaimer">>(
+    SYSTEM_INSTRUCTION_SINASTRIA,
+    construirPromptSinastria(personaA, personaB, aspectos),
+    RESPONSE_SCHEMA_SINASTRIA
   );
 
   return { ...parcial, disclaimer: DISCLAIMER_LEGAL };
