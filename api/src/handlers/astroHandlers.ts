@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { AuthRequest } from "../middleware/auth";
 import {
   generarInformeAstrologico,
+  generarSinastria,
   obtenerHoroscopoDiario,
   validarDatosNacimiento,
 } from "../controllers/astroController";
@@ -65,5 +66,19 @@ export const getHoroscopoDiarioHandler: RequestHandler = async (req: AuthRequest
     res.status(200).json(horoscopo);
   } catch (error: unknown) {
     responderError(res, error, "astro/horoscopo-diario");
+  }
+};
+
+export const postSinastriaHandler: RequestHandler = async (req: AuthRequest, res) => {
+  if (!req.user) {
+    res.status(401).json({ error: "Necesitás iniciar sesión." });
+    return;
+  }
+
+  try {
+    const resultado = await generarSinastria(req.body);
+    res.status(200).json(resultado);
+  } catch (error: unknown) {
+    responderError(res, error, "astro/sinastria");
   }
 };

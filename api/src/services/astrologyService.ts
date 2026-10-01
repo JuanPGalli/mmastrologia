@@ -268,3 +268,106 @@ export const calcularCartaResumen = (datos: DatosNacimiento): CartaResumen => {
     horaConocida: true,
   };
 };
+
+// ---- Sinastría (compatibilidad entre dos cartas) ----
+
+export type PuntoSinastria = { cuerpo: string; signo: string; grado: number };
+export type PersonaSinastria = { nombre: string; puntos: PuntoSinastria[]; horaConocida: boolean };
+
+export type AspectoSinastria = {
+  cuerpoA: string;
+  cuerpoB: string;
+  tipo: "conjunción" | "sextil" | "cuadratura" | "trígono" | "oposición";
+  orbe: number; // diferencia en grados respecto del aspecto exacto
+};
+
+const CUERPOS_SINASTRIA = ["sun", "moon", "venus", "mars"] as const;
+
+const NOMBRE_ES: Record<string, string> = {
+  sun: "Sol",
+  moon: "Luna",
+  venus: "Venus",
+  mars: "Marte",
+  ascendant: "Ascendente",
+};
+
+const ANGULOS_ASPECTOS: { tipo: AspectoSinastria["tipo"]; angulo: number }[] = [
+  { tipo: "conjunción", angulo: 0 },
+  { tipo: "sextil", angulo: 60 },
+  { tipo: "cuadratura", angulo: 90 },
+  { tipo: "trígono", angulo: 120 },
+  { tipo: "oposición", angulo: 180 },
+];
+const ORBE_MAXIMO = 6; // grados de tolerancia — valor estándar para planetas personales
+
+// Puntos de una persona relevantes para sinastría: Sol/Luna/Venus/Marte
+// siempre, y Ascendente si se conoce la hora. Sin hora, la sinastría igual
+// funciona (es común en la práctica astrológica), solo que sin ese punto.
+export const calcularPuntosSinastria = (datos: DatosNacimiento, nombre: string): PersonaSinastria => {
+  const horaConocida = !datos.horaDesconocida;
+  const hour = horaConocida ? (datos.hour ?? 12) : 12;
+  const minute = horaConocida ? (datos.minute ?? 0) : 0;
+
+  const horoscope = construirHoroscopio({
+    year: datos.year,
+    month: datos.month - 1,
+    day: datos.day,
+    hour,
+    minute,
+    latitude: datos.latitude,
+    longitude: datos.longitude,
+  });
+
+  type CelestialBody = { Sign: { label: string }; ChartPosition: { Ecliptic: { DecimalDegrees: number } } };
+  const cuerpos = horoscope.CelestialBodies as unknown as Record<string, CelestialBody>;
+
+  const puntos: PuntoSinastria[] = CUERPOS_SINASTRIA.map((cuerpo) => ({
+    cuerpo: NOMBRE_ES[cuerpo],
+    signo: cuerpos[cuerpo].Sign.label,
+    grado: cuerpos[cuerpo].ChartPosition.Ecliptic.DecimalDegrees,
+  }));
+
+  if (horaConocida) {
+    const houses = horoscope.Houses as HoroscopeHouse[];
+    const ascGrado = houses[0].ChartPosition.StartPosition.Ecliptic.DecimalDegrees;
+    const asc = horoscope.Angles as unknown as { ascendant: CelestialBody };
+    puntos.push({ cuerpo: NOMBRE_ES.ascendant, signo: asc.ascendant.Sign.label, grado: ascGrado });
+  }
+
+  return { nombre, puntos, horaConocida };
+};
+
+const diferenciaAngular = (a: number, b: number): number => {
+  const diff = Math.abs(a - b) % 360;
+  return diff > 180 ? 360 - diff : diff;
+};
+
+// Compara cada punto de A contra cada punto de B y se queda con los
+// aspectos mayores que caen dentro del orbe — es la tabla clásica de
+// sinastría (Sol-Luna, Venus-Marte, etc. entre dos cartas).
+export const calcularAspectosSinastria = (
+  personaA: PersonaSinastria,
+  personaB: PersonaSinastria
+): AspectoSinastria[] => {
+  const aspectos: AspectoSinastria[] = [];
+
+  for (const puntoA of personaA.puntos) {
+    for (const puntoB of personaB.puntos) {
+      const diferencia = diferenciaAngular(puntoA.grado, puntoB.grado);
+
+      let mejor: { tipo: AspectoSinastria["tipo"]; orbe: number } | null = null;
+      for (const { tipo, angulo } of ANGULOS_ASPECTOS) {
+        const orbe = Math.abs(diferencia - angulo);
+        if (orbe <= ORBE_MAXIMO && (!mejor || orbe < mejor.orbe)) {
+          mejor = { tipo, orbe };
+        }
+      }
+      if (mejor) {
+        aspectos.push({ cuerpoA: puntoA.cuerpo, cuerpoB: puntoB.cuerpo, ...mejor });
+      }
+    }
+  }
+
+  // Los aspectos más exactos (orbe chico) son los más significativos.
+  return aspectos.sort((a, b) => a.orbe - b.orbe);
+};

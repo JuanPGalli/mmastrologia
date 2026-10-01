@@ -23,6 +23,7 @@ const ForgotPassword = lazy(() => import('./Views/ForgotPassword/ForgotPassword'
 const ResetPassword = lazy(() => import('./Views/ResetPassword/ResetPassword'));
 const MiCuenta = lazy(() => import('./Views/MiCuenta/MiCuenta'));
 const AstrologoVirtual = lazy(() => import('./Views/AstrologoVirtual/AstrologoVirtual'));
+const Sinastria = lazy(() => import('./Views/Sinastria/Sinastria'));
 const AdminHome = lazy(() => import('./Views/AdminHome/AdminHome'));
 const AdminServices = lazy(() => import('./Views/AdminServices/AdminServices'));
 const AdminBlog = lazy(() => import('./Views/AdminBlog/AdminBlog'));
@@ -49,6 +50,7 @@ function App() {
           <Route path={'/reset-password'} element={<ResetPassword />} />
           <Route path={'/cuenta'} element={<MiCuenta />} />
           <Route path={'/astrologo-virtual'} element={<AstrologoVirtual />} />
+          <Route path={'/sinastria'} element={<Sinastria />} />
           <Route path={'/admin'} element={<AdminHome />} />
           <Route path={'/admin/services'} element={<AdminServices />} />
           <Route path={'/blog'} element={<Blog />} />

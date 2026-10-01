@@ -1,6 +1,8 @@
 import {
+  calcularAspectosSinastria,
   calcularCartaResumen,
   calcularDatosRueda,
+  calcularPuntosSinastria,
   calcularTransitosDelDia,
   CartaResumen,
   DatosNacimiento,
@@ -9,7 +11,9 @@ import {
 import {
   generarHoroscopoDiarioConGemini,
   generarInformeConGemini,
+  generarSinastriaConGemini,
   InformeAstrologico,
+  SinastriaTexto,
 } from "../services/geminiService";
 import { ValidationError } from "../utils/errors";
 import { User } from "../models/User";
@@ -107,4 +111,39 @@ export const obtenerHoroscopoDiario = async (userId: string) => {
   });
 
   return horoscopo;
+};
+
+export type SinastriaPayload = {
+  personaA?: InformePayload & { nombre?: unknown };
+  personaB?: InformePayload & { nombre?: unknown };
+};
+
+const validarPersonaSinastria = (
+  payload: SinastriaPayload["personaA"],
+  etiqueta: string
+): { datos: DatosNacimiento; nombre: string } => {
+  if (!payload) {
+    throw new ValidationError(`Faltan los datos de nacimiento de ${etiqueta}.`);
+  }
+  const nombre = typeof payload.nombre === "string" && payload.nombre.trim() ? payload.nombre.trim() : etiqueta;
+  // Reutiliza la misma validación que el informe individual, salvo que acá
+  // no hay "pregunta" — se le pasa un valor dummy que cumple el mínimo de
+  // caracteres solo para no duplicar la función de validación.
+  const datos = validarDatosNacimiento({ ...payload, pregunta: "sinastría" });
+  return { datos, nombre };
+};
+
+export const generarSinastria = async (
+  payload: SinastriaPayload
+): Promise<SinastriaTexto & { personaA: string; personaB: string; aspectos: ReturnType<typeof calcularAspectosSinastria> }> => {
+  const a = validarPersonaSinastria(payload.personaA, "la primera persona");
+  const b = validarPersonaSinastria(payload.personaB, "la segunda persona");
+
+  const puntosA = calcularPuntosSinastria(a.datos, a.nombre);
+  const puntosB = calcularPuntosSinastria(b.datos, b.nombre);
+  const aspectos = calcularAspectosSinastria(puntosA, puntosB);
+
+  const interpretacion = await generarSinastriaConGemini(puntosA, puntosB, aspectos);
+
+  return { ...interpretacion, personaA: a.nombre, personaB: b.nombre, aspectos };
 };

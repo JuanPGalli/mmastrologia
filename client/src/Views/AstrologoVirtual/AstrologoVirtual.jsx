@@ -138,8 +138,13 @@ const AstrologoVirtual = () => {
             Astrólogo Virtual
           </h1>
         </div>
-        <p className='text-gray-600 text-center mb-10'>
+        <p className='text-gray-600 text-center mb-2'>
           Contanos tu fecha, hora y lugar de nacimiento, y qué te gustaría consultar.
+        </p>
+        <p className='text-center text-sm mb-10'>
+          <a href='/sinastria' className='text-purple-700 underline hover:text-purple-900'>
+            ¿Querés ver compatibilidad con otra persona? Probá Sinastría →
+          </a>
         </p>
 
         <HoroscopoDiarioCard key={horoscopoRefreshKey} />
