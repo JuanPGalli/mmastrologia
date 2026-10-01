@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaMagic } from 'react-icons/fa';
-import { GiCrystalBall } from 'react-icons/gi';
 import { getStoredSession } from '../../api/auth';
 import { generarInformeAstrologico } from '../../api/astro';
 import { ARGENTINA_CITIES } from '../../data/argentinaCities';
@@ -132,8 +131,15 @@ const AstrologoVirtual = () => {
         noIndex
       />
       <div className='max-w-2xl mx-auto px-6 py-32'>
-        <div className='flex items-center justify-center gap-2 mb-2'>
-          <GiCrystalBall className='text-purple-700 text-3xl' aria-hidden='true' />
+        <div className='flex flex-col items-center justify-center gap-2 mb-2'>
+          <video
+            src='https://res.cloudinary.com/ydsjcgim/video/upload/v1790829084/bola_de_cristal.mp4'
+            autoPlay
+            loop
+            muted
+            playsInline
+            className='w-20 h-20 rounded-full object-cover shadow-lg'
+          />
           <h1 className='text-3xl md:text-4xl font-light text-purple-950 text-center'>
             Astrólogo Virtual
           </h1>
