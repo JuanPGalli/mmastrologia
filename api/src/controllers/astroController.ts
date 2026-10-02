@@ -75,8 +75,6 @@ export const generarInformeAstrologico = async (
   return { ...informe, carta, rueda };
 };
 
-// Fecha de hoy en huso horario Argentina (no UTC), para que el horóscopo
-// cambie a la medianoche real de Buenos Aires y no a las 21:00 (UTC-3).
 const fechaDeHoyArgentina = (): string =>
   new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
 
@@ -126,9 +124,6 @@ const validarPersonaSinastria = (
     throw new ValidationError(`Faltan los datos de nacimiento de ${etiqueta}.`);
   }
   const nombre = typeof payload.nombre === "string" && payload.nombre.trim() ? payload.nombre.trim() : etiqueta;
-  // Reutiliza la misma validación que el informe individual, salvo que acá
-  // no hay "pregunta" — se le pasa un valor dummy que cumple el mínimo de
-  // caracteres solo para no duplicar la función de validación.
   const datos = validarDatosNacimiento({ ...payload, pregunta: "sinastría" });
   return { datos, nombre };
 };

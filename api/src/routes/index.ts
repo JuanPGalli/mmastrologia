@@ -8,6 +8,7 @@ import paymentRouter from "./paymentRouter";
 import favoriteRouter from "./favoriteRouter";
 import reviewRouter from "./reviewRouter";
 import astroRouter from "./astroRouter";
+import suscripcionRouter from "./suscripcionRouter";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/payments", paymentRouter);
 router.use("/favorites", favoriteRouter);
 router.use("/reviews", reviewRouter);
 router.use("/astro", astroRouter);
+router.use("/suscripcion", suscripcionRouter);
 
 export default router;
