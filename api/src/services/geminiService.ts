@@ -6,21 +6,21 @@ import { AspectoSinastria, CartaResumen, PersonaSinastria, TransitosDia } from "
 // - gemini-2.5-flash: Google lo discontinuó para API keys nuevas
 //   ("no longer available to new users") — confirmado por el 404 real
 //   que devolvió la API el 28/09/2026.
-// Se pasó a gemini-3.7-flash: es el modelo que el propio mensaje de error
-// de Google recomienda para reemplazar 2.5, y es la opción que Google
-// describe como la elegida para cargas de trabajo "cost-first" en vez de
-// gemini-3.8-flash (pensado para agentes de código de largo horizonte,
-// no para generar un informe de texto corto).
-// OJO: al momento de este cambio, Google viene recortando fuerte los
-// límites del free tier (algunos modelos bajaron de ~1500 a 20
-// requests/día sin aviso) y ya no publica los números en la
-// documentación. Si esto se vuelve a romper, lo más robusto no es cambiar
-// el modelo de nuevo sino activar facturación (billing) en el proyecto de
-// Google Cloud vinculado a la API key — el costo real por informe sigue
-// siendo una fracción de centavo, muy por debajo del riesgo de que el
-// free tier se corte sin aviso otra vez.
-const GEMINI_MODEL = "gemini-3.7-flash";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+// - gemini-3.7-flash: funcionaba, pero con saturación frecuente (503) aun
+//   con muy poco uso — es un modelo nuevo/muy pedido.
+// Se pasó a gemini-3.5-flash-lite como PRINCIPAL: es un modelo estable y
+// de disponibilidad general (GA, no preview), pensado por Google
+// explícitamente para alto volumen/baja latencia/costo mínimo — encaja
+// mejor con esto (generar un JSON corto) que un modelo pensado para
+// razonamiento/agentes de código. Además es más barato que 3.7.
+// Como red de seguridad adicional, si el principal falla después de los
+// reintentos, se prueba una vez con gemini-3.6-flash (también GA/estable)
+// antes de darse por vencido.
+const GEMINI_MODEL_PRINCIPAL = "gemini-3.5-flash-lite";
+const GEMINI_MODEL_RESPALDO = "gemini-3.6-flash";
+
+const urlModelo = (modelo: string) =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`;
 
 export type InformeAstrologico = {
   titulo: string;
@@ -35,6 +35,12 @@ export type HoroscopoDiarioTexto = {
   disclaimer: string;
 };
 
+export type SinastriaTexto = {
+  titulo: string;
+  texto: string;
+  disclaimer: string;
+};
+
 const DISCLAIMER_LEGAL =
   "Aviso Legal: Esta aplicación ha sido creada exclusivamente con fines de entretenimiento y autoconocimiento. " +
   "El informe astrológico virtual y las respuestas de la Inteligencia Artificial se basan en interpretaciones " +
@@ -43,13 +49,18 @@ const DISCLAIMER_LEGAL =
   "tomadas por el usuario basadas en la información provista. El uso de la app queda bajo la total " +
   "responsabilidad del usuario.";
 
-// Llamada de bajo nivel a Gemini, compartida entre el informe completo y el
-// horóscopo diario — mismo manejo de errores/JSON para no duplicarlo.
-const llamarGemini = async <T>(
+const esperar = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+type ErrorTemporal = { temporal: true; status: number };
+
+// Un único intento contra un modelo puntual. No reintenta ni hace fallback
+// acá adentro — eso lo maneja llamarGemini.
+const intentarLlamada = async <T>(
+  modelo: string,
   systemInstruction: string,
   userPrompt: string,
   responseSchema: object
-): Promise<T> => {
+): Promise<T | ErrorTemporal> => {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY no está configurada.");
@@ -64,7 +75,7 @@ const llamarGemini = async <T>(
     },
   };
 
-  const response = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+  const response = await fetch(`${urlModelo(modelo)}?key=${apiKey}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -72,14 +83,10 @@ const llamarGemini = async <T>(
 
   if (!response.ok) {
     const detalle = await response.text();
-    // El detalle crudo de Gemini queda en los logs del servidor para
-    // debug, pero al usuario final no le sirve ver un JSON de Google.
-    console.error(`[geminiService] Gemini respondió ${response.status}:`, detalle);
+    console.error(`[geminiService] ${modelo} respondió ${response.status}:`, detalle);
 
     if (response.status === 503 || response.status === 429) {
-      throw new Error(
-        "El servicio de IA está con mucha demanda en este momento. Probá de nuevo en un minuto."
-      );
+      return { temporal: true, status: response.status };
     }
     throw new Error("No pudimos generar el contenido en este momento. Probá de nuevo más tarde.");
   }
@@ -94,6 +101,47 @@ const llamarGemini = async <T>(
   }
 
   return JSON.parse(texto) as T;
+};
+
+const esErrorTemporal = (valor: unknown): valor is ErrorTemporal =>
+  typeof valor === "object" && valor !== null && (valor as ErrorTemporal).temporal === true;
+
+// Reintenta el modelo PRINCIPAL hasta 3 veces con backoff exponencial
+// (1s, 2s, 4s) ante 503/429 — la mayoría de las saturaciones de Gemini son
+// transitorias y un segundo intento unos segundos después suele andar. Si
+// se agotan los reintentos, prueba UNA vez con el modelo de RESPALDO antes
+// de rendirse.
+const llamarGemini = async <T>(
+  systemInstruction: string,
+  userPrompt: string,
+  responseSchema: object
+): Promise<T> => {
+  const ESPERAS_MS = [1000, 2000, 4000];
+
+  for (let intento = 0; intento <= ESPERAS_MS.length; intento++) {
+    const resultado = await intentarLlamada<T>(
+      GEMINI_MODEL_PRINCIPAL,
+      systemInstruction,
+      userPrompt,
+      responseSchema
+    );
+    if (!esErrorTemporal(resultado)) return resultado;
+    if (intento < ESPERAS_MS.length) await esperar(ESPERAS_MS[intento]);
+  }
+
+  console.error(
+    `[geminiService] ${GEMINI_MODEL_PRINCIPAL} siguió saturado tras los reintentos, probando respaldo ${GEMINI_MODEL_RESPALDO}`
+  );
+
+  const resultadoRespaldo = await intentarLlamada<T>(
+    GEMINI_MODEL_RESPALDO,
+    systemInstruction,
+    userPrompt,
+    responseSchema
+  );
+  if (!esErrorTemporal(resultadoRespaldo)) return resultadoRespaldo;
+
+  throw new Error("El servicio de IA está con mucha demanda en este momento. Probá de nuevo en un minuto.");
 };
 
 const SYSTEM_INSTRUCTION_INFORME =
@@ -113,10 +161,7 @@ const RESPONSE_SCHEMA_INFORME = {
 };
 
 const construirPromptUsuario = (carta: CartaResumen, pregunta: string): string => {
-  const lineas = [
-    `- Sol en ${carta.solSigno}`,
-    `- Luna en ${carta.lunaSigno}`,
-  ];
+  const lineas = [`- Sol en ${carta.solSigno}`, `- Luna en ${carta.lunaSigno}`];
 
   if (carta.horaConocida && carta.ascendenteSigno) {
     lineas.push(`- Ascendente en ${carta.ascendenteSigno}`);
@@ -141,8 +186,6 @@ export const generarInformeConGemini = async (
     RESPONSE_SCHEMA_INFORME
   );
 
-  // El disclaimer legal se agrega siempre acá, del lado del servidor — no
-  // depende de que el modelo lo reproduzca fiel palabra por palabra.
   return { ...parcial, disclaimer: DISCLAIMER_LEGAL };
 };
 
@@ -190,12 +233,6 @@ export const generarHoroscopoDiarioConGemini = async (
   return { ...parcial, disclaimer: DISCLAIMER_LEGAL };
 };
 
-export type SinastriaTexto = {
-  titulo: string;
-  texto: string;
-  disclaimer: string;
-};
-
 const SYSTEM_INSTRUCTION_SINASTRIA =
   "Sos un astrólogo profesional que interpreta sinastría (compatibilidad astrológica entre dos personas) en " +
   "español rioplatense, cálido y honesto — ni todo color de rosa ni alarmista. Recibís los signos de Sol, Luna, " +
@@ -224,7 +261,7 @@ const construirPromptSinastria = (
   const lineasAspectos =
     aspectos.length > 0
       ? aspectos
-          .slice(0, 8) // los 8 más exactos alcanzan para una interpretación con sentido
+          .slice(0, 8)
           .map((a) => `- ${a.cuerpoA} (${personaA.nombre}) en ${a.tipo} con ${a.cuerpoB} (${personaB.nombre})`)
           .join("\n")
       : "- No hay aspectos mayores dentro del orbe estándar entre estos puntos.";

@@ -2,6 +2,7 @@ import { MercadoPagoConfig, Preference, Payment as MPPayment } from "mercadopago
 import { IPayment, Payment } from "../models/Payment";
 import { Service } from "../models/Service";
 import { sendPaymentConfirmationEmail } from "../services/emailService";
+import { procesarWebhookPreapproval } from "./suscripcionController";
 
 const getClient = () => {
   if (!process.env.MP_ACCESS_TOKEN) {
@@ -164,12 +165,22 @@ const mapMpStatus = (status: string | undefined): IPayment["status"] => {
 
 export const processPaymentWebhook = async (query: Record<string, unknown>) => {
   const type = (query.type || query.topic) as string | undefined;
-  const paymentId = (query["data.id"] || query.id) as string | undefined;
+  const dataId = (query["data.id"] || query.id) as string | undefined;
 
-  if (type !== "payment" || !paymentId) {
+  // Mismo endpoint que ya usa Checkout Pro: Mercado Pago manda notificaciones
+  // de distintos "type" al mismo webhook, así que acá se bifurca según cuál
+  // llegó. Preapproval es la suscripción mensual del Astrólogo Virtual.
+  if (type === "preapproval" || type === "subscription_preapproval") {
+    if (!dataId) return;
+    await procesarWebhookPreapproval(dataId);
+    return;
+  }
+
+  if (type !== "payment" || !dataId) {
     // Otras notificaciones (merchant_order, etc.) las ignoramos.
     return;
   }
+  const paymentId = dataId;
 
   const client = getClient();
   const mpPayment = new MPPayment(client);

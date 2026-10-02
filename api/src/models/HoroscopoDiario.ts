@@ -1,12 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-// Se cachea un horóscopo por usuario por día (fecha en huso horario
-// Argentina, ver astroController.ts) para no volver a llamar a Gemini si la
-// persona entra varias veces el mismo día — importante tanto para el costo
-// como para no pisar los límites de rate del free tier de Google.
 export interface IHoroscopoDiario extends Document {
   userId: mongoose.Types.ObjectId;
-  fecha: string; // YYYY-MM-DD, huso horario Argentina
+  fecha: string;
   titulo: string;
   texto: string;
   disclaimer: string;

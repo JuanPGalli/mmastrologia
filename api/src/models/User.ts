@@ -21,6 +21,11 @@ export interface IUser extends Document {
   resetTokenHash?: string;
   resetTokenExpires?: Date;
   birthData?: IBirthData;
+  // true recién cuando la primera interacción del Astrólogo Virtual
+  // (informe, horóscopo o sinastría) termina EXITOSAMENTE sin tener una
+  // suscripción activa — así no se "gasta" la prueba gratis si Gemini
+  // falla o el formulario tenía un dato mal cargado.
+  pruebaGratisUsada?: boolean;
 }
 
 const birthDataSchema = new Schema<IBirthData>(
@@ -51,11 +56,8 @@ const userSchema = new Schema<IUser>({
   picture: { type: String, trim: true },
   resetTokenHash: { type: String },
   resetTokenExpires: { type: Date },
-  // Se completa solo (ver astroHandlers.ts) la primera vez que la persona
-  // genera un informe en el Astrólogo Virtual, para que funciones que
-  // necesitan la carta (como el horóscopo diario) no le vuelvan a pedir los
-  // mismos datos de nacimiento.
   birthData: { type: birthDataSchema, required: false },
+  pruebaGratisUsada: { type: Boolean, default: false },
 });
 
 export const User = mongoose.model<IUser>("User", userSchema);
