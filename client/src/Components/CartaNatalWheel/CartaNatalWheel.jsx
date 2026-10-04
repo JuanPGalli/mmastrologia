@@ -1,9 +1,6 @@
-// Rueda de carta natal en SVG puro — nada de esto depende de la IA, son
-// ángulos calculados a partir de los grados que ya devuelve el backend
-// (astrologyService.calcularDatosRueda). Convención astrológica: 0° Aries
-// se dibuja en el borde izquierdo (9 en punto) y los grados avanzan en
-// sentido ANTIHORARIO alrededor del círculo — así es como se dibuja una
-// carta natal tradicionalmente.
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { FaExpand, FaXmark } from 'react-icons/fa6';
 
 const SIGNOS = [
   { simbolo: '♈', nombre: 'Aries' },
@@ -39,8 +36,8 @@ const R_OUTER = 160;
 const R_SIGNS = 140;
 const R_PLANETS = 108;
 const R_INNER = 92;
+const PASO_RADIO = 18; // cuánto se achica el radio por cada planeta apilado en el mismo sector
 
-// grado eclíptico -> radianes de dibujo (0° a la izquierda, antihorario)
 const gradoARadianes = (grado) => Math.PI - (grado * Math.PI) / 180;
 
 const punto = (grado, radio) => ({
@@ -48,30 +45,36 @@ const punto = (grado, radio) => ({
   y: CENTER - radio * Math.sin(gradoARadianes(grado)),
 });
 
-const CartaNatalWheel = ({ rueda }) => {
-  if (!rueda) return null;
+// Ordena los planetas por grado y, cuando dos (o más) quedan a menos de 6°
+// de distancia, los va acomodando en radios cada vez más chicos en vez de
+// comparar solo contra el primero — así tres o más planetas pegados no
+// terminan todos en el mismo lugar.
+const calcularPosiciones = (planetas) => {
+  const ordenados = [...planetas].sort((a, b) => a.grado - b.grado);
+  const posiciones = [];
+  let gradoAnterior = null;
+  let nivel = 0;
 
-  // Agrupa planetas que caen muy cerca en grado para no superponer los
-  // glifos (ej. Sol y Mercurio suelen estar a pocos grados de distancia).
-  const planetasOrdenados = [...rueda.planetas].sort((a, b) => a.grado - b.grado);
-  const posicionesPlanetas = [];
-  planetasOrdenados.forEach((p) => {
-    let radio = R_PLANETS;
-    const cercano = posicionesPlanetas.find((otro) => {
-      const diff = Math.min(Math.abs(otro.grado - p.grado), 360 - Math.abs(otro.grado - p.grado));
-      return diff < 6 && otro.radio === radio;
-    });
-    if (cercano) radio -= 20;
-    posicionesPlanetas.push({ ...p, radio });
+  ordenados.forEach((p) => {
+    if (gradoAnterior !== null) {
+      const diff = Math.min(Math.abs(p.grado - gradoAnterior), 360 - Math.abs(p.grado - gradoAnterior));
+      nivel = diff < 6 ? nivel + 1 : 0;
+    }
+    posiciones.push({ ...p, radio: R_PLANETS - nivel * PASO_RADIO });
+    gradoAnterior = p.grado;
   });
 
+  return posiciones;
+};
+
+const DibujoRueda = ({ rueda }) => {
+  const posicionesPlanetas = calcularPosiciones(rueda.planetas);
+
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className='w-full max-w-xs mx-auto' role='img' aria-label='Carta natal'>
-      {/* Anillo del zodíaco */}
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className='w-full h-full' role='img' aria-label='Carta natal'>
       <circle cx={CENTER} cy={CENTER} r={R_OUTER} fill='none' stroke='#c4b5fd' strokeWidth='1' />
       <circle cx={CENTER} cy={CENTER} r={R_INNER} fill='none' stroke='#c4b5fd' strokeWidth='1' />
 
-      {/* 12 divisiones de 30° + símbolo de cada signo */}
       {SIGNOS.map((signo, i) => {
         const gradoInicio = i * 30;
         const borde = punto(gradoInicio, R_OUTER);
@@ -93,7 +96,6 @@ const CartaNatalWheel = ({ rueda }) => {
         );
       })}
 
-      {/* Cúspides de las 12 casas (solo si se conoce la hora) */}
       {rueda.horaConocida &&
         rueda.casas?.map((grado, i) => {
           const extremo = punto(grado, R_INNER);
@@ -115,7 +117,6 @@ const CartaNatalWheel = ({ rueda }) => {
           );
         })}
 
-      {/* Planetas */}
       {posicionesPlanetas.map((p) => {
         const pos = punto(p.grado, p.radio);
         return (
@@ -133,6 +134,52 @@ const CartaNatalWheel = ({ rueda }) => {
         );
       })}
     </svg>
+  );
+};
+
+const CartaNatalWheel = ({ rueda }) => {
+  const [abierta, setAbierta] = useState(false);
+
+  if (!rueda) return null;
+
+  return (
+    <>
+      <button
+        type='button'
+        onClick={() => setAbierta(true)}
+        className='relative w-full max-w-xs mx-auto block group'
+        aria-label='Ver carta natal más grande'
+      >
+        <DibujoRueda rueda={rueda} />
+        <span className='absolute bottom-1 right-1 bg-white/90 rounded-full p-1.5 text-purple-700 shadow group-hover:bg-white'>
+          <FaExpand size={12} />
+        </span>
+      </button>
+
+      {abierta &&
+        createPortal(
+          <div
+            className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-purple-950/70 backdrop-blur-sm'
+            onClick={() => setAbierta(false)}
+          >
+            <div
+              className='bg-white rounded-lg shadow-2xl p-6 relative w-full max-w-lg'
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type='button'
+                onClick={() => setAbierta(false)}
+                aria-label='Cerrar'
+                className='absolute top-3 right-3 bg-purple-50 rounded-full p-2 text-purple-950 hover:bg-purple-100'
+              >
+                <FaXmark aria-hidden='true' />
+              </button>
+              <DibujoRueda rueda={rueda} />
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 };
 

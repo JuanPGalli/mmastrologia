@@ -100,7 +100,7 @@ const Footer = () => {
       {/* Firma del desarrollador */}
       <div className='flex items-center justify-center gap-3 text-xs text-gray-400 mt-3'>
         <a
-          href='https://jpgdev.vercel.app'
+          href='https://juanpablogalli.com'
           target='_blank'
           rel='noopener noreferrer'
           className='hover:text-[#D697B8] transition-colors'

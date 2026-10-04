@@ -7,6 +7,7 @@ import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import Seo from '../../Components/Seo/Seo';
 import HoroscopoDiarioCard from '../../Components/HoroscopoDiarioCard/HoroscopoDiarioCard';
 import CartaNatalWheel from '../../Components/CartaNatalWheel/CartaNatalWheel';
+import RequiereSuscripcion from '../../Components/RequiereSuscripcion/RequiereSuscripcion';
 
 const estadoInicial = {
   fecha: '',
@@ -17,12 +18,6 @@ const estadoInicial = {
 };
 
 const WHATSAPP_SOPORTE = 'https://wa.me/5491128933987';
-
-// El informe se guarda en localStorage (no es información sensible, es solo
-// una copia del último resultado para este navegador) para que, cuando más
-// adelante el formulario quede bloqueado hasta el próximo período de
-// suscripción, la persona igual pueda seguir viendo su último informe en
-// vez de encontrarse con una pantalla vacía.
 const STORAGE_KEY = 'mma_ultimo_informe_astrologico';
 
 const guardarInformeLocal = (informe) => {
@@ -30,7 +25,7 @@ const guardarInformeLocal = (informe) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ informe, fecha: Date.now() }));
   } catch {
     // localStorage puede fallar (modo privado, cuota llena, etc.) — no es
-    // crítico para el funcionamiento del formulario, así que se ignora.
+    // crítico para el funcionamiento del formulario.
   }
 };
 
@@ -52,9 +47,7 @@ const AstrologoVirtual = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [errorEsTecnico, setErrorEsTecnico] = useState(false);
-  // Cambia cada vez que se genera un informe exitosamente, para forzar que
-  // la card del horóscopo diario se vuelva a pedir (la primera vez que
-  // alguien genera un informe recién ahí queda guardada su carta natal).
+  const [requiereSuscripcion, setRequiereSuscripcion] = useState(false);
   const [horoscopoRefreshKey, setHoroscopoRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -73,6 +66,7 @@ const AstrologoVirtual = () => {
     if (loading) return;
     setError('');
     setErrorEsTecnico(false);
+    setRequiereSuscripcion(false);
 
     if (!form.fecha || form.ciudadIndex === '' || !form.pregunta.trim()) {
       setError('Completá fecha de nacimiento, ciudad y tu pregunta.');
@@ -107,12 +101,13 @@ const AstrologoVirtual = () => {
       setHoroscopoRefreshKey((k) => k + 1);
     } catch (requestError) {
       const status = requestError.response?.status;
-      const mensaje = requestError.response?.data?.error || requestError.message;
-      setError(mensaje);
-      // 502 = falla técnica nuestra/de Gemini (ver astroHandlers.ts). Para
-      // eso mostramos una vía de contacto directa; un 400 es simplemente
-      // un dato mal cargado y la persona lo puede corregir sola.
-      setErrorEsTecnico(status >= 500);
+      if (status === 402) {
+        setRequiereSuscripcion(true);
+      } else {
+        const mensaje = requestError.response?.data?.error || requestError.message;
+        setError(mensaje);
+        setErrorEsTecnico(status >= 500);
+      }
     } finally {
       setLoading(false);
     }
@@ -251,6 +246,10 @@ const AstrologoVirtual = () => {
             </div>
           )}
 
+          {requiereSuscripcion && (
+            <RequiereSuscripcion mensaje='Ya usaste tu consulta de prueba gratis. Suscribite para seguir generando informes.' />
+          )}
+
           <button
             type='submit'
             disabled={loading}
@@ -286,6 +285,7 @@ const AstrologoVirtual = () => {
                 )}
               </div>
             )}
+
             {informe.rueda && <CartaNatalWheel rueda={informe.rueda} />}
 
             <div className='flex items-start gap-2'>

@@ -21,13 +21,9 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
-  // Lectura sincrónica: se recalcula solo en cada render (p. ej. al cambiar
-  // de ruta), sin necesidad de sincronizarla con un efecto.
   const session = getStoredSession();
   const [prevPathname, setPrevPathname] = useState(location.pathname);
 
-  // Cierra el menú de usuario al navegar a otra página (ajuste de estado
-  // durante el render, evita el cascading-render de hacerlo en un efecto).
   if (location.pathname !== prevPathname) {
     setPrevPathname(location.pathname);
     setMenuOpen(false);
@@ -51,8 +47,7 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > SCROLL_THRESHOLD);
     };
-    handleScroll(); // sincroniza el estado inicial (por ej. al navegar
-    // client-side desde una página donde ya se había scrolleado)
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

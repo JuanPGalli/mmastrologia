@@ -22,14 +22,14 @@ const Register = lazy(() => import('./Views/Register/Register'));
 const ForgotPassword = lazy(() => import('./Views/ForgotPassword/ForgotPassword'));
 const ResetPassword = lazy(() => import('./Views/ResetPassword/ResetPassword'));
 const MiCuenta = lazy(() => import('./Views/MiCuenta/MiCuenta'));
-const AstrologoVirtual = lazy(() => import('./Views/AstrologoVirtual/AstrologoVirtual'));
-const Sinastria = lazy(() => import('./Views/Sinastria/Sinastria'));
 const AdminHome = lazy(() => import('./Views/AdminHome/AdminHome'));
 const AdminServices = lazy(() => import('./Views/AdminServices/AdminServices'));
 const AdminBlog = lazy(() => import('./Views/AdminBlog/AdminBlog'));
 const AdminNovedades = lazy(() => import('./Views/AdminNovedades/AdminNovedades'));
 const AdminPayments = lazy(() => import('./Views/AdminPayments/AdminPayments'));
 const AdminReviews = lazy(() => import('./Views/AdminReviews/AdminReviews'));
+const AstrologoVirtual = lazy(() => import('./Views/AstrologoVirtual/AstrologoVirtual'));
+const Sinastria = lazy(() => import('./Views/Sinastria/Sinastria'));
 
 function App() {
   return (
@@ -49,8 +49,6 @@ function App() {
           <Route path={'/forgot-password'} element={<ForgotPassword />} />
           <Route path={'/reset-password'} element={<ResetPassword />} />
           <Route path={'/cuenta'} element={<MiCuenta />} />
-          <Route path={'/astrologo-virtual'} element={<AstrologoVirtual />} />
-          <Route path={'/sinastria'} element={<Sinastria />} />
           <Route path={'/admin'} element={<AdminHome />} />
           <Route path={'/admin/services'} element={<AdminServices />} />
           <Route path={'/blog'} element={<Blog />} />
@@ -59,6 +57,8 @@ function App() {
           <Route path={'/admin/novedades'} element={<AdminNovedades />} />
           <Route path={'/admin/payments'} element={<AdminPayments />} />
           <Route path={'/admin/reviews'} element={<AdminReviews />} />
+          <Route path={'/astrologo-virtual'} element={<AstrologoVirtual />} />
+          <Route path={'/sinastria'} element={<Sinastria />} />
         </Routes>
       </Suspense>
       <Footer />

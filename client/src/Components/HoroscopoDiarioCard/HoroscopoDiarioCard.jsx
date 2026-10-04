@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { FaSun } from 'react-icons/fa';
 import { obtenerHoroscopoDiario } from '../../api/astro';
+import RequiereSuscripcion from '../RequiereSuscripcion/RequiereSuscripcion';
 
-// Muestra el horóscopo del día si la persona ya tiene una carta guardada
-// (se guarda sola la primera vez que genera un informe más abajo en esta
-// misma página). Si todavía no la tiene, no molesta con un error — solo no
-// muestra nada, ya que el formulario de abajo la va a generar.
+// Estados: 'cargando' | 'listo' | 'sin-carta' (nunca generó un informe
+// todavía, no hay nada que mostrar) | 'requiere-suscripcion' (ya usó la
+// prueba gratis) | 'error' (falla técnica, no molestamos con esto acá)
 const HoroscopoDiarioCard = () => {
   const [horoscopo, setHoroscopo] = useState(null);
-  const [estado, setEstado] = useState('cargando'); // cargando | listo | sin-carta | error
+  const [estado, setEstado] = useState('cargando');
 
   useEffect(() => {
     let cancelado = false;
@@ -20,7 +20,10 @@ const HoroscopoDiarioCard = () => {
       })
       .catch((requestError) => {
         if (cancelado) return;
-        if (requestError.response?.status === 400) {
+        const status = requestError.response?.status;
+        if (status === 402) {
+          setEstado('requiere-suscripcion');
+        } else if (status === 400) {
           setEstado('sin-carta');
         } else {
           setEstado('error');
@@ -32,6 +35,14 @@ const HoroscopoDiarioCard = () => {
   }, []);
 
   if (estado === 'cargando' || estado === 'sin-carta' || estado === 'error') return null;
+
+  if (estado === 'requiere-suscripcion') {
+    return (
+      <div className='mb-8'>
+        <RequiereSuscripcion mensaje='Tu horóscopo diario personalizado está disponible con la suscripción mensual.' />
+      </div>
+    );
+  }
 
   return (
     <div className='bg-gradient-to-br from-purple-800 to-purple-950 text-white shadow-lg p-6 mb-8'>
