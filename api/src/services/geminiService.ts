@@ -8,16 +8,15 @@ import { AspectoSinastria, CartaResumen, PersonaSinastria, TransitosDia } from "
 //   que devolvió la API el 28/09/2026.
 // - gemini-3.7-flash: funcionaba, pero con saturación frecuente (503) aun
 //   con muy poco uso — es un modelo nuevo/muy pedido.
-// Se pasó a gemini-3.5-flash-lite como PRINCIPAL: es un modelo estable y
-// de disponibilidad general (GA, no preview), pensado por Google
-// explícitamente para alto volumen/baja latencia/costo mínimo — encaja
-// mejor con esto (generar un JSON corto) que un modelo pensado para
-// razonamiento/agentes de código. Además es más barato que 3.7.
-// Como red de seguridad adicional, si el principal falla después de los
-// reintentos, se prueba una vez con gemini-3.6-flash (también GA/estable)
-// antes de darse por vencido.
-const GEMINI_MODEL_PRINCIPAL = "gemini-3.5-flash-lite";
-const GEMINI_MODEL_RESPALDO = "gemini-3.6-flash";
+// - gemini-3.5-flash-lite como principal: estable (GA) y confiable, pero
+//   el modelo "lite" sacrifica calidad de redacción (errores de
+//   ortografía notados en producción el 02/10/2026).
+// Se pasó gemini-3.6-flash a PRINCIPAL (también GA/estable, pero sin el
+// recorte de calidad de la versión "lite") y gemini-3.5-flash-lite quedó
+// como RESPALDO — da lo mejor de los dos mundos: mejor redacción cuando
+// el principal responde, y igual hay red de seguridad si se satura.
+const GEMINI_MODEL_PRINCIPAL = "gemini-3.6-flash";
+const GEMINI_MODEL_RESPALDO = "gemini-3.5-flash-lite";
 
 const urlModelo = (modelo: string) =>
   `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`;

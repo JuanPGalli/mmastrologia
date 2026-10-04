@@ -1,11 +1,6 @@
 import { RequestHandler } from "express";
 import { RequestConAcceso } from "../middleware/suscripcion";
-import {
-  generarInformeAstrologico,
-  generarSinastria,
-  obtenerHoroscopoDiario,
-  validarDatosNacimiento,
-} from "../controllers/astroController";
+import { generarInformeAstrologico, generarSinastria, obtenerHoroscopoDiario } from "../controllers/astroController";
 import { marcarPruebaGratisUsada } from "../controllers/suscripcionController";
 import { ValidationError } from "../utils/errors";
 import { User } from "../models/User";
@@ -33,11 +28,13 @@ export const postInformeHandler: RequestHandler = async (req: RequestConAcceso, 
   }
 
   try {
-    const informe = await generarInformeAstrologico(req.body);
+    const { datosNacimiento, ...informe } = await generarInformeAstrologico(req.body);
 
+    // Se guarda la carta (ya geocodificada) en la cuenta la primera vez (y
+    // cada vez) que se genera un informe, para que el horóscopo diario y
+    // futuras funciones no vuelvan a pedirla ni a geocodificar de nuevo.
     try {
-      const datos = validarDatosNacimiento(req.body);
-      await User.findByIdAndUpdate(req.user.id, { birthData: datos });
+      await User.findByIdAndUpdate(req.user.id, { birthData: datosNacimiento });
     } catch (guardadoError) {
       console.error("[astro/informe] no se pudo guardar birthData:", guardadoError);
     }

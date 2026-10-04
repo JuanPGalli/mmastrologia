@@ -8,6 +8,7 @@ import {
   DatosNacimiento,
   DatosRueda,
 } from "../services/astrologyService";
+import { geocodificarLugar } from "../services/geocodingService";
 import {
   generarHoroscopoDiarioConGemini,
   generarInformeConGemini,
@@ -26,22 +27,23 @@ export type InformePayload = {
   hour?: unknown;
   minute?: unknown;
   horaDesconocida?: unknown;
-  latitude?: unknown;
-  longitude?: unknown;
+  lugarNacimiento?: unknown;
   pregunta?: unknown;
 };
 
 const numeroValido = (value: unknown): value is number =>
   typeof value === "number" && Number.isFinite(value);
 
-export const validarDatosNacimiento = (payload: InformePayload): DatosNacimiento => {
-  const { year, month, day, hour, minute, latitude, longitude, pregunta } = payload;
+type DatosBase = Omit<DatosNacimiento, "latitude" | "longitude"> & { lugarNacimiento: string };
+
+const validarDatosBase = (payload: InformePayload): DatosBase => {
+  const { year, month, day, hour, minute, lugarNacimiento, pregunta } = payload;
   const horaDesconocida = payload.horaDesconocida === true;
 
   if (!numeroValido(year) || !numeroValido(month) || !numeroValido(day)) {
     throw new ValidationError("Faltan la fecha de nacimiento (año, mes y día).");
   }
-  if (!numeroValido(latitude) || !numeroValido(longitude)) {
+  if (typeof lugarNacimiento !== "string" || !lugarNacimiento.trim()) {
     throw new ValidationError("Falta el lugar de nacimiento.");
   }
   if (typeof pregunta !== "string" || pregunta.trim().length < 5) {
@@ -58,21 +60,31 @@ export const validarDatosNacimiento = (payload: InformePayload): DatosNacimiento
     hour: horaDesconocida ? undefined : (hour as number),
     minute: horaDesconocida ? undefined : (minute as number),
     horaDesconocida,
-    latitude,
-    longitude,
+    lugarNacimiento: lugarNacimiento.trim(),
   };
+};
+
+// Valida los datos Y geocodifica el lugar (texto libre, cualquier país) a
+// coordenadas reales — así ya no depende de una lista fija de ciudades
+// argentinas. Es async porque geocodificarLugar llama a un servicio externo
+// (Nominatim/OpenStreetMap).
+export const resolverDatosNacimiento = async (payload: InformePayload): Promise<DatosNacimiento> => {
+  const base = validarDatosBase(payload);
+  const { lugarNacimiento, ...resto } = base;
+  const coordenadas = await geocodificarLugar(lugarNacimiento);
+  return { ...resto, ...coordenadas };
 };
 
 export const generarInformeAstrologico = async (
   payload: InformePayload
-): Promise<InformeAstrologico & { carta: CartaResumen; rueda: DatosRueda }> => {
-  const datosNacimiento = validarDatosNacimiento(payload);
+): Promise<InformeAstrologico & { carta: CartaResumen; rueda: DatosRueda; datosNacimiento: DatosNacimiento }> => {
+  const datosNacimiento = await resolverDatosNacimiento(payload);
   const pregunta = (payload.pregunta as string).trim();
 
   const carta = calcularCartaResumen(datosNacimiento);
   const rueda = calcularDatosRueda(datosNacimiento);
   const informe = await generarInformeConGemini(carta, pregunta);
-  return { ...informe, carta, rueda };
+  return { ...informe, carta, rueda, datosNacimiento };
 };
 
 const fechaDeHoyArgentina = (): string =>
@@ -94,6 +106,7 @@ export const obtenerHoroscopoDiario = async (userId: string) => {
       titulo: existente.titulo,
       texto: existente.texto,
       disclaimer: existente.disclaimer,
+      fecha: existente.fecha,
     };
   }
 
@@ -108,7 +121,7 @@ export const obtenerHoroscopoDiario = async (userId: string) => {
     disclaimer: horoscopo.disclaimer,
   });
 
-  return horoscopo;
+  return { ...horoscopo, fecha };
 };
 
 export type SinastriaPayload = {
@@ -116,23 +129,23 @@ export type SinastriaPayload = {
   personaB?: InformePayload & { nombre?: unknown };
 };
 
-const validarPersonaSinastria = (
+const validarPersonaSinastria = async (
   payload: SinastriaPayload["personaA"],
   etiqueta: string
-): { datos: DatosNacimiento; nombre: string } => {
+): Promise<{ datos: DatosNacimiento; nombre: string }> => {
   if (!payload) {
     throw new ValidationError(`Faltan los datos de nacimiento de ${etiqueta}.`);
   }
   const nombre = typeof payload.nombre === "string" && payload.nombre.trim() ? payload.nombre.trim() : etiqueta;
-  const datos = validarDatosNacimiento({ ...payload, pregunta: "sinastría" });
+  const datos = await resolverDatosNacimiento({ ...payload, pregunta: "sinastría" });
   return { datos, nombre };
 };
 
 export const generarSinastria = async (
   payload: SinastriaPayload
 ): Promise<SinastriaTexto & { personaA: string; personaB: string; aspectos: ReturnType<typeof calcularAspectosSinastria> }> => {
-  const a = validarPersonaSinastria(payload.personaA, "la primera persona");
-  const b = validarPersonaSinastria(payload.personaB, "la segunda persona");
+  const a = await validarPersonaSinastria(payload.personaA, "la primera persona");
+  const b = await validarPersonaSinastria(payload.personaB, "la segunda persona");
 
   const puntosA = calcularPuntosSinastria(a.datos, a.nombre);
   const puntosB = calcularPuntosSinastria(b.datos, b.nombre);
