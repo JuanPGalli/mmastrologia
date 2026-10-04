@@ -1,5 +1,3 @@
-import { ARGENTINA_CITIES } from '../../data/argentinaCities';
-
 const PersonaNacimientoForm = ({ titulo, valores, onCambiar }) => {
   const actualizar = (campo) => (event) => {
     const valor = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -49,22 +47,15 @@ const PersonaNacimientoForm = ({ titulo, valores, onCambiar }) => {
       </div>
 
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Ciudad de nacimiento</label>
-        <select
-          value={valores.ciudadIndex}
-          onChange={actualizar('ciudadIndex')}
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Lugar de nacimiento</label>
+        <input
+          type='text'
+          value={valores.lugarNacimiento}
+          onChange={actualizar('lugarNacimiento')}
+          placeholder='Ciudad, país (ej: Río de Janeiro, Brasil)'
           className='w-full border border-gray-300 rounded px-3 py-2'
           required
-        >
-          <option value='' disabled>
-            Elegí una ciudad
-          </option>
-          {ARGENTINA_CITIES.map((ciudad, index) => (
-            <option key={ciudad.label} value={index}>
-              {ciudad.label}
-            </option>
-          ))}
-        </select>
+        />
       </div>
     </fieldset>
   );

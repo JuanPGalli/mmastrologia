@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { FaMagic } from 'react-icons/fa';
 import { getStoredSession } from '../../api/auth';
 import { generarInformeAstrologico } from '../../api/astro';
-import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import Seo from '../../Components/Seo/Seo';
 import HoroscopoDiarioCard from '../../Components/HoroscopoDiarioCard/HoroscopoDiarioCard';
 import CartaNatalWheel from '../../Components/CartaNatalWheel/CartaNatalWheel';
@@ -13,12 +12,16 @@ const estadoInicial = {
   fecha: '',
   hora: '',
   horaDesconocida: false,
-  ciudadIndex: '',
+  lugarNacimiento: '',
   pregunta: '',
 };
 
 const WHATSAPP_SOPORTE = 'https://wa.me/5491128933987';
-const STORAGE_KEY = 'mma_ultimo_informe_astrologico';
+// v2: el informe ahora incluye `rueda` y los datos de lugar cambiaron de
+// lat/long fijos a geocoding por texto libre — un informe viejo guardado
+// con la clave anterior podía faltarle `rueda` y confundir ("¿por qué no
+// puedo agrandar el gráfico?"). Clave nueva para no mezclar formatos.
+const STORAGE_KEY = 'mma_ultimo_informe_astrologico_v2';
 
 const guardarInformeLocal = (informe) => {
   try {
@@ -68,8 +71,8 @@ const AstrologoVirtual = () => {
     setErrorEsTecnico(false);
     setRequiereSuscripcion(false);
 
-    if (!form.fecha || form.ciudadIndex === '' || !form.pregunta.trim()) {
-      setError('Completá fecha de nacimiento, ciudad y tu pregunta.');
+    if (!form.fecha || !form.lugarNacimiento.trim() || !form.pregunta.trim()) {
+      setError('Completá fecha de nacimiento, lugar de nacimiento y tu pregunta.');
       return;
     }
     if (!form.horaDesconocida && !form.hora) {
@@ -79,7 +82,6 @@ const AstrologoVirtual = () => {
 
     const [year, month, day] = form.fecha.split('-').map(Number);
     const [hour, minute] = form.horaDesconocida ? [undefined, undefined] : form.hora.split(':').map(Number);
-    const ciudad = ARGENTINA_CITIES[Number(form.ciudadIndex)];
 
     setLoading(true);
     setInforme(null);
@@ -91,8 +93,7 @@ const AstrologoVirtual = () => {
         hour,
         minute,
         horaDesconocida: form.horaDesconocida,
-        latitude: ciudad.latitude,
-        longitude: ciudad.longitude,
+        lugarNacimiento: form.lugarNacimiento.trim(),
         pregunta: form.pregunta.trim(),
       });
       setInforme(resultado);
@@ -142,10 +143,13 @@ const AstrologoVirtual = () => {
         <p className='text-gray-600 text-center mb-2'>
           Contanos tu fecha, hora y lugar de nacimiento, y qué te gustaría consultar.
         </p>
-        <p className='text-center text-sm mb-10'>
+        <p className='text-center text-sm mb-2'>
           <a href='/sinastria' className='text-purple-700 underline hover:text-purple-900'>
             ¿Querés ver compatibilidad con otra persona? Probá Sinastría →
           </a>
+        </p>
+        <p className='text-center text-xs text-gray-400 mb-10'>
+          Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
         </p>
 
         <HoroscopoDiarioCard key={horoscopoRefreshKey} />
@@ -194,25 +198,19 @@ const AstrologoVirtual = () => {
           </div>
 
           <div>
-            <label htmlFor='ciudad' className='block text-sm font-medium text-gray-700 mb-1'>
-              Ciudad de nacimiento
+            <label htmlFor='lugarNacimiento' className='block text-sm font-medium text-gray-700 mb-1'>
+              Lugar de nacimiento
             </label>
-            <select
-              id='ciudad'
-              value={form.ciudadIndex}
-              onChange={actualizarCampo('ciudadIndex')}
+            <input
+              id='lugarNacimiento'
+              type='text'
+              value={form.lugarNacimiento}
+              onChange={actualizarCampo('lugarNacimiento')}
+              placeholder='Ciudad, país (ej: Río de Janeiro, Brasil)'
               className='w-full border border-gray-300 rounded px-3 py-2'
               required
-            >
-              <option value='' disabled>
-                Elegí una ciudad
-              </option>
-              {ARGENTINA_CITIES.map((ciudad, index) => (
-                <option key={ciudad.label} value={index}>
-                  {ciudad.label}
-                </option>
-              ))}
-            </select>
+            />
+            <p className='text-xs text-gray-500 mt-1'>Vale cualquier país — cuanto más específico, mejor.</p>
           </div>
 
           <div>
@@ -298,6 +296,9 @@ const AstrologoVirtual = () => {
               <p className='text-gray-700 whitespace-pre-line'>{informe.consejo_practico}</p>
             </div>
             <p className='text-xs text-gray-400 border-t pt-4'>{informe.disclaimer}</p>
+            <p className='text-xs text-gray-400'>
+              Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
+            </p>
 
             <div className='bg-purple-50 -mx-8 -mb-8 mt-6 p-6 text-center'>
               <p className='text-purple-950 font-medium mb-3'>

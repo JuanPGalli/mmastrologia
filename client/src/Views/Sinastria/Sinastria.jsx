@@ -3,17 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
 import { getStoredSession } from '../../api/auth';
 import { generarSinastria } from '../../api/astro';
-import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import PersonaNacimientoForm from '../../Components/PersonaNacimientoForm/PersonaNacimientoForm';
 import RequiereSuscripcion from '../../Components/RequiereSuscripcion/RequiereSuscripcion';
 import Seo from '../../Components/Seo/Seo';
 
-const valoresIniciales = { nombre: '', fecha: '', hora: '', horaDesconocida: false, ciudadIndex: '' };
+const valoresIniciales = { nombre: '', fecha: '', hora: '', horaDesconocida: false, lugarNacimiento: '' };
 
 const construirPayload = (valores) => {
   const [year, month, day] = valores.fecha.split('-').map(Number);
   const [hour, minute] = valores.horaDesconocida ? [undefined, undefined] : valores.hora.split(':').map(Number);
-  const ciudad = ARGENTINA_CITIES[Number(valores.ciudadIndex)];
   return {
     nombre: valores.nombre.trim(),
     year,
@@ -22,13 +20,12 @@ const construirPayload = (valores) => {
     hour,
     minute,
     horaDesconocida: valores.horaDesconocida,
-    latitude: ciudad.latitude,
-    longitude: ciudad.longitude,
+    lugarNacimiento: valores.lugarNacimiento.trim(),
   };
 };
 
 const formularioCompleto = (v) =>
-  v.nombre.trim() && v.fecha && v.ciudadIndex !== '' && (v.horaDesconocida || v.hora);
+  v.nombre.trim() && v.fecha && v.lugarNacimiento.trim() && (v.horaDesconocida || v.hora);
 
 const Sinastria = () => {
   const navigate = useNavigate();
@@ -55,7 +52,7 @@ const Sinastria = () => {
     setRequiereSuscripcion(false);
 
     if (!formularioCompleto(personaA) || !formularioCompleto(personaB)) {
-      setError('Completá nombre, fecha, ciudad (y hora, o marcá que no la conocés) de las dos personas.');
+      setError('Completá nombre, fecha, lugar (y hora, o marcá que no la conocés) de las dos personas.');
       return;
     }
 
@@ -92,8 +89,11 @@ const Sinastria = () => {
           <FaHeart className='text-purple-700 text-2xl' aria-hidden='true' />
           <h1 className='text-3xl md:text-4xl font-light text-purple-950 text-center'>Sinastría</h1>
         </div>
-        <p className='text-gray-600 text-center mb-10'>
+        <p className='text-gray-600 text-center mb-2'>
           Cargá los datos de nacimiento de las dos personas para ver qué dice la conexión entre sus cartas.
+        </p>
+        <p className='text-center text-xs text-gray-400 mb-10'>
+          Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
         </p>
 
         <form onSubmit={handleSubmit} className='bg-white shadow-lg p-8 space-y-6'>
@@ -149,6 +149,9 @@ const Sinastria = () => {
             <h2 className='text-xl text-purple-950 font-medium'>{resultado.titulo}</h2>
             <p className='text-gray-700 whitespace-pre-line'>{resultado.texto}</p>
             <p className='text-xs text-gray-400 border-t pt-4'>{resultado.disclaimer}</p>
+            <p className='text-xs text-gray-400'>
+              Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
+            </p>
 
             <div className='bg-purple-50 -mx-8 -mb-8 mt-6 p-6 text-center'>
               <p className='text-purple-950 font-medium mb-3'>
