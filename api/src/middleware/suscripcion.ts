@@ -12,6 +12,15 @@ export const requireSuscripcionOPrueba: RequestHandler = async (req: RequestConA
     return;
   }
 
+  // Los administradores (María Marta gestionando el sitio, vos probando)
+  // no deberían tener que suscribirse ni gastar la prueba gratis para
+  // entrar al Astrólogo Virtual o Sinastría.
+  if (req.user.role === "admin") {
+    req.accesoViaPrueba = false;
+    next();
+    return;
+  }
+
   try {
     const acceso = await tieneAccesoVigente(req.user.id);
     if (!acceso.permitido) {

@@ -1,7 +1,5 @@
 import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 
-// Mismos campos que usa el formulario del informe individual, mostrados dos
-// veces (persona A / persona B) para armar la sinastría.
 const PersonaNacimientoForm = ({ titulo, valores, onCambiar }) => {
   const actualizar = (campo) => (event) => {
     const valor = event.target.type === 'checkbox' ? event.target.checked : event.target.value;

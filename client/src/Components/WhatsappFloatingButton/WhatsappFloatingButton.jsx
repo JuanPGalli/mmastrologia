@@ -6,8 +6,6 @@ const WHATSAPP_URL = 'https://wa.me/5491128933987';
 const WhatsappFloatingButton = () => {
   const { pathname } = useLocation();
 
-  // No mostrar el botón en el panel de administración: es para
-  // visitantes del sitio público, no para María Marta gestionando el back office.
   if (pathname.startsWith('/admin')) return null;
 
   return (

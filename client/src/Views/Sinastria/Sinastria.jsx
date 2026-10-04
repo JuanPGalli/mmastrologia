@@ -5,6 +5,7 @@ import { getStoredSession } from '../../api/auth';
 import { generarSinastria } from '../../api/astro';
 import { ARGENTINA_CITIES } from '../../data/argentinaCities';
 import PersonaNacimientoForm from '../../Components/PersonaNacimientoForm/PersonaNacimientoForm';
+import RequiereSuscripcion from '../../Components/RequiereSuscripcion/RequiereSuscripcion';
 import Seo from '../../Components/Seo/Seo';
 
 const valoresIniciales = { nombre: '', fecha: '', hora: '', horaDesconocida: false, ciudadIndex: '' };
@@ -38,6 +39,7 @@ const Sinastria = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [errorEsTecnico, setErrorEsTecnico] = useState(false);
+  const [requiereSuscripcion, setRequiereSuscripcion] = useState(false);
 
   useEffect(() => {
     if (!session) navigate('/login');
@@ -50,6 +52,7 @@ const Sinastria = () => {
     if (loading) return;
     setError('');
     setErrorEsTecnico(false);
+    setRequiereSuscripcion(false);
 
     if (!formularioCompleto(personaA) || !formularioCompleto(personaB)) {
       setError('Completá nombre, fecha, ciudad (y hora, o marcá que no la conocés) de las dos personas.');
@@ -63,8 +66,12 @@ const Sinastria = () => {
       setResultado(data);
     } catch (requestError) {
       const status = requestError.response?.status;
-      setError(requestError.response?.data?.error || requestError.message);
-      setErrorEsTecnico(status >= 500);
+      if (status === 402) {
+        setRequiereSuscripcion(true);
+      } else {
+        setError(requestError.response?.data?.error || requestError.message);
+        setErrorEsTecnico(status >= 500);
+      }
     } finally {
       setLoading(false);
     }
@@ -107,6 +114,10 @@ const Sinastria = () => {
                 </a>
               )}
             </div>
+          )}
+
+          {requiereSuscripcion && (
+            <RequiereSuscripcion mensaje='Ya usaste tu consulta de prueba gratis. Suscribite para seguir usando Sinastría.' />
           )}
 
           <button
