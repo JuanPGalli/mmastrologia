@@ -4,6 +4,7 @@ import Reveal from '../../Components/Reveal/Reveal';
 import Seo from '../../Components/Seo/Seo';
 import NovedadesSection from '../../Components/NovedadesSection/NovedadesSection';
 import CTASection from '../../Components/CTASection/CTASection';
+import TestimoniosSociales from '../../Components/TestimoniosSociales/TestimoniosSociales';
 import { fetchPosts } from '../../api/posts';
 import { fetchServices } from '../../api/services';
 import { fetchApprovedReviews } from '../../api/reviews';
@@ -191,6 +192,37 @@ const Home = () => {
         </div>
       </Reveal>
 
+      {/* ASTRÓLOGO VIRTUAL */}
+      <Reveal as='section' className='bg-purple-950 py-20 overflow-hidden'>
+        <div className='max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center'>
+          <div className='flex justify-center'>
+            <video
+              src='https://res.cloudinary.com/ydsjcgim/video/upload/v1790829084/bola_de_cristal.mp4'
+              autoPlay
+              loop
+              muted
+              playsInline
+              className='w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-2xl'
+            />
+          </div>
+          <div className='text-center md:text-left'>
+            <p className='text-xs uppercase tracking-widest text-purple-300 mb-3'>Nuevo</p>
+            <h2 className='text-3xl text-white font-light mb-4'>Conocé al Astrólogo Virtual</h2>
+            <p className='text-purple-100 mb-6'>
+              Tu carta natal calculada en el momento, un horóscopo personalizado cada día, respuestas a
+              tus preguntas puntuales y hasta la compatibilidad con otra persona — todo con la misma
+              mirada astrológica, disponible cuando lo necesites.
+            </p>
+            <Link
+              to='/astrologo-virtual'
+              className='inline-block bg-amber-400 text-purple-950 px-8 py-3 uppercase tracking-widest text-sm font-medium hover:bg-amber-300 transition'
+            >
+              Probar el Astrólogo Virtual
+            </Link>
+          </div>
+        </div>
+      </Reveal>
+
       {/* CÓMO ES UNA CONSULTA */}
       <Reveal as='section' className='py-20 bg-white'>
         <div className='max-w-5xl mx-auto px-6'>
@@ -237,6 +269,14 @@ const Home = () => {
           </div>
         </Reveal>
       )}
+
+      {/* TESTIMONIOS SOCIALES (capturas de WhatsApp + cita escrita) */}
+      <Reveal as='section' className='bg-[#f7f3fb] py-20'>
+        <div className='max-w-5xl mx-auto px-6 text-center'>
+          <h2 className='text-3xl mb-12 text-purple-900 font-light'>Más voces, más caminos recorridos</h2>
+          <TestimoniosSociales />
+        </div>
+      </Reveal>
 
       {/* ÚLTIMOS ARTÍCULOS DEL BLOG */}
       {latestPosts.length > 0 && (

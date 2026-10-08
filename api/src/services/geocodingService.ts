@@ -7,6 +7,7 @@ const USER_AGENT = "MMAstrologia/1.0 (contacto@mariamartagalli.com.ar)";
 
 export type Coordenadas = { latitude: number; longitude: number };
 
+
 export const geocodificarLugar = async (lugar: string): Promise<Coordenadas> => {
   const url = `${NOMINATIM_URL}?q=${encodeURIComponent(lugar)}&format=json&limit=1`;
 

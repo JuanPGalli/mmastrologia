@@ -92,6 +92,11 @@ const Sinastria = () => {
         <p className='text-gray-600 text-center mb-2'>
           Cargá los datos de nacimiento de las dos personas para ver qué dice la conexión entre sus cartas.
         </p>
+        <p className='text-center text-sm mb-2'>
+          <a href='/astrologo-virtual' className='text-purple-700 underline hover:text-purple-900'>
+            ← Volver al Astrólogo Virtual
+          </a>
+        </p>
         <p className='text-center text-xs text-gray-400 mb-10'>
           Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
         </p>
