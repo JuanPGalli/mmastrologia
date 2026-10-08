@@ -93,9 +93,9 @@ const Navbar = () => {
             bg-[rgb(147,116,192)] md:bg-transparent md:static
             flex flex-col md:flex-row md:items-center md:gap-5 md:w-auto
             px-6 md:p-0
-            overflow-hidden md:overflow-visible
+            md:overflow-visible
             transition-[max-height,opacity] duration-300 ease-in-out
-            ${isOpen ? 'max-h-dvh opacity-100 pt-2 pb-10' : 'max-h-0 opacity-0 pointer-events-none pt-0 pb-0'}
+            ${isOpen ? 'max-h-[calc(100dvh-4rem)] overflow-y-auto opacity-100 pt-2 pb-10' : 'max-h-0 overflow-hidden opacity-0 pointer-events-none pt-0 pb-0'}
             md:max-h-none md:opacity-100 md:pointer-events-auto
           `}
         >
@@ -161,7 +161,7 @@ const Navbar = () => {
                 </button>
 
                 {menuOpen && (
-                  <div className='absolute right-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg overflow-hidden z-50'>
+                  <div className='mt-2 w-full bg-white text-gray-800 shadow-lg rounded-lg overflow-hidden z-50 md:absolute md:right-0 md:w-48'>
                     <p className='px-4 py-3 text-sm border-b border-gray-100 truncate'>
                       {session.user.name}
                     </p>
