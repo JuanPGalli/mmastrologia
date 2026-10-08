@@ -147,12 +147,12 @@ const CartaNatalWheel = ({ rueda }) => {
       <button
         type='button'
         onClick={() => setAbierta(true)}
-        className='relative w-full max-w-xs mx-auto block group'
+        className='relative w-full max-w-xs mx-auto block group cursor-pointer'
         aria-label='Ver carta natal más grande'
       >
         <DibujoRueda rueda={rueda} />
-        <span className='absolute bottom-1 right-1 bg-white/90 rounded-full p-1.5 text-purple-700 shadow group-hover:bg-white'>
-          <FaExpand size={12} />
+        <span className='absolute bottom-1 right-1 bg-white rounded-full p-2 text-purple-700 shadow-md group-hover:bg-purple-50'>
+          <FaExpand size={14} />
         </span>
       </button>
 

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { postInformeHandler, getHoroscopoDiarioHandler, postSinastriaHandler } from "../handlers/astroHandlers";
+import {
+  postInformeHandler,
+  getHoroscopoDiarioHandler,
+  postSinastriaHandler,
+} from "../handlers/astroHandlers";
 import { requireAuth } from "../middleware/auth";
 import { requireSuscripcionOPrueba } from "../middleware/suscripcion";
 import { astroLimiter } from "../middleware/rateLimiters";

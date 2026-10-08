@@ -290,10 +290,29 @@ const AstrologoVirtual = () => {
               <FaMagic className='text-purple-400 text-xl shrink-0 mt-1' aria-hidden='true' />
               <h2 className='text-xl text-purple-950 font-medium'>{informe.titulo}</h2>
             </div>
-            <p className='text-gray-700 whitespace-pre-line'>{informe.interpretacion}</p>
+            <div className='space-y-3'>
+              {informe.interpretacion
+                .split('\n\n')
+                .filter((parrafo) => parrafo.trim())
+                .map((parrafo, i) => (
+                  <p key={i} className='text-gray-700 whitespace-pre-line'>
+                    {parrafo}
+                  </p>
+                ))}
+            </div>
             <div>
-              <h3 className='text-sm font-semibold text-purple-800 mb-1'>Consejo práctico</h3>
-              <p className='text-gray-700 whitespace-pre-line'>{informe.consejo_practico}</p>
+              <h3 className='text-sm font-semibold text-purple-800 mb-2'>Consejo práctico</h3>
+              <ul className='space-y-2'>
+                {(Array.isArray(informe.consejo_practico)
+                  ? informe.consejo_practico
+                  : [informe.consejo_practico]
+                ).map((item, i) => (
+                  <li key={i} className='flex items-start gap-2 text-gray-700'>
+                    <span className='text-purple-400 mt-1'>✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
             <p className='text-xs text-gray-400 border-t pt-4'>{informe.disclaimer}</p>
             <p className='text-xs text-gray-400'>

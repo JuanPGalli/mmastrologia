@@ -24,7 +24,7 @@ const urlModelo = (modelo: string) =>
 export type InformeAstrologico = {
   titulo: string;
   interpretacion: string;
-  consejo_practico: string;
+  consejo_practico: string[];
   disclaimer: string;
 };
 
@@ -147,14 +147,17 @@ const SYSTEM_INSTRUCTION_INFORME =
   "Sos un astrólogo profesional que redacta informes personalizados en español rioplatense, cálido pero " +
   "profesional, sin promesas categóricas. Recibís datos de carta natal YA CALCULADOS (no los calcules vos) y " +
   "una pregunta del usuario. Si el ascendente o el tránsito de Saturno no están disponibles (hora de " +
-  "nacimiento desconocida), no los menciones ni los inventes: basá la interpretación en lo que sí tenés.";
+  "nacimiento desconocida), no los menciones ni los inventes: basá la interpretación en lo que sí tenés. " +
+  "Escribí 'interpretacion' en 2 o 3 párrafos cortos (separados por un salto de línea doble), no un solo " +
+  "bloque largo — tiene que ser fácil de leer de un vistazo. 'consejo_practico' va en 2 o 3 ítems concretos y " +
+  "accionables, cada uno una frase corta, sin numerarlos vos (el formato de lista lo pone el frontend).";
 
 const RESPONSE_SCHEMA_INFORME = {
   type: "OBJECT",
   properties: {
     titulo: { type: "STRING" },
     interpretacion: { type: "STRING" },
-    consejo_practico: { type: "STRING" },
+    consejo_practico: { type: "ARRAY", items: { type: "STRING" } },
   },
   required: ["titulo", "interpretacion", "consejo_practico"],
 };
