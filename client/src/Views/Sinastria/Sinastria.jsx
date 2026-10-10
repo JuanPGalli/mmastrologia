@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
 import { getStoredSession } from '../../api/auth';
 import { generarSinastria } from '../../api/astro';
+import { useConsultaDiaria } from '../../hooks/useConsultaDiaria';
+import { formatearFechaLarga } from '../../utils/fechas';
 import PersonaNacimientoForm from '../../Components/PersonaNacimientoForm/PersonaNacimientoForm';
 import RequiereSuscripcion from '../../Components/RequiereSuscripcion/RequiereSuscripcion';
 import Seo from '../../Components/Seo/Seo';
 
 const valoresIniciales = { nombre: '', fecha: '', hora: '', horaDesconocida: false, lugarNacimiento: '' };
+
+const AVISO_IA = 'Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.';
 
 const construirPayload = (valores) => {
   const [year, month, day] = valores.fecha.split('-').map(Number);
@@ -27,12 +31,65 @@ const construirPayload = (valores) => {
 const formularioCompleto = (v) =>
   v.nombre.trim() && v.fecha && v.lugarNacimiento.trim() && (v.horaDesconocida || v.hora);
 
+const ResultadoSinastria = ({ consulta }) => {
+  const { resultado } = consulta;
+
+  return (
+    <article className='bg-white shadow-lg p-8 space-y-4 border-t-4 border-purple-400'>
+      <div className='bg-purple-50 -mx-8 -mt-8 px-8 py-4 mb-2 text-sm text-purple-900'>
+        <p className='text-xs uppercase tracking-widest text-purple-500 mb-1'>
+          Tu sinastría del {formatearFechaLarga(consulta.fecha)}
+        </p>
+        <p className='font-medium mb-1'>
+          {resultado.personaA} & {resultado.personaB}
+        </p>
+        {resultado.aspectos.length > 0 ? (
+          <p>
+            {resultado.aspectos.length} aspecto{resultado.aspectos.length !== 1 ? 's' : ''} mayor
+            {resultado.aspectos.length !== 1 ? 'es' : ''} encontrado{resultado.aspectos.length !== 1 ? 's' : ''}{' '}
+            entre ambas cartas.
+          </p>
+        ) : (
+          <p>No se encontraron aspectos mayores exactos entre estas dos cartas.</p>
+        )}
+      </div>
+
+      <h2 className='text-xl text-purple-950 font-medium'>{resultado.titulo}</h2>
+      <div className='space-y-3'>
+        {resultado.texto
+          .split('\n\n')
+          .filter((parrafo) => parrafo.trim())
+          .map((parrafo, i) => (
+            <p key={i} className='text-gray-700 whitespace-pre-line'>
+              {parrafo}
+            </p>
+          ))}
+      </div>
+      <p className='text-xs text-gray-400 border-t pt-4'>{resultado.disclaimer}</p>
+      <p className='text-xs text-gray-400'>{AVISO_IA}</p>
+
+      <div className='bg-purple-50 -mx-8 -mb-8 mt-6 p-6 text-center'>
+        <p className='text-purple-950 font-medium mb-3'>¿Querés profundizar en esto con una lectura personal?</p>
+        <a
+          href='/services'
+          className='inline-block bg-purple-800 text-white px-6 py-2 rounded-full text-sm hover:bg-purple-900 transition'
+        >
+          Ver consultas con María Marta →
+        </a>
+      </div>
+    </article>
+  );
+};
+
 const Sinastria = () => {
   const navigate = useNavigate();
   const [session] = useState(() => getStoredSession());
+  const { consulta, setConsulta, cargando, generoHoy, sinAcceso, puedeGenerar, refrescarEstado } =
+    useConsultaDiaria('sinastria', session);
+
   const [personaA, setPersonaA] = useState(valoresIniciales);
   const [personaB, setPersonaB] = useState(valoresIniciales);
-  const [resultado, setResultado] = useState(null);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [errorEsTecnico, setErrorEsTecnico] = useState(false);
@@ -43,6 +100,8 @@ const Sinastria = () => {
   }, [session, navigate]);
 
   if (!session) return null;
+
+  const verFormulario = !consulta || mostrarFormulario;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,10 +116,14 @@ const Sinastria = () => {
     }
 
     setLoading(true);
-    setResultado(null);
     try {
-      const data = await generarSinastria(construirPayload(personaA), construirPayload(personaB));
-      setResultado(data);
+      const nueva = await generarSinastria(construirPayload(personaA), construirPayload(personaB));
+      setConsulta(nueva);
+      setMostrarFormulario(false);
+      setPersonaA(valoresIniciales);
+      setPersonaB(valoresIniciales);
+      refrescarEstado();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (requestError) {
       const status = requestError.response?.status;
       if (status === 402) {
@@ -97,79 +160,83 @@ const Sinastria = () => {
             ← Volver al Astrólogo Virtual
           </a>
         </p>
-        <p className='text-center text-xs text-gray-400 mb-10'>
-          Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
-        </p>
+        <p className='text-center text-xs text-gray-400 mb-10'>{AVISO_IA}</p>
 
-        <form onSubmit={handleSubmit} className='bg-white shadow-lg p-8 space-y-6'>
-          <PersonaNacimientoForm titulo='Persona 1' valores={personaA} onCambiar={setPersonaA} />
-          <PersonaNacimientoForm titulo='Persona 2' valores={personaB} onCambiar={setPersonaB} />
+        {cargando && <p className='text-center text-gray-500'>Cargando…</p>}
 
-          {error && (
-            <div className='text-sm text-red-600'>
-              <p>{error}</p>
-              {errorEsTecnico && (
-                <a
-                  href={`https://wa.me/5491128933987?text=${mensajeSoporte}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-block mt-2 text-purple-700 underline hover:text-purple-900'
+        {!cargando && !verFormulario && (
+          <>
+            <ResultadoSinastria consulta={consulta} />
+
+            <div className='mt-8 space-y-4 text-center'>
+              {puedeGenerar && (
+                <button
+                  type='button'
+                  onClick={() => setMostrarFormulario(true)}
+                  className='bg-purple-800 text-white px-8 py-3 rounded-full hover:bg-purple-900 transition cursor-pointer'
                 >
-                  Avisanos este problema por WhatsApp →
-                </a>
+                  Hacer una nueva sinastría
+                </button>
               )}
-            </div>
-          )}
-
-          {requiereSuscripcion && (
-            <RequiereSuscripcion mensaje='Ya usaste tu consulta de prueba gratis. Suscribite para seguir usando Sinastría.' />
-          )}
-
-          <button
-            type='submit'
-            disabled={loading}
-            className='w-full bg-purple-800 text-white py-3 rounded-full hover:bg-purple-900 transition disabled:opacity-60'
-          >
-            {loading ? 'Calculando...' : 'Ver compatibilidad'}
-          </button>
-        </form>
-
-        {resultado && (
-          <div className='bg-white shadow-lg p-8 mt-8 space-y-4 border-t-4 border-purple-400'>
-            <div className='bg-purple-50 -mx-8 -mt-8 px-8 py-4 mb-2 text-sm text-purple-900'>
-              <p className='font-medium mb-1'>
-                {resultado.personaA} & {resultado.personaB}
-              </p>
-              {resultado.aspectos.length > 0 ? (
-                <p>
-                  {resultado.aspectos.length} aspecto{resultado.aspectos.length !== 1 ? 's' : ''} mayor
-                  {resultado.aspectos.length !== 1 ? 'es' : ''} encontrado{resultado.aspectos.length !== 1 ? 's' : ''}{' '}
-                  entre ambas cartas.
+              {!puedeGenerar && generoHoy && !sinAcceso && (
+                <p className='text-sm text-gray-600'>
+                  Ya hiciste tu sinastría de hoy. Mañana podés hacer una nueva.
                 </p>
-              ) : (
-                <p>No se encontraron aspectos mayores exactos entre estas dos cartas.</p>
+              )}
+              {sinAcceso && (
+                <RequiereSuscripcion mensaje='Usaste tu consulta de prueba gratis. Suscribite para seguir usando Sinastría.' />
               )}
             </div>
+          </>
+        )}
 
-            <h2 className='text-xl text-purple-950 font-medium'>{resultado.titulo}</h2>
-            <p className='text-gray-700 whitespace-pre-line'>{resultado.texto}</p>
-            <p className='text-xs text-gray-400 border-t pt-4'>{resultado.disclaimer}</p>
-            <p className='text-xs text-gray-400'>
-              Este astrólogo virtual es una IA y puede cometer errores. Revisá/confirmá siempre las respuestas.
-            </p>
+        {!cargando && verFormulario && sinAcceso && !consulta && (
+          <RequiereSuscripcion mensaje='Usaste tu consulta de prueba gratis. Suscribite para usar Sinastría.' />
+        )}
 
-            <div className='bg-purple-50 -mx-8 -mb-8 mt-6 p-6 text-center'>
-              <p className='text-purple-950 font-medium mb-3'>
-                ¿Querés profundizar en esto con una lectura personal?
-              </p>
-              <a
-                href='/services'
-                className='inline-block bg-purple-800 text-white px-6 py-2 rounded-full text-sm hover:bg-purple-900 transition'
+        {!cargando && verFormulario && !(sinAcceso && !consulta) && (
+          <form onSubmit={handleSubmit} className='bg-white shadow-lg p-8 space-y-6'>
+            <PersonaNacimientoForm titulo='Persona 1' valores={personaA} onCambiar={setPersonaA} />
+            <PersonaNacimientoForm titulo='Persona 2' valores={personaB} onCambiar={setPersonaB} />
+
+            {error && (
+              <div className='text-sm text-red-600'>
+                <p>{error}</p>
+                {errorEsTecnico && (
+                  <a
+                    href={`https://wa.me/5491128933987?text=${mensajeSoporte}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='inline-block mt-2 text-purple-700 underline hover:text-purple-900'
+                  >
+                    Avisanos este problema por WhatsApp →
+                  </a>
+                )}
+              </div>
+            )}
+
+            {requiereSuscripcion && (
+              <RequiereSuscripcion mensaje='Ya usaste tu consulta de prueba gratis. Suscribite para seguir usando Sinastría.' />
+            )}
+
+            <button
+              type='submit'
+              disabled={loading}
+              className='w-full bg-purple-800 text-white py-3 rounded-full hover:bg-purple-900 transition disabled:opacity-60'
+            >
+              {loading ? 'Calculando...' : 'Ver compatibilidad'}
+            </button>
+
+            {consulta && (
+              <button
+                type='button'
+                onClick={() => setMostrarFormulario(false)}
+                className='w-full text-sm text-purple-700 underline hover:text-purple-900 cursor-pointer'
               >
-                Ver consultas con María Marta →
-              </a>
-            </div>
-          </div>
+                ← Volver a mi última sinastría
+              </button>
+            )}
+          </form>
         )}
       </div>
     </>
