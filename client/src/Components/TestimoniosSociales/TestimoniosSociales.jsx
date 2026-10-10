@@ -26,26 +26,36 @@ const TESTIMONIOS = [
   },
 ];
 
-const TarjetaTestimonio = ({ t }) => {
-  if (t.tipo === 'imagen') {
-    return (
-      <figure className='bg-white shadow-sm overflow-hidden'>
-        <img src={t.imagen} alt={`Testimonio de ${t.nombre}`} className='w-full h-auto' loading='lazy' />
-        <figcaption className='p-4 text-sm text-purple-800 text-center'>— {t.nombre}</figcaption>
-      </figure>
-    );
-  }
-
-  return (
-    <blockquote className='bg-white p-8 shadow-sm text-left'>
-      <p className='text-gray-700 italic mb-4'>“{t.texto}”</p>
-      <footer className='text-sm text-purple-800'>
-        — {t.nombre}
-        {t.rol ? `, ${t.rol}` : ''}
-      </footer>
-    </blockquote>
-  );
-};
+// TODAS las tarjetas comparten la misma proporción (9:16). Antes cada una
+// medía lo que le pedía su contenido (las capturas una altura, la cita
+// escrita otra), y al pasar de una a otra el carrusel "saltaba". Con una
+// proporción fija, el alto es idéntico en desktop y mobile y no hay
+// desprolijidad al deslizar.
+const TarjetaTestimonio = ({ t }) => (
+  <div className='aspect-9/16 w-full bg-white shadow-sm overflow-hidden flex flex-col'>
+    {t.tipo === 'imagen' ? (
+      <>
+        <img
+          src={t.imagen}
+          alt={`Testimonio de ${t.nombre}`}
+          className='flex-1 min-h-0 w-full object-cover object-top'
+          loading='lazy'
+        />
+        <p className='shrink-0 p-3 text-sm text-purple-800 text-center'>— {t.nombre}</p>
+      </>
+    ) : (
+      <blockquote className='flex-1 min-h-0 overflow-y-auto p-6 text-left flex flex-col'>
+        <div className='my-auto'>
+          <p className='text-gray-700 italic text-sm leading-relaxed mb-4'>“{t.texto}”</p>
+          <footer className='text-sm text-purple-800'>
+            — {t.nombre}
+            {t.rol ? `, ${t.rol}` : ''}
+          </footer>
+        </div>
+      </blockquote>
+    )}
+  </div>
+);
 
 const TestimoniosSociales = () => {
   const [index, setIndex] = useState(0);
@@ -65,10 +75,10 @@ const TestimoniosSociales = () => {
   const siguiente = () => setIndex((i) => (i + 1) % total);
   const anterior = () => setIndex((i) => (i - 1 + total) % total);
 
-  // En desktop no hace falta carrusel: entran los tres lado a lado.
+  // Desktop: las tres tarjetas lado a lado, todas del mismo tamaño.
   if (isDesktop) {
     return (
-      <div className='grid grid-cols-3 gap-6 items-start'>
+      <div className='grid grid-cols-3 gap-6'>
         {TESTIMONIOS.map((t) => (
           <TarjetaTestimonio key={t.nombre} t={t} />
         ))}
@@ -85,12 +95,10 @@ const TestimoniosSociales = () => {
     setTouchStartX(null);
   };
 
-  // Se renderiza SOLO el slide activo (no un riel con todos): así cada
-  // tarjeta mide lo que le corresponde. Con un riel, todas las tarjetas
-  // quedaban estiradas a la altura de la más alta (la cita escrita) y las
-  // capturas se veían chicas y con un hueco blanco abajo.
+  // Mobile: una tarjeta por vez. max-w-sm evita que en pantallas anchas
+  // (tablets) la tarjeta 9:16 se vuelva gigante.
   return (
-    <div>
+    <div className='max-w-sm mx-auto'>
       <div
         key={index}
         className='testimonio-fade'

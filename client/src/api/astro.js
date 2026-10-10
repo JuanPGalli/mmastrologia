@@ -9,19 +9,18 @@ const authHeaders = () => {
   return { Authorization: `Bearer ${session.token}` };
 };
 
+export const obtenerUltimaConsulta = async (tipo) => {
+  const response = await axios.get(`${apiUrl}/api/astro/ultimo`, {
+    params: { tipo },
+    headers: authHeaders(),
+  });
+  return response.data.consulta; // { fecha, entrada, resultado } | null
+};
+
 export const generarInformeAstrologico = async (datos) => {
   if (!apiUrl) throw new Error('El sitio no está configurado correctamente.');
 
   const response = await axios.post(`${apiUrl}/api/astro/informe`, datos, {
-    headers: authHeaders(),
-  });
-  return response.data;
-};
-
-export const obtenerHoroscopoDiario = async () => {
-  if (!apiUrl) throw new Error('El sitio no está configurado correctamente.');
-
-  const response = await axios.get(`${apiUrl}/api/astro/horoscopo-diario`, {
     headers: authHeaders(),
   });
   return response.data;
