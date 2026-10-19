@@ -4,3 +4,6 @@
 // mal y conviene ofrecerle reintentar o contactar soporte en vez de un
 // mensaje de "pedido inválido".
 export class ValidationError extends Error {}
+// Conflicto de estado (ej.: ya tiene una suscripción activa) — se traduce a
+// HTTP 409.
+export class ConflictError extends Error {}
