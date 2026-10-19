@@ -8,6 +8,7 @@ import { formatearFechaCorta, formatearFechaLarga } from '../../utils/fechas';
 import Seo from '../../Components/Seo/Seo';
 import CartaNatalWheel from '../../Components/CartaNatalWheel/CartaNatalWheel';
 import RequiereSuscripcion from '../../Components/RequiereSuscripcion/RequiereSuscripcion';
+import SuscripcionRetorno from '../../Components/SuscripcionRetorno/SuscripcionRetorno';
 
 const estadoInicial = {
   fecha: '',
@@ -243,6 +244,8 @@ const AstrologoVirtual = () => {
           </a>
         </p>
         <p className='text-center text-xs text-gray-400 mb-10'>{AVISO_IA}</p>
+
+        <SuscripcionRetorno onActualizado={refrescarEstado} />
 
         {cargando && <p className='text-center text-gray-500'>Cargando…</p>}
 

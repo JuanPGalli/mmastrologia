@@ -8,6 +8,7 @@ import { fetchMyFavorites, removeFavorite } from '../../api/favorites';
 import { submitReview } from '../../api/reviews';
 import { formatARS } from '../../utils/currency';
 import Seo from '../../Components/Seo/Seo';
+import MiSuscripcion from '../../Components/MiSuscripcion/MiSuscripcion';
 
 const statusLabels = {
   approved: { text: 'Confirmada', className: 'bg-green-100 text-green-800' },
@@ -140,6 +141,8 @@ const MiCuenta = () => {
             Cerrar sesión
           </button>
         </div>
+
+        <MiSuscripcion />
 
         <h2 className='text-lg text-purple-900 mb-4'>Tus consultas</h2>
 
