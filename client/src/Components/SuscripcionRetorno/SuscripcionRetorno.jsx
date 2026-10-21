@@ -8,7 +8,9 @@ import { sincronizarSuscripcion } from '../../api/suscripcion';
 // reintentar.
 const SuscripcionRetorno = ({ onActualizado }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const vuelveDeMP = searchParams.get('suscripcion') === 'ok';
+  // Mercado Pago agrega preapproval_id al volver; no se depende solo de
+  // nuestro ?suscripcion=ok por si el checkout lo pisa.
+  const vuelveDeMP = searchParams.get('suscripcion') === 'ok' || searchParams.has('preapproval_id');
   const [fase, setFase] = useState(vuelveDeMP ? 'sincronizando' : null);
 
   useEffect(() => {
