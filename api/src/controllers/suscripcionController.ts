@@ -56,6 +56,10 @@ export const sincronizarSuscripcion = async (suscripcion: ISuscripcion) => {
   suscripcion.status = status;
   suscripcion.vigenteHasta = calcularVigenteHasta(status, proximoCobro, suscripcion.vigenteHasta, new Date());
   await suscripcion.save();
+  console.log(
+    `[suscripcion/sync] ${suscripcion.mpPreapprovalId}: MP status=${detalle.status}, ` +
+      `next_payment_date=${detalle.next_payment_date ?? "-"} -> vigenteHasta=${suscripcion.vigenteHasta?.toISOString() ?? "-"}`
+  );
   return suscripcion;
 };
 
@@ -63,6 +67,37 @@ const vigenteQuery = (userId: string) => ({
   userId,
   vigenteHasta: { $gt: new Date(Date.now() - GRACIA_MS) },
 });
+
+// Sincroniza varias en paralelo SIN esconder los fallos: un error de Mercado
+// Pago (token, red, id inválido) queda en los logs en vez de perderse.
+const sincronizarVarias = async (suscripciones: ISuscripcion[]) => {
+  const resultados = await Promise.allSettled(suscripciones.map(sincronizarSuscripcion));
+  resultados.forEach((resultado, i) => {
+    if (resultado.status === "rejected") {
+      console.error(`[suscripcion/sync] no se pudo sincronizar ${suscripciones[i].mpPreapprovalId}:`, resultado.reason);
+    }
+  });
+};
+
+const PENDIENTE_MAX_MS = 7 * DIA_MS;
+
+// Revisa contra Mercado Pago lo que pudo cambiar sin que nos enterásemos
+// (webhook sin configurar o perdido, vuelta del checkout sin el parámetro):
+// las "authorized" (renovaciones) y las "pending" recientes (pago recién
+// hecho). Devuelve cuántas revisó.
+const reconciliar = async (userId: string): Promise<number> => {
+  const aRevisar = await Suscripcion.find({
+    userId,
+    $or: [
+      { status: "authorized" },
+      { status: "pending", createdAt: { $gt: new Date(Date.now() - PENDIENTE_MAX_MS) } },
+    ],
+  })
+    .sort({ createdAt: -1 })
+    .limit(5);
+  await sincronizarVarias(aRevisar);
+  return aRevisar.length;
+};
 
 export const crearSuscripcion = async (userId: string, emailCuenta: string, payerEmailPedido?: string) => {
   const frontendUrl = process.env.FRONTEND_URL;
@@ -84,7 +119,8 @@ export const crearSuscripcion = async (userId: string, emailCuenta: string, paye
 
   const monto = obtenerPrecioMensual();
 
-  const resultado = await new PreApproval(getClient()).create({
+  const resultado = await new PreApproval(getClient())
+    .create({
     body: {
       reason: "Astrólogo Virtual — suscripción mensual (María Marta Galli)",
       external_reference: userId,
@@ -100,7 +136,16 @@ export const crearSuscripcion = async (userId: string, emailCuenta: string, paye
         currency_id: "ARS",
       },
     },
-  });
+    })
+    .catch((error: unknown) => {
+      // El SDK de MP tira objetos con status/message/cause: se loguean enteros
+      // para poder ver el motivo real (el usuario solo ve un mensaje genérico).
+      console.error(
+        "[suscripcion/crear] Mercado Pago rechazó la creación:",
+        JSON.stringify(error, Object.getOwnPropertyNames(error as object))
+      );
+      throw error;
+    });
 
   if (!resultado.id || !resultado.init_point) {
     throw new Error("Mercado Pago no devolvió los datos esperados para la suscripción.");
@@ -118,12 +163,21 @@ export const crearSuscripcion = async (userId: string, emailCuenta: string, paye
   return { initPoint: resultado.init_point };
 };
 
-export const obtenerEstadoSuscripcion = async (userId: string) => {
-  const suscripciones = await Suscripcion.find({ userId }).sort({ createdAt: -1 });
-  const user = await User.findById(userId);
-  const limite = Date.now() - GRACIA_MS;
+export const obtenerEstadoSuscripcion = async (userId: string, reconciliarSiHaceFalta = true) => {
+  const buscar = () => Suscripcion.find({ userId }).sort({ createdAt: -1 });
+  const esVigente = (s: ISuscripcion) => Boolean(s.vigenteHasta) && s.vigenteHasta!.getTime() > Date.now() - GRACIA_MS;
 
-  const vigente = suscripciones.find((s) => s.vigenteHasta && s.vigenteHasta.getTime() > limite);
+  let suscripciones = await buscar();
+  let vigente = suscripciones.find(esVigente);
+
+  // Sin acceso vigente pero con una suscripción pendiente/autorizada: puede
+  // que ya esté paga y no nos hayamos enterado. Se confirma contra MP.
+  if (!vigente && reconciliarSiHaceFalta && (await reconciliar(userId)) > 0) {
+    suscripciones = await buscar();
+    vigente = suscripciones.find(esVigente);
+  }
+
+  const user = await User.findById(userId);
   const referencia = vigente ?? suscripciones[0];
 
   return {
@@ -148,8 +202,8 @@ export const sincronizarSuscripcionesDelUsuario = async (userId: string) => {
     .sort({ createdAt: -1 })
     .limit(5);
 
-  await Promise.allSettled(abiertas.map(sincronizarSuscripcion));
-  return obtenerEstadoSuscripcion(userId);
+  await sincronizarVarias(abiertas);
+  return obtenerEstadoSuscripcion(userId, false);
 };
 
 export const cancelarSuscripcion = async (userId: string) => {
@@ -171,7 +225,7 @@ export const cancelarSuscripcion = async (userId: string) => {
   suscripcion.status = "cancelled";
   await suscripcion.save();
 
-  return obtenerEstadoSuscripcion(userId);
+  return obtenerEstadoSuscripcion(userId, false);
 };
 
 // Llamado desde el webhook de Mercado Pago (mismo endpoint que Checkout Pro,
@@ -189,13 +243,11 @@ export const tieneAccesoVigente = async (
 ): Promise<{ permitido: boolean; viaPrueba: boolean }> => {
   if (await Suscripcion.exists(vigenteQuery(userId))) return { permitido: true, viaPrueba: false };
 
-  // Auto-sanación: una suscripción "authorized" con la vigencia vencida puede
-  // haberse renovado sin que nos enterásemos (webhook perdido). Se consulta a
-  // MP una vez; si de verdad se renovó, vuelve a tener acceso.
-  const autorizadas = await Suscripcion.find({ userId, status: "authorized" });
-  if (autorizadas.length > 0) {
-    await Promise.allSettled(autorizadas.map(sincronizarSuscripcion));
-    if (await Suscripcion.exists(vigenteQuery(userId))) return { permitido: true, viaPrueba: false };
+  // Auto-sanación: una suscripción "authorized" vencida puede haberse renovado,
+  // o una "pending" puede haberse pagado, sin que nos enterásemos (webhook
+  // perdido o sin configurar). Se confirma contra MP antes de bloquear.
+  if ((await reconciliar(userId)) > 0 && (await Suscripcion.exists(vigenteQuery(userId)))) {
+    return { permitido: true, viaPrueba: false };
   }
 
   const user = await User.findById(userId);
