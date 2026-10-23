@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { sincronizarSuscripcion } from '../../api/suscripcion';
 
 // Banner que aparece al volver de Mercado Pago (?suscripcion=ok). Consulta
@@ -7,10 +7,14 @@ import { sincronizarSuscripcion } from '../../api/suscripcion';
 // ve enseguida si quedó activa. Si el pago todavía no se acreditó, ofrece
 // reintentar.
 const SuscripcionRetorno = ({ onActualizado }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  // Mercado Pago agrega preapproval_id al volver; no se depende solo de
-  // nuestro ?suscripcion=ok por si el checkout lo pisa.
-  const vuelveDeMP = searchParams.get('suscripcion') === 'ok' || searchParams.has('preapproval_id');
+  const location = useLocation();
+  const navigate = useNavigate();
+  // Se busca en el texto crudo de la URL, no con URLSearchParams: Mercado Pago
+  // pega "?preapproval_id=" al final aunque ya haya un "?", y entonces
+  // searchParams no ve ese parámetro (queda dentro del valor de otro). Vale
+  // tanto la URL limpia (?preapproval_id=...) como la vieja (?suscripcion=ok?...).
+  const vuelveDeMP = /[?&](suscripcion=ok|preapproval_id=)/.test(location.search);
+  const limpiarUrl = () => navigate(location.pathname, { replace: true });
   const [fase, setFase] = useState(vuelveDeMP ? 'sincronizando' : null);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ const SuscripcionRetorno = ({ onActualizado }) => {
       .then((estado) => {
         if (cancelado) return;
         setFase(estado.activa ? 'activa' : 'pendiente');
-        if (estado.activa) setSearchParams({}, { replace: true });
+        if (estado.activa) navigate(location.pathname, { replace: true });
         onActualizado?.();
       })
       .catch(() => {
@@ -29,14 +33,14 @@ const SuscripcionRetorno = ({ onActualizado }) => {
     return () => {
       cancelado = true;
     };
-  }, [vuelveDeMP, onActualizado, setSearchParams]);
+  }, [vuelveDeMP, onActualizado, navigate, location.pathname]);
 
   const reintentar = () => {
     setFase('sincronizando');
     sincronizarSuscripcion()
       .then((estado) => {
         setFase(estado.activa ? 'activa' : 'pendiente');
-        if (estado.activa) setSearchParams({}, { replace: true });
+        if (estado.activa) limpiarUrl();
         onActualizado?.();
       })
       .catch(() => setFase('error'));
