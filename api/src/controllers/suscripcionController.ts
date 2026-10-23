@@ -125,7 +125,11 @@ export const crearSuscripcion = async (userId: string, emailCuenta: string, paye
       reason: "Astrólogo Virtual — suscripción mensual (María Marta Galli)",
       external_reference: userId,
       payer_email: payerEmail,
-      back_url: `${frontendUrl.replace(/\/$/, "")}/astrologo-virtual?suscripcion=ok`,
+      // Sin query string a propósito: Mercado Pago le pega "?preapproval_id=..."
+      // al final tal cual, y si ya había un "?" quedaba una URL rota
+      // (".../astrologo-virtual?suscripcion=ok?preapproval_id=..."), que
+      // impedía reconocer la vuelta.
+      back_url: `${frontendUrl.replace(/\/$/, "")}/astrologo-virtual`,
       // "pending": queda a la espera de que la persona cargue su medio de
       // pago en el checkout de MP (devuelve init_point).
       status: "pending",
@@ -144,6 +148,13 @@ export const crearSuscripcion = async (userId: string, emailCuenta: string, paye
         "[suscripcion/crear] Mercado Pago rechazó la creación:",
         JSON.stringify(error, Object.getOwnPropertyNames(error as object))
       );
+      // Caso habitual al probar: pagar con la misma cuenta de Mercado Pago que
+      // cobra (la de la vendedora). MP lo prohíbe; se explica en vez de un 502.
+      if (/payer and collector cannot be the same user/i.test(String((error as { message?: unknown })?.message ?? ""))) {
+        throw new ValidationError(
+          "No podés suscribirte con la misma cuenta de Mercado Pago que recibe los pagos. Usá otra cuenta distinta."
+        );
+      }
       throw error;
     });
 
